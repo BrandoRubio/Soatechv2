@@ -1,0 +1,60 @@
+ion-range::part(tick) {
+  background: #bde0fe;
+}
+
+ion-range::part(tick-active) {
+  background: #66b0f5;
+}
+
+ion-range::part(pin) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffafcc;
+  color: #fff;
+
+  border-radius: 50%;
+  transform: scale(1);
+
+  top: -16px;
+
+  min-width: 25px;
+  height: 25px;
+  transition: transform 120ms ease, background 120ms ease;
+}
+
+ion-range::part(pin)::before {
+  content: none;
+}
+
+ion-range::part(knob) {
+  background: #ffc8dd;
+}
+
+ion-range::part(bar) {
+  background: #bde0fe;
+}
+
+ion-range::part(bar-active) {
+  background: #66b0f5;
+}
+
+ion-img::part(image) {
+  width: 50%;
+  /* or whatever value */
+  /* you can set the height value too */
+  margin: auto;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ion-spinner {
+  display: block;
+  margin: auto;
+}
+ion-note {
+  font-size: 1.2rem;
+}

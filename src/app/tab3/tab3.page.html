@@ -1,0 +1,175 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button id="click-menu2">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="light">
+      <ion-select value="{{deviceSelected}}" (ionChange)="changeDevice($event)" [interfaceOptions]="optionsDevice"
+        placeholder="0 dispositivos">
+        <ion-select-option value="{{item.id}}" *ngFor="let item of devices; trackBy:trackItems">{{item.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-title>
+  </ion-toolbar>
+  <ion-popover trigger="click-menu2" [dismissOnSelect]="true" triggerAction="click">
+    <ng-template>
+      <ion-content>
+        <ion-list>
+          <ion-item [button]="true" lines="none" [detail]="false" [routerLink]="['/devices']">
+            <ion-label>Dispositivos</ion-label>
+            <ion-icon slot="end" name="hardware-chip" color="primary"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refrescar($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
+  <div [hidden]="components.Grafics">
+    <ion-item [disabled]="disableFileChooser">
+      <ion-label color="primary">Archivos ({{numFiles}})</ion-label>
+      <ion-select [interfaceOptions]="optionsFiles" [(ngModel)]="fileSelected" (ionChange)="changeFile($event)"
+        interface="alert" placeholder="Seleccione un archivo" cancelText="Cancelar">
+        <ion-select-option value="{{f}}" *ngFor="let f of files; trackBy:trackItems">{{f}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-card [disabled]=showChart>
+      <ion-card-header color="primary">
+        Histórico
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #lineCanvas style="position: relative; height:40vh; width:80vw">
+        </canvas>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div>
+                <ion-label color="primary">
+                  {{dateMin | date: 'hh:mm a'}} -
+                </ion-label>
+                <ion-label color="success">
+                  {{dateMin | date: 'dd/MM'}}
+                </ion-label>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="ion-text-right">
+                <ion-label color="primary">
+                  {{dateMax | date: 'hh:mm a'}}
+                </ion-label>
+                <ion-label color="success">
+                  - {{dateMax | date: 'dd/MM'}}
+                </ion-label>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-item lines="none">
+          <ion-range (ionKnobMoveEnd)="onIonKnobMoveEnd($event)" [dualKnobs]="true" [value]="{ lower: 0, upper: 100 }"
+            [(ngModel)]="rangeKnobs"></ion-range>
+        </ion-item>
+        <!--ion-item lines="none">
+          <ion-label color="primary">{{sdCardMsg}}{{netMsg}}
+          </ion-label>
+        </ion-item-->
+        <ion-item lines="none">
+        </ion-item>
+        <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+          <ion-fab-button color="danger" (click)="emptyFile()">
+            <ion-icon name="trash"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+        <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+          <ion-fab-button (click)="ShareFile()" color="success">
+            <ion-icon name="document"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+        <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+          <ion-fab-button (click)="descargarArchivo()">
+            <ion-icon name="reload"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;"
+    [hidden]="components.NoDevice">
+    <ion-card>
+      <ion-card-header class="ion-text-center">
+        <ion-img src="../../assets/icon/advertencia.png"></ion-img>
+        <ion-card-title color="primary">¡UPS! Dispositivo no encontrado </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>Posibles causas:</h2>
+        <section>
+          <ul>
+            <li>
+              <h3>No estás conectado a la misma red</h3>
+            </li>
+            <li>
+              <h3>Tu dispositivo no está conectado a la red</h3>
+            </li>
+            <li><h3>Tu dispositivo está sincronizando los datos</h3></li>
+          </ul>
+        </section>
+        <h3>Nota: recuerda que este apartado es para ver los registros pasados solo de forma local mientras no haya
+          conexión a internet.</h3>
+        <ion-item lines="none">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;"
+    [hidden]="components.AskingDevice">
+    <ion-card>
+      <ion-card-header class="ion-text-center">
+        <ion-img src="../../assets/icon/asking_device.png"></ion-img>
+        <ion-card-title color="primary">Buscando Dispositivo </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;"
+    [hidden]="components.WithoutDevices">
+    <ion-card>
+      <ion-card-header class="ion-text-center">
+        <ion-img src="../../assets/icon/cpu.png"></ion-img>
+        <ion-card-title color="primary">No hay dispositivos registrados </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>Agrega tus dispositivos <a [routerLink]="['/devices']">aquí</a> o sigue los siguientes pasos: </h2>
+        <section>
+          <ul>
+            <li>
+              <h3>Clic <ion-icon name="ellipsis-vertical-outline"></ion-icon> en la parte superior derecha</h3>
+            </li>
+            <li>
+              <h3>Conéctate al mismo Wi-Fi que tus dispositivos</h3>
+            </li>
+            <li>
+              <h3>Selecciona <b>Dispositivos</b></h3>
+            </li>
+            <li>
+              <h3>Ingresa la IP correspondiente</h3>
+            </li>
+            <li>
+              <h3>Verifica y listo</h3>
+            </li>
+          </ul>
+        </section>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

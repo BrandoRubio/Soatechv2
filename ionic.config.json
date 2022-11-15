@@ -1,0 +1,7 @@
+{
+  "name": "Soatech",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

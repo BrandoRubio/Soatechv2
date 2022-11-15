@@ -1,0 +1,335 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button id="click-menu1">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="light">
+      <ion-select value="{{deviceSelected}}" [interfaceOptions]="optionsDevice" (ionChange)="changeDevice($event)"
+        placeholder="0 dispositivos">
+        <ion-select-option value="{{item.id}}" *ngFor="let item of devices; trackBy:trackItems">{{item.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-title>
+  </ion-toolbar>
+  <ion-popover trigger="click-menu1" [dismissOnSelect]="true" triggerAction="click">
+    <ng-template>
+      <ion-content>
+        <ion-list>
+          <ion-item [button]="true" [detail]="false" [routerLink]="['/devices']">
+            <ion-label>Dispositivos</ion-label>
+            <ion-icon slot="end" name="hardware-chip" color="primary"></ion-icon>
+          </ion-item>
+          <ion-item [button]="true" id="aboutColors">
+            <ion-label>Ayuda</ion-label>
+            <ion-icon slot="end" name="help" color="primary"></ion-icon>
+          </ion-item>
+          <ion-radio-group (ionChange)="changeMood($event)" [(ngModel)]="mostrarComo">
+            <ion-item>
+              <ion-label>Valor en tiempo real</ion-label>
+              <ion-radio slot="start" value="numbers"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Registros en gráficos</ion-label>
+              <ion-radio slot="start" value="registers"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+          <ion-popover trigger="aboutColors">
+            <ng-template>
+              <ion-content>
+                <ion-list>
+                  <ion-item lines="none">
+                    <ion-icon slot="start" name="ellipse" color="success"></ion-icon>
+                    <ion-label>Elemento estable</ion-label>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-icon slot="start" name="ellipse" color="danger"></ion-icon>
+                    <ion-label>Fuera de rango</ion-label>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-icon slot="start" name="ellipse" color="warning"></ion-icon>
+                    <ion-label>Fallo del sensor</ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-content>
+            </ng-template>
+          </ion-popover>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+</ion-header>
+
+<ion-content>
+
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;"
+    [hidden]="components.NoDevice">
+    <ion-card>
+      <ion-card-header class="ion-text-center">
+        <ion-img src="../../assets/icon/advertencia.png"></ion-img>
+        <ion-card-title color="primary">¡UPS! Dispositivo no encontrado </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>Posibles causas:</h2>
+        <section>
+          <ul>
+            <li>
+              <h3>No estás conectado a la misma red</h3>
+            </li>
+            <li>
+              <h3>Tu dispositivo no está conectado a la red</h3>
+            </li>
+            <li>
+              <h3>Tu dispositivo está sincronizando los datos</h3>
+            </li>
+          </ul>
+        </section>
+        <h3>Nota: recuerda que este apartado es para monitoreo local.</h3>
+        <ion-item lines="none">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;"
+    [hidden]="components.AskingDevice">
+    <ion-card>
+      <ion-card-header class="ion-text-center">
+        <ion-img src="../../assets/icon/asking_device.png"></ion-img>
+        <ion-card-title color="primary">Buscando Dispositivo </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;"
+    [hidden]="components.WithoutDevices">
+    <ion-card>
+      <ion-card-header class="ion-text-center">
+        <ion-img src="../../assets/icon/cpu.png"></ion-img>
+        <ion-card-title color="primary">No hay dispositivos registrados </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>Agrega tus dispositivos <a [routerLink]="['/devices']">aquí</a> o sigue los siguientes pasos: </h2>
+        <section>
+          <ul>
+            <li>
+              <h3>Clic <ion-icon name="ellipsis-vertical-outline"></ion-icon> en la parte superior derecha</h3>
+            </li>
+            <li>
+              <h3>Conéctate al mismo Wi-Fi que tus dispositivos</h3>
+            </li>
+            <li>
+              <h3>Selecciona <b>Dispositivos</b></h3>
+            </li>
+            <li>
+              <h3>Ingresa la IP correspondiente</h3>
+            </li>
+            <li>
+              <h3>Verifica y listo</h3>
+            </li>
+          </ul>
+        </section>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div [hidden]="components.GRAFICS">
+    <div [hidden]="sensors.temperatura">
+      <ion-card>
+        <ion-card-header color="{{colors.temperatura}}">
+          Valor actual: <b>{{VALUES.TEMP}} °C</b> &nbsp; {{RANGES.TEMP}}
+          <ion-icon name="thermometer"></ion-icon>
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasGrillosTemp style="position: relative; height:40vh; width: 120vw">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.humedad">
+      <ion-card>
+        <ion-card-header color="{{colors.humedad}}">
+          Valor actual: <b>{{VALUES.HUM}} %</b> &nbsp; {{RANGES.HUM}}
+          <ion-icon name="water"></ion-icon>
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasGrillosHum style="position: relative; height:40vh; width:120vw">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.oxigenacion">
+      <ion-card>
+        <ion-card-header color="{{colors.oxigenacion}}">
+          Oxigenación: <b>{{VALUES.OXY}}</b> &nbsp; {{RANGES.OXY}}
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasOxygen style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.conductividad">
+      <ion-card>
+        <ion-card-header color="{{colors.conductividad}">
+          Valor actual: <b>{{VALUES.CONDUC}}</b> &nbsp; {{RANGES.CONDUC}}
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasConductivity style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.ph">
+      <ion-card>
+        <ion-card-header color="{{colors.ph}}">
+          Valor actual: <b>{{VALUES.PH}}</b> &nbsp; {{RANGES.PH}}
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasPh style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.Htemperatura">
+      <ion-card>
+        <ion-card-header color="{{colors.Htemperatura}}">
+          Valor actual: <b>{{VALUES.HTEMP}}</b> &nbsp; {{RANGES.HTEMP}}
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasTemp style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.YL">
+      <ion-card>
+        <ion-card-header color="{{colors.YL}}">
+          Humedad promedio: <b>{{VALUES.YL}}</b> &nbsp; {{RANGES.YL}}
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasYL style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.DS18">
+      <ion-card>
+        <ion-card-header color="{{colors.DS18}}">
+          Temperatura promedio: <b>{{VALUES.DS18}}</b> &nbsp; {{RANGES.DS18}}
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasDS18 style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+  <div [hidden]="components.NUMBERS">
+    <div [hidden]="sensors.temperatura">
+      <ion-card>
+        <ion-card-header color="{{colors.temperatura}}">
+          <ion-card-title>Temperatura en el aire<ion-icon name="thermometer"></ion-icon>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.temperatura}}">{{VALUES.TEMP}}°C</ion-label>
+          <h2>Rango definido: {{RANGES.TEMP}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.humedad">
+      <ion-card>
+        <ion-card-header color="{{colors.humedad}}">
+          <ion-card-title>Humedad en el aire<ion-icon name="water"></ion-icon>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.humedad}}">{{VALUES.HUM}}%</ion-label>
+          <h2>Rango definido: {{RANGES.HUM}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.oxigenacion">
+      <ion-card>
+        <ion-card-header color="{{colors.oxigenacion}}">
+          <ion-card-title>Oxigenación
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.oxigenacion}}">{{VALUES.OXY}}</ion-label>
+          <h2>Rango definido: {{RANGES.OXY}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.conductividad">
+      <ion-card>
+        <ion-card-header color="{{colors.conductividad}}">
+          <ion-card-title>Conductividad
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.conductividad}}">{{VALUES.CONDUC}}</ion-label>
+          <h2>Rango definido: {{RANGES.CONDUC}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.ph">
+      <ion-card>
+        <ion-card-header color="{{colors.ph}}">
+          <ion-card-title>PH
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.ph}}">{{VALUES.PH}}</ion-label>
+          <h2>Rango definido: {{RANGES.PH}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.Htemperatura">
+      <ion-card>
+        <ion-card-header color="{{colors.Htemperatura}}">
+          <ion-card-title>Temperatura
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.Htemperatura}}">{{VALUES.HTEMP}}°C</ion-label>
+          <h2>Rango definido: {{RANGES.HTEMP}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.YL">
+      <ion-card>
+        <ion-card-header color="{{colors.YL}}">
+          <ion-card-title>Humedad en sustrato <ion-icon name="water"></ion-icon>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.YL}}">{{VALUES.YL}}%</ion-label>
+          <h2>Rangos definidos: {{RANGES.YL}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.DS18">
+      <ion-card>
+        <ion-card-header color="{{colors.DS18}}">
+          <ion-card-title>Temperatura en sustrato <ion-icon name="thermometer"></ion-icon>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.DS18}}">{{VALUES.DS18}}°C</ion-label>
+          <h2>Rangos definidos: {{RANGES.DS18}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+  <!--ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="newNotification()">
+      <ion-icon name="arrow-forward-circle"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-->
+</ion-content>

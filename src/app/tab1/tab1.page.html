@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Monitoreo de dispositivos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center">
+  <ion-img src="../../assets/icon/{{logo}}"></ion-img>
+  <ion-button color="primary" (click)="loadUbiWebSite()">
+    <ion-label>Ingresar </ion-label>
+    <ion-icon slot="end" name="radio"></ion-icon>
+  </ion-button><br>
+  <ion-label color="primary">o</ion-label><br>
+  <ion-button color="primary" (click)="openInExternal()">
+    <ion-label>Abrir enlace </ion-label>
+    <ion-icon name="globe-outline"></ion-icon>
+  </ion-button>
+</ion-content>

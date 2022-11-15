@@ -1,0 +1,19 @@
+ion-img::part(image) {
+    width: 50%;
+    /* or whatever value */
+    /* you can set the height value too */
+    margin: auto;
+}
+
+ul {
+    list-style-type: disc;
+}
+
+ion-spinner {
+    display: block;
+    margin: auto;
+}
+
+.label-size {
+    font-size: 60px;
+}

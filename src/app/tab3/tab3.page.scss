@@ -1,0 +1,25 @@
+ion-range {
+  --bar-background: #d0e3f3;
+  --bar-background-active: #57abfa;
+  --bar-height: 3px;
+  --bar-border-radius: 3px;
+  --knob-background: #ffc8dd;
+  --knob-size: 15px;
+  --pin-background: #ffafcc;
+  --pin-color: #fff;
+}
+ion-img::part(image) {
+  width: 50%;
+  /* or whatever value */
+  /* you can set the height value too */
+  margin: auto;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ion-spinner {
+  display: block;
+  margin: auto;
+}
