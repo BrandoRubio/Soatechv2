@@ -1,0 +1,45 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title color="light">Logger
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <!--ruta-->
+    <ion-item>
+      <ion-label color="primary">Tipo de Logg</ion-label>
+      <ion-select placeholder="Seleccione" value="{{ruteSelected}}" [(ngModel)]="ruteSelected"
+        (ionChange)="changesRute()">
+        <ion-select-option value="{{item}}" *ngFor="let item of rutas; trackBy:trackItems">{{item}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <!--ruta-->
+    <ion-item>
+      <ion-label color="primary">Archivo {{ruteSelected}} ({{nFiles}})</ion-label>
+      <ion-select placeholder="Seleccione" value="{{fileSelected}}" [(ngModel)]="fileSelected"
+        (ionChange)="changesFile()">
+        <ion-select-option value="{{item.name}}" *ngFor="let item of files; trackBy:trackItems">{{item.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <!--ruta-->
+    <ion-item lines="none">
+      <ion-label slot="start" color="primary">Tamaño: </ion-label>
+      <ion-label slot="end" color="dark">{{file.size}} bytes</ion-label>
+    </ion-item>
+    <ion-item lines="none" [hidden]=header color="secondary">
+      <ion-label color="light">MENSAJE</ion-label>
+      <ion-note slot="end" color="light">HORA</ion-note>
+    </ion-item>
+    <ion-item *ngFor="let item of data" button (click)="details(item.hora, item.tipo, item.text)">
+      <ion-label color="{{item.color}}">{{item.text}}</ion-label>
+      <ion-note slot="end" color="secondary">{{item.hora}}</ion-note>
+    </ion-item>
+  </ion-list>
+</ion-content>

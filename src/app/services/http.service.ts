@@ -38,6 +38,9 @@ export class HttpService {
   getAllFileNames(ipDevice): Observable<any> {
     return this.httpClient.get(this.endpoint + ipDevice + "/getAllItems")
   }
+  getDirs(ipDevice): Observable<any> {
+    return this.httpClient.get(this.endpoint + ipDevice + "/listDirLoggs")
+  }
   checkDevice(ip): Observable<any> {
     return this.httpClient.get(this.endpoint + ip + "/checkDevice", ).pipe(
       timeout(10000)

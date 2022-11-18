@@ -54,6 +54,18 @@ export class DownloadsService {
     //console.log(parsedData);
     return parsedData;
   }
+  readLog = async (rute) => {
+    const contents = await Filesystem.readFile({
+      //path: this.file.externalDataDirectory+'oxygen1.csv',
+      path: rute,
+      encoding: Encoding.UTF8,
+    })
+    this.papa.parse(contents.data)
+    let parsedData = this.papa.parse(contents.data).data;
+    parsedData.splice(0, 1);
+    //console.log(parsedData);
+    return parsedData;
+  }
 
   async shareFile() {
     /*this.socialSharing.canShareViaEmail().then((_) => {

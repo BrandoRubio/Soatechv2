@@ -1,9 +1,10 @@
 import { Component, NgZone } from '@angular/core';
 import { HttpService } from '../services/http.service';
-import { NavController, ToastController, AlertController, Platform } from '@ionic/angular';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
+import { NavController, ToastController, AlertController, Platform } from '@ionic/angular';
 import { DbService } from '../services/db.service';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+import { NetworkInterface } from '@awesome-cordova-plugins/network-interface/ngx';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class Tab2Page {
   split: String = ""
   type: String = ""
   netname = ""
+  myIP = ""
   SSID: String
   PASS: String
   BLEDEVS: any[] = []
@@ -128,6 +130,7 @@ export class Tab2Page {
   showLoading: Boolean = true
   minutes = 0
   constructor(
+    private networkInterface: NetworkInterface,
     private db: DbService,
     private network: Network,
     private nav: NavController,
@@ -210,6 +213,7 @@ export class Tab2Page {
     this.getDevices()
     //this.tryCheck()
     if (this.network.type == 'wifi') {
+      this.GetIP()
       if (this.deviceSelected == "404") {
         this.sensors = true;
         this.showLoading = true;
@@ -234,6 +238,14 @@ export class Tab2Page {
         this.showLoading = true
       }
     }
+  }
+  GetIP(){
+    this.networkInterface.getWiFiIPAddress()
+    .then(address => {
+      console.log(address.ip);
+      this.myIP = address.ip
+    })
+    .catch(error => console.error(`Unable to get IP: ${error}`));
   }
   plusNumber() {
     if (this.NRegisters < 60) {
@@ -315,7 +327,6 @@ export class Tab2Page {
           this.Oxy.ranges.upper = Number(String(Oxy.max))
           this.Oxy.control_min_pin = String(Oxy.pin_min)
           this.Oxy.control_max_pin = String(Oxy.pin_max)
-          console.log(Oxy);
         }
         if (sensors.YL != undefined) {//Asignación de variables a DHT11
           const YL = sensors.YL
@@ -331,8 +342,6 @@ export class Tab2Page {
           this.YL.ranges.upper = Number(String(YL.max))
           this.YL.control_min_pin = String(YL.pin_min)
           this.YL.control_max_pin = String(YL.pin_max)
-          console.log(YL);
-
         }
         this.sensors = false
         setTimeout(() => {
@@ -351,7 +360,6 @@ export class Tab2Page {
       this.showLoading = true
       this.sensors = true
       this.loading = true
-      console.log(error);
     })
   }
   refrescar(event) {
@@ -361,13 +369,12 @@ export class Tab2Page {
     }, 2500);
   }
   sendData() {
-    let newData
-
-    newData = "?newSSID=" + this.SSID.replace(" ", ",") + "&newPassword=" + this.PASS.replace(" ", ",")
+    let newData = "?newSSID=" + this.SSID.replace(" ", ",") + "&newPassword=" + this.PASS.replace(" ", ",")
       + "&newTime=" + this.minutes * 1000 * 60
       + "&newType=" + this.type
       + "&newName=" + this.name
       + "&newNR=" + this.NRegisters
+      + "&ip="+this.myIP
     this.http.changeParams(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       this.db.updateTypeDevice(this.deviceSelected, this.name, this.type)
@@ -375,7 +382,6 @@ export class Tab2Page {
     }, (error) => {
       this.presentToast("Ha ocurriedo un error, vuelva a intentarlo.")
       this.http.dismissLoader()
-      console.log(error);
     })
   }
   scanDevices() {
@@ -393,19 +399,18 @@ export class Tab2Page {
     })
   }
   onBleChanged(event) {
-    console.log(event.target.value);
     this.BLSE.connect(this.deviceBLE).subscribe(state => {
-      console.log(state);
+      //console.log(state);
     }, e => {
-      console.log(e)
+      //console.log(e)
     })
   }
   sendSSIDPASS() {
     let data = this.SSID + "," + this.PASS
     this.BLSE.write(data).then(state => {
-      console.log(state);
+      //console.log(state);
     }, e => {
-      console.log(e)
+      //console.log(e)
     })
 
     /*if (this.ble.isConnected)
@@ -430,6 +435,7 @@ export class Tab2Page {
       + "&newIdeal=" + this.DHT11.temperatura.ideal + "," + this.DHT11.humedad.ideal
       + "&active=" + this.disable.DHT
       + "&id=1"
+      + "&ip="+this.myIP
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       setTimeout(() => {
@@ -455,6 +461,7 @@ export class Tab2Page {
       + "&newIdeal=" + this.DS18.ideal
       + "&active=" + this.disable.DS18
       + "&id=4"
+      + "&ip="+this.myIP
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       setTimeout(() => {
@@ -480,7 +487,8 @@ export class Tab2Page {
       + "&newIdeal=" + this.Oxy.ideal
       + "&active=" + this.disable.Oxy
       + "&id=3"
-      console.log(newData);
+      + "&ip="+this.myIP
+      //console.log(newData);
       
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
@@ -507,8 +515,8 @@ export class Tab2Page {
       + "&newIdeal=" + this.YL.ideal
       + "&active=" + this.disable.YL
       + "&id=2"
-
-    console.log(newData);
+      + "&ip="+this.myIP
+    //console.log(newData);
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       setTimeout(() => {
@@ -526,9 +534,15 @@ export class Tab2Page {
   getDeviceData(id) {
     this.db.getDevice(id).then(_ => {
       this.ipDeviceSelected = _.ip
-      console.log(this.ipDeviceSelected);
+      //console.log(this.ipDeviceSelected);
       this.tryCheck()
     })
+  }
+  openLogger() {
+    let params : any = {
+      "ip" : this.ipDeviceSelected
+    } 
+    this.nav.navigateForward(['/logger'], { state: params })
   }
   async presentToast(msg) {
     const toast = await this.toastController.create({

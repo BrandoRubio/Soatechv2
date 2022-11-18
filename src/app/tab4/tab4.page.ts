@@ -4,6 +4,7 @@ import { HttpService } from '../services/http.service';
 import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { Plugins } from '@capacitor/core';
+import { Platform } from '@ionic/angular';
 const { LocalNotifications } = Plugins;
 //import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
@@ -28,6 +29,7 @@ export class Tab4Page implements OnInit {
   deviceSelected = ""
   ipDeviceSelected = ""
   firstTime = true
+  firstTimeDev = true
   intervalo
   lineChartTemp: any;
   lineChartGrillosTemp: any;
@@ -105,15 +107,22 @@ export class Tab4Page implements OnInit {
   constructor(
     //private localNotifications: LocalNotifications,
     private db: DbService,
-    private http: HttpService,) {
-
+    private http: HttpService,
+    public platform: Platform) {
     Chart.register(...registerables);
+    this.platform.pause.subscribe(async () => {
+      clearInterval(this.intervalo)
+    });
+    this.platform.resume.subscribe(async () => {
+      this.firstTime = true
+      this.firstTimeDev = true
+      this.reloadData()
+    });
   }
   ngOnInit() {
   }
   ionViewWillEnter() {
     this.reloadData()
-    //this.getDevices()
   }
   getDevices() {
     this.db.getDevices().then(_ => {
@@ -150,6 +159,10 @@ export class Tab4Page implements OnInit {
     this.db.getDevice(id).then(_ => {
       this.ipDeviceSelected = _.ip
       this.http.checkDevice(this.ipDeviceSelected).subscribe(__ => {
+        if(this.firstTimeDev){
+          this.firstTimeDev = false
+          this.db.updateTypeDevice(this.deviceSelected, __.name, __.type)
+        }
         this.components.WithoutDevices = true;
         if (this.mostrarComo == "numbers") {
           this.components.NoDevice = true;
@@ -332,26 +345,26 @@ export class Tab4Page implements OnInit {
               var d4: number[] = data.s_h4.reverse()
               var i = 0;
               var s = 0;
-              if(d1[LEN] > 0){
+              if (d1[LEN] > 0) {
                 i++;
-                s += Number(d1[LEN]); 
+                s += Number(d1[LEN]);
               }
-              if(d2[LEN] > 0){
+              if (d2[LEN] > 0) {
                 i++;
-                s += Number(d2[LEN]); 
+                s += Number(d2[LEN]);
               }
-              if(d3[LEN] > 0){
+              if (d3[LEN] > 0) {
                 i++;
-                s += Number(d3[LEN]); 
+                s += Number(d3[LEN]);
               }
-              if(d4[LEN] > 0){
+              if (d4[LEN] > 0) {
                 i++;
-                s += Number(d4[LEN]); 
+                s += Number(d4[LEN]);
               }
               this.showYLChart(d1, d2, d3, d4, dataDates, dataDates[0], dataDates[LEN], REGISTERS)
               this.RANGES.YL = data.SHUMRANGES
               this.colors.YL = data.SHUMCOLOR
-              this.VALUES.YL = Number(s/i) ? Number(s/i) : 0;
+              this.VALUES.YL = Number(s / i) ? Number(s / i) : 0;
               this.sensors.YL = false;
             } catch (error) {
               this.sensors.YL = true;
@@ -363,25 +376,25 @@ export class Tab4Page implements OnInit {
               var d4: number[] = data.s_t4.reverse()
               var i = 0;
               var s = 0;
-              if(d1[LEN] > 0){
+              if (d1[LEN] > 0) {
                 i++;
-                s = s + Number(d1[LEN]); 
+                s = s + Number(d1[LEN]);
               }
-              if(d2[LEN] > 0){
+              if (d2[LEN] > 0) {
                 i++;
-                s = s + Number(d2[LEN]); 
+                s = s + Number(d2[LEN]);
               }
-              if(d3[LEN] > 0){
+              if (d3[LEN] > 0) {
                 i++;
-                s = s + Number(d3[LEN]); 
+                s = s + Number(d3[LEN]);
               }
-              if(d4[LEN] > 0){
+              if (d4[LEN] > 0) {
                 i++;
-                s = s + Number(d4[LEN]); 
+                s = s + Number(d4[LEN]);
               }
               this.showDS18Chart(d1, d2, d3, d4, dataDates, dataDates[0], dataDates[LEN], REGISTERS)
               this.RANGES.DS18 = data.STEMPRANGES
-              this.VALUES.DS18 = Number(s/i);
+              this.VALUES.DS18 = Number(s / i);
               this.colors.DS18 = data.STEMPCOLOR
               this.sensors.DS18 = false;
             } catch (error) {
@@ -1177,9 +1190,9 @@ export class Tab4Page implements OnInit {
     if (this.firstTime) {
       this.getDevices()
     }
+    clearInterval(this.intervalo)
     this.intervalo = setInterval(() => {
       this.getDevices();
-      //this.showNotification()
     }, 10000);
   }
   showNotification() {

@@ -746,4 +746,9 @@
       </ion-fab-button>
     </ion-fab>
   </div>
+  <ion-fab [hidden]="!ImAdmin" vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button (click)="openLogger()" color="primary">
+      <ion-icon name="bug"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
