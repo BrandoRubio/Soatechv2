@@ -24,15 +24,19 @@ const routes: Routes = [
         loadChildren: () => import('../tab4/tab4.module').then(m => m.Tab4PageModule)
       },
       {
+        path: 'home',
+        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
+      },
+      {
         path: '',
-        redirectTo: '/tabs/tab4',
+        redirectTo: '/tabs/home',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab4',
+    redirectTo: '/tabs/home',
     pathMatch: 'full'
   }
 ];

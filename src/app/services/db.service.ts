@@ -109,14 +109,14 @@ export class DbService {
               document.documentElement.style.setProperty('--ion-color-primary-shade', '#c8ad00');
               document.documentElement.style.setProperty('--ion-color-primary-tint', '#e6cb1a');
             } else
-              if (res.rows.item(0).type == "hidroponia") {
-                this.logo = "logo hidroponia.png"
-                document.documentElement.style.setProperty('--ion-color-primary', '#d1009d');
-                document.documentElement.style.setProperty('--ion-color-primary-rgb', '209,0,157');
+              if (res.rows.item(0).type == "integral") {
+                this.logo = "logotipo.png"
+                document.documentElement.style.setProperty('--ion-color-primary', '#01a3d2');
+                document.documentElement.style.setProperty('--ion-color-primary-rgb', '56, 128, 255');
                 document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');
-                document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,25');
-                document.documentElement.style.setProperty('--ion-color-primary-shade', '#b8008a');
-                document.documentElement.style.setProperty('--ion-color-primary-tint', '#d61aa7');
+                document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
+                document.documentElement.style.setProperty('--ion-color-primary-shade', '#3171e0');
+                document.documentElement.style.setProperty('--ion-color-primary-tint', '#4c8dff');
               } else {
                 this.logo = "logotipo.png"
                 document.documentElement.style.setProperty('--ion-color-primary', '#01a3d2');

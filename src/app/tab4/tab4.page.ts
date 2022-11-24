@@ -6,6 +6,7 @@ import { Chart, registerables } from 'chart.js';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 const { LocalNotifications } = Plugins;
+const { SplashScreen } = Plugins;
 //import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
@@ -171,11 +172,11 @@ export class Tab4Page implements OnInit {
       }
       this.components.WithoutDevices = true;
       if (this.mostrarComo == "numbers") {
-        this.components.NoDevice = true;
-        this.components.AskingDevice = true;
-        this.components.GRAFICS = true;
-        this.components.NUMBERS = false;
         this.http.getLastValues(this.ipDeviceSelected).subscribe(data => {
+          this.components.NoDevice = true;
+          this.components.AskingDevice = true;
+          this.components.GRAFICS = true;
+          this.components.NUMBERS = false;
           if (data.HUM != undefined) {//HUMEDAD DHT11
             this.RANGES.HUM = data.HUMRANGES
             this.VALUES.HUM = Math.round(data.HUM + Number.EPSILON * 100)
@@ -249,11 +250,11 @@ export class Tab4Page implements OnInit {
         });
 
       } else if (this.mostrarComo == "registers") {
-        this.components.NoDevice = true;
-        this.components.AskingDevice = true;
-        this.components.NUMBERS = true;
-        this.components.GRAFICS = false;
         this.http.getAllElementValues(this.ipDeviceSelected).subscribe(data => {
+          this.components.NoDevice = true;
+          this.components.AskingDevice = true;
+          this.components.NUMBERS = true;
+          this.components.GRAFICS = false;
           const dataDates: String[] = []
           data.dates.reverse().forEach(i => {
             const d = new Date(i)
