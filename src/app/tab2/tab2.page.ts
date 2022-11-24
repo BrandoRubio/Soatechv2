@@ -93,6 +93,34 @@ export class Tab2Page {
     control_min_pin: "0",
     control_max_pin: "0"
   }
+  Cond = {
+    id: 3,
+    a: "Sensor inactivo",
+    ranges: {
+      lower: 0,
+      upper: 0
+    },
+    ideal: 0,
+    pines: {
+      pin1: "0"
+    },
+    control_min_pin: "0",
+    control_max_pin: "0"
+  }
+  PH = {
+    id: 3,
+    a: "Sensor inactivo",
+    ranges: {
+      lower: 0,
+      upper: 0
+    },
+    ideal: 0,
+    pines: {
+      pin1: "0"
+    },
+    control_min_pin: "0",
+    control_max_pin: "0"
+  }
   YL = {
     id: 2,
     a: "Sensor inactivo",
@@ -117,12 +145,15 @@ export class Tab2Page {
     chDht: true,
     chDs18: true,
     chOxy: true,
+    chPH: true,
+    chCond: true,
     chYL: true,
     DHT: true,
     DS18: true,
     YL: true,
     Oxy: true,
-    chCond: true
+    PH: true,
+    Cond: true,
   }
 
   loading: Boolean = false
@@ -188,6 +219,18 @@ export class Tab2Page {
       this.Oxy.a = Boolean(this.disable.Oxy) ? "Sensor activo" : "Sensor inactivo"
     }
   }
+  changesPH() {
+    if (!this.disable.loading) {
+      this.disable.chPH = false;
+      this.PH.a = Boolean(this.disable.PH) ? "Sensor activo" : "Sensor inactivo"
+    }
+  }
+  changesCond() {
+    if (!this.disable.loading) {
+      this.disable.chCond = false;
+      this.Cond.a = Boolean(this.disable.Cond) ? "Sensor activo" : "Sensor inactivo"
+    }
+  }
   changesYL() {
     if (!this.disable.loading) {
       this.disable.chYL = false;
@@ -203,6 +246,7 @@ export class Tab2Page {
     this.disable.chCond = true
     this.disable.chDht = true
     this.disable.chOxy = true
+    this.disable.chPH = true
     this.disable.chDs18 = true
     this.disable.chYL = true
     this.sensors = true
@@ -327,6 +371,30 @@ export class Tab2Page {
           this.Oxy.ranges.upper = Number(String(Oxy.max))
           this.Oxy.control_min_pin = String(Oxy.pin_min)
           this.Oxy.control_max_pin = String(Oxy.pin_max)
+        }
+        if (sensors.Conductividad != undefined) {//Asignación de variables a DHT11
+          const Cond = sensors.Conductividad
+          this.disable.Cond = Cond.active == "true" ? true : false
+          this.Cond.a = Cond.active == "true" ? "Sensor activo" : "Sensor inactivo"
+          this.Cond.id = Cond.id
+          this.Cond.pines.pin1 = String(Cond.read_pin)
+          this.Cond.ideal = Number(String(Cond.ideal))
+          this.Cond.ranges.lower = Number(String(Cond.min))
+          this.Cond.ranges.upper = Number(String(Cond.max))
+          this.Cond.control_min_pin = String(Cond.pin_min)
+          this.Cond.control_max_pin = String(Cond.pin_max)
+        }
+        if (sensors.PH != undefined) {//Asignación de variables a DHT11
+          const PH = sensors.PH
+          this.disable.PH = PH.active == "true" ? true : false
+          this.PH.a = PH.active == "true" ? "Sensor activo" : "Sensor inactivo"
+          this.PH.id = PH.id
+          this.PH.pines.pin1 = String(PH.read_pin)
+          this.PH.ideal = Number(String(PH.ideal))
+          this.PH.ranges.lower = Number(String(PH.min))
+          this.PH.ranges.upper = Number(String(PH.max))
+          this.PH.control_min_pin = String(PH.pin_min)
+          this.PH.control_max_pin = String(PH.pin_max)
         }
         if (sensors.YL != undefined) {//Asignación de variables a DHT11
           const YL = sensors.YL
@@ -504,6 +572,62 @@ export class Tab2Page {
       //console.log(error);
     })
   }
+  updateSensorPH() {
+    let newData
+    newData = "?newUbiVar=PHgen"
+      + "&newReadPin=" + this.PH.pines.pin1
+      + "&newControlPinMin=" + this.PH.control_min_pin
+      + "&newControlPinMax=" + this.PH.control_max_pin
+      + "&newMin=" + this.PH.ranges.lower
+      + "&newMax=" + this.PH.ranges.upper
+      + "&newIdeal=" + this.PH.ideal
+      + "&active=" + this.disable.PH
+      + "&id=5"
+      + "&ip="+this.myIP
+      //console.log(newData);
+      
+    this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
+      this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+    }, (error) => {
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+      this.presentToast("Ha ocurriedo un error, vuelva a intentarlo.")
+      this.http.dismissLoader()
+      //console.log(error);
+    })
+  }
+  updateSensorCond() {
+    let newData
+    newData = "?newUbiVar=Condgen"
+      + "&newReadPin=" + this.Cond.pines.pin1
+      + "&newControlPinMin=" + this.Cond.control_min_pin
+      + "&newControlPinMax=" + this.Cond.control_max_pin
+      + "&newMin=" + this.Cond.ranges.lower
+      + "&newMax=" + this.Cond.ranges.upper
+      + "&newIdeal=" + this.Cond.ideal
+      + "&active=" + this.disable.Cond
+      + "&id=6"
+      + "&ip="+this.myIP
+      //console.log(newData);
+      
+    this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
+      this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+    }, (error) => {
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+      this.presentToast("Ha ocurriedo un error, vuelva a intentarlo.")
+      this.http.dismissLoader()
+      //console.log(error);
+    })
+  }
   updateSensorYL() {
     let newData
     newData = "?newUbiVar=S_Humedad"
@@ -574,6 +698,10 @@ export class Tab2Page {
               this.updateSensorDS18()
             } else if (thing == 'Oxy') {
               this.updateSensorOxy()
+            } else if (thing == 'Cond') {
+              this.updateSensorCond()
+            } else if (thing == 'PH') {
+              this.updateSensorPH()
             } else if (thing == 'YL') {
               this.updateSensorYL()
             }
@@ -630,6 +758,10 @@ export class Tab2Page {
               this.disable.DS18 = !this.disable.DS18
             } else if (sensor == 'Oxy') {
               this.disable.Oxy = !this.disable.Oxy
+            } else if (sensor == 'Cond') {
+              this.disable.Cond = !this.disable.Cond
+            } else if (sensor == 'PH') {
+              this.disable.PH = !this.disable.PH
             } else if (sensor == 'YL') {
               this.disable.YL = !this.disable.YL
             }
@@ -645,6 +777,10 @@ export class Tab2Page {
                 this.disable.DHT = !this.disable.DHT
               } else if (sensor == 'Oxy') {
                 this.disable.Oxy = !this.disable.Oxy
+              } else if (sensor == 'PH') {
+                this.disable.PH = !this.disable.PH
+              } else if (sensor == 'Cond') {
+                this.disable.Cond = !this.disable.Cond
               } else if (sensor == 'Ds18') {
                 this.disable.DS18 = !this.disable.DS18
               } else if (sensor == 'YL') {

@@ -691,6 +691,162 @@
           </div>
         </div>
       </ion-accordion>
+      <ion-accordion value="cond">
+        <ion-item slot="header" color="light">
+          <ion-label>Conductividad</ion-label>
+          <ion-note slot="end" color="dark" [hidden]="disable.chCond">*</ion-note>
+          <ion-icon slot="start" color="primary" name="hardware-chip"></ion-icon>
+        </ion-item>
+        <div class="ion-padding" slot="content" (ionChange)="changesCond()">
+          <ion-item [hidden]="!ImAdmin">
+            <!--Active-->
+            <ion-label color="primary">{{Cond.a}}</ion-label>
+            <ion-toggle slot="end" [(ngModel)]="disable.Cond" (click)="showAlertChangeStatus('Cond')"></ion-toggle>
+          </ion-item>
+          <ion-list-header>
+            <ion-label color="success">Rangos</ion-label>
+          </ion-list-header>
+          <ion-item [disabled]="!disable.Cond" lines="none">
+            <ion-range [min]="100" [max]="1000" [pin]="true" [(ngModel)]="Cond.ranges" [dualKnobs]="true"
+              [value]="{ lower: Cond.ranges.lower, upper: Cond.ranges.upper }"></ion-range>
+          </ion-item>
+          <ion-item [disabled]="!disable.Cond" lines="none">
+            <ion-label color="primary" slot="start">Min</ion-label>
+            <ion-label color="primary" slot="end">Max</ion-label>
+          </ion-item>
+          <!--ion-item [disabled]="!disable.Cond">
+            <ion-label color="primary">Max</ion-label>
+            <ion-input [(ngModel)]="Cond.max" class="ion-text-center"></ion-input>
+          </ion-item-->
+          <ion-item [disabled]="!disable.Cond">
+            <ion-label color="primary">Ideal</ion-label>
+            <ion-range [min]="Cond.ranges.lower" [max]="Cond.ranges.upper"
+             [pin]="true" [(ngModel)]="Cond.ideal"></ion-range>
+          </ion-item>
+          <div [hidden]="!ImAdmin">
+            <ion-list-header>
+              <ion-label color="success">Pines de control</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.Cond">
+              <ion-label color="primary">Conductividad mínima</ion-label>
+              <ion-select value="{{Cond.control_min_pin}}" [(ngModel)]="Cond.control_min_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item [disabled]="!disable.Cond">
+              <ion-label color="primary">Conductividad máxima</ion-label>
+              <ion-select value="{{Cond.control_max_pin}}" [(ngModel)]="Cond.control_max_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-list-header>
+              <ion-label color="success">Sensores</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.Cond">
+              <ion-label color="primary">Pin</ion-label>
+              <ion-select value="{{Cond.pines.pin1}}" [(ngModel)]="Cond.pines.pin1">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of generalPines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          <div class="ion-text-center">
+            <ion-button [disabled]="disable.chCond" expand="block" (click)="showAlertParams('Cond')" color="primary">
+              <ion-icon slot="end" name="save-outline"></ion-icon>
+              Guardar cambios
+            </ion-button>
+          </div>
+        </div>
+      </ion-accordion>
+      <ion-accordion value="ph">
+        <ion-item slot="header" color="light">
+          <ion-label>PH</ion-label>
+          <ion-note slot="end" color="dark" [hidden]="disable.chPH">*</ion-note>
+          <ion-icon slot="start" color="primary" name="hardware-chip"></ion-icon>
+        </ion-item>
+        <div class="ion-padding" slot="content" (ionChange)="changesPH()">
+          <ion-item [hidden]="!ImAdmin">
+            <!--Active-->
+            <ion-label color="primary">{{PH.a}}</ion-label>
+            <ion-toggle slot="end" [(ngModel)]="disable.PH" (click)="showAlertChangeStatus('PH')"></ion-toggle>
+          </ion-item>
+          <ion-list-header>
+            <ion-label color="success">Rangos</ion-label>
+          </ion-list-header>
+          <ion-item [disabled]="!disable.PH" lines="none">
+            <ion-range [min]="0" [max]="14" [pin]="true" [(ngModel)]="PH.ranges" [dualKnobs]="true"
+              [value]="{ lower: PH.ranges.lower, upper: PH.ranges.upper }"></ion-range>
+          </ion-item>
+          <ion-item [disabled]="!disable.PH" lines="none">
+            <ion-label color="primary" slot="start">Min</ion-label>
+            <ion-label color="primary" slot="end">Max</ion-label>
+          </ion-item>
+          <!--ion-item [disabled]="!disable.PH">
+            <ion-label color="primary">Max</ion-label>
+            <ion-input [(ngModel)]="PH.max" class="ion-text-center"></ion-input>
+          </ion-item-->
+          <ion-item [disabled]="!disable.PH">
+            <ion-label color="primary">PH ideal</ion-label>
+            <ion-range [min]="PH.ranges.lower" [max]="PH.ranges.upper"
+             [pin]="true" [(ngModel)]="PH.ideal"></ion-range>
+          </ion-item>
+          <div [hidden]="!ImAdmin">
+            <ion-list-header>
+              <ion-label color="success">Pines de control</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.PH">
+              <ion-label color="primary">PH mínimo</ion-label>
+              <ion-select value="{{PH.control_min_pin}}" [(ngModel)]="PH.control_min_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item [disabled]="!disable.PH">
+              <ion-label color="primary">PH máximo</ion-label>
+              <ion-select value="{{PH.control_max_pin}}" [(ngModel)]="PH.control_max_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-list-header>
+              <ion-label color="success">Sensores</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.PH">
+              <ion-label color="primary">Pin</ion-label>
+              <ion-select value="{{PH.pines.pin1}}" [(ngModel)]="PH.pines.pin1">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of generalPines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          <div class="ion-text-center">
+            <ion-button [disabled]="disable.chPH" expand="block" (click)="showAlertParams('PH')" color="primary">
+              <ion-icon slot="end" name="save-outline"></ion-icon>
+              Guardar cambios
+            </ion-button>
+          </div>
+        </div>
+      </ion-accordion>
     </ion-accordion-group>
   </div>
   <div [hidden]=SSIDPASS>

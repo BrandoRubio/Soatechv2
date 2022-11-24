@@ -158,262 +158,267 @@ export class Tab4Page implements OnInit {
   getDeviceData(id) {
     this.db.getDevice(id).then(_ => {
       this.ipDeviceSelected = _.ip
-      this.http.checkDevice(this.ipDeviceSelected).subscribe(__ => {
-        if(this.firstTimeDev){
+      if (this.firstTimeDev) {
+        this.http.checkDevice(this.ipDeviceSelected).subscribe(__ => {
           this.firstTimeDev = false
           this.db.updateTypeDevice(this.deviceSelected, __.name, __.type)
-        }
-        this.components.WithoutDevices = true;
-        if (this.mostrarComo == "numbers") {
-          this.components.NoDevice = true;
+        }, error => {
+          this.deshabilitarDivs();
+          this.components.WithoutDevices = true;
           this.components.AskingDevice = true;
-          this.components.GRAFICS = true;
-          this.components.NUMBERS = false;
-          this.http.getLastValues(this.ipDeviceSelected).subscribe(data => {
-            if (data.HUM != undefined) {//HUMEDAD DHT11
-              this.RANGES.HUM = data.HUMRANGES
-              this.VALUES.HUM = Math.round(data.HUM + Number.EPSILON * 100)
-              this.colors.humedad = data.HUMCOLOR
-              this.sensors.humedad = false;
-            } else {
-              this.sensors.humedad = true;
-            }
-            if (data.TEMP != undefined) {//TEMPERATURA DHT11
-              this.RANGES.TEMP = data.TEMPRANGES
-              this.VALUES.TEMP = Math.round(data.TEMP + Number.EPSILON * 100)
-              this.colors.temperatura = data.TEMPCOLOR
-              this.sensors.temperatura = false;
-
-            } else {
-              this.sensors.temperatura = true;
-            }
-            if (data.PH != undefined) {//PH Acuaponia
-              this.RANGES.PH = data.PHRANGES
-              this.VALUES.PH = Math.round(data.PH + Number.EPSILON * 100)
-              this.colors.ph = data.PHCOLOR
-              this.sensors.ph = false;
-            } else {
-              this.sensors.ph = true;
-            }
-            if (data.CONDUC != undefined) {//Conductividad Acuaponia
-              this.RANGES.CONDUC = data.CONDUCRANGES
-              this.VALUES.CONDUC = Math.round(data.CONDUC + Number.EPSILON * 100)
-              this.colors.conductividad = data.CONDCOLOR
-              this.sensors.conductividad = false;
-            } else {
-              this.sensors.conductividad = true;
-            }
-            if (data.OXY != undefined) {//Oxigenación Acuaponia
-              this.RANGES.OXY = data.OXYRANGES
-              this.VALUES.OXY = Math.round(data.OXY + Number.EPSILON * 100)
-              this.colors.oxigenacion = data.OXYCOLOR
-              this.sensors.oxigenacion = false;
-            } else {
-              this.sensors.oxigenacion = true;
-            }
-            if (data.TURVIDEZ != undefined) {//TURVIDEZ Acuaponia
-              this.RANGES.TURVIDEZ = data.TURVIDEZRANGES
-              this.VALUES.TURVIDEZ = Math.round(data.TURVIDEZ + Number.EPSILON * 100)
-              this.colors.turvidez = data.TURVIDEZCOLOR
-              this.sensors.turvidez = false;
-            } else {
-              this.sensors.turvidez = true;
-            }
-            if (data.PSHUM != undefined) {//Humedad en sustrato (YL)
-              this.RANGES.YL = data.SHUMRANGES
-              this.VALUES.YL = Math.round(data.PSHUM + Number.EPSILON * 100)
-              this.colors.YL = data.SHUMCOLOR
-              this.sensors.YL = false;
-            } else {
-              this.sensors.YL = true;
-            }
-            if (data.PSTEMP != undefined) {//Temperatura en sustrato (DS18)
-              this.RANGES.DS18 = data.STEMPRANGES
-              this.VALUES.DS18 = Math.round(data.PSTEMP + Number.EPSILON * 100)
-              this.colors.DS18 = data.STEMPCOLOR
-              this.sensors.DS18 = false;
-            } else {
-              this.sensors.DS18 = true;
-            }
-          }, error => {
-            this.deshabilitarDivs();
-            this.components.WithoutDevices = true;
-            this.components.AskingDevice = true;
-            this.components.NoDevice = false;
-          });
-
-        } else if (this.mostrarComo == "registers") {
-          this.components.NoDevice = true;
-          this.components.AskingDevice = true;
-          this.components.NUMBERS = true;
-          this.components.GRAFICS = false;
-          this.http.getAllElementValues(this.ipDeviceSelected).subscribe(data => {
-            const dataDates: String[] = []
-            data.dates.reverse().forEach(i => {
-              const d = new Date(i)
-              dataDates.push(d.toLocaleString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' }))
-            });
-            const LEN = Number(dataDates.length - 1);
-            const REGISTERS: number = data.REGISTERS;
-            try {//Temperatura DHT11
-              var d: number[] = data.temperatura.reverse()
-              this.showTempChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.TEMP = data.TEMPRANGES
-              this.VALUES.TEMP = d[d.length - 1]
-              this.colors.temperatura = data.TEMPCOLOR
-              this.sensors.temperatura = false;
-            } catch (error) {
-              this.sensors.temperatura = true;
-            }
-            try {//HUMEDAD DHT11
-              var d: number[] = data.humedad.reverse()
-              this.showHumChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.HUM = data.HUMRANGES
-              this.VALUES.HUM = d[d.length - 1]
-              this.colors.humedad = data.HUMCOLOR
-              this.sensors.humedad = false;
-            } catch (error) {
-              this.sensors.humedad = true;
-            }
-            try {//co2
-              var d: number[] = data.co2.reverse()
-              var c: number[] = data.amon.reverse()
-              this.showGasesGrillosChart(dataDates, d, c, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.CO2 = data.HUMRANGES
-              this.RANGES.AMON = data.AMONRANGES
-              this.VALUES.CO2 = d[d.length - 1]
-              this.VALUES.AMON = c[c.length - 1]
-              this.colors.co2 = data.CO2COLOR
-              this.sensors.co2 = false;
-            } catch (error) {
-              this.sensors.co2 = true;
-            }
-            try {//Oxigenación Acuaponia
-              var d: number[] = data.oxygen.reverse()
-              this.showOxygenChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.OXY = data.OXYRANGES
-              this.VALUES.OXY = d[d.length - 1]
-              this.colors.oxigenacion = data.OXYCOLOR
-              this.sensors.oxigenacion = false;
-            } catch (error) {
-              this.sensors.oxigenacion = true;
-            }
-            try {//Conductividad Acuaponia
-              var d: number[] = data.conductividad.reverse()
-              this.showConductivityChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.CONDUC = data.CONDRANGES
-              this.VALUES.CONDUC = d[d.length - 1]
-              this.colors.conductividad = data.CONDCOLOR
-              this.sensors.conductividad = false;
-            } catch (error) {
-              this.sensors.conductividad = true;
-            }
-            try {//TURVIDEZ Acuaponia
-              var d: number[] = data.turvidez.reverse()
-              this.showTurbChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.TURVIDEZ = data.TURVRANGES
-              this.VALUES.TURVIDEZ = d[d.length - 1]
-              this.colors.turvidez = data.TURVCOLOR
-              this.sensors.turvidez = false;
-            } catch (error) {
-              this.sensors.turvidez = true;
-            }
-            try {//PH Acuaponia
-              var d: number[] = data.ph.reverse()
-              this.showPhChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.PH = data.PHRANGES
-              this.VALUES.PH = d[d.length - 1]
-              this.colors.ph = data.PHCOLOR
-              this.sensors.ph = false;
-            } catch (error) {
-              this.sensors.ph = true;
-            }
-            try {//Temperatura Acuaponia
-              var d: number[] = data.Htemp.reverse()
-              this.showHTempChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.HTEMP = data.HTEMPRANGES
-              this.VALUES.HTEMP = d[d.length - 1]
-              this.colors.Htemperatura = data.HTEMPCOLOR
-              this.sensors.Htemperatura = false;
-            } catch (error) {
-              this.sensors.Htemperatura = true;
-            }
-            try {//Humedad en sustrato
-              var d1: number[] = data.s_h1.reverse()
-              var d2: number[] = data.s_h2.reverse()
-              var d3: number[] = data.s_h3.reverse()
-              var d4: number[] = data.s_h4.reverse()
-              var i = 0;
-              var s = 0;
-              if (d1[LEN] > 0) {
-                i++;
-                s += Number(d1[LEN]);
-              }
-              if (d2[LEN] > 0) {
-                i++;
-                s += Number(d2[LEN]);
-              }
-              if (d3[LEN] > 0) {
-                i++;
-                s += Number(d3[LEN]);
-              }
-              if (d4[LEN] > 0) {
-                i++;
-                s += Number(d4[LEN]);
-              }
-              this.showYLChart(d1, d2, d3, d4, dataDates, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.YL = data.SHUMRANGES
-              this.colors.YL = data.SHUMCOLOR
-              this.VALUES.YL = Number(s / i) ? Number(s / i) : 0;
-              this.sensors.YL = false;
-            } catch (error) {
-              this.sensors.YL = true;
-            }
-            try {//Temperatura en sustrato
-              var d1: number[] = data.s_t1.reverse()
-              var d2: number[] = data.s_t2.reverse()
-              var d3: number[] = data.s_t3.reverse()
-              var d4: number[] = data.s_t4.reverse()
-              var i = 0;
-              var s = 0;
-              if (d1[LEN] > 0) {
-                i++;
-                s = s + Number(d1[LEN]);
-              }
-              if (d2[LEN] > 0) {
-                i++;
-                s = s + Number(d2[LEN]);
-              }
-              if (d3[LEN] > 0) {
-                i++;
-                s = s + Number(d3[LEN]);
-              }
-              if (d4[LEN] > 0) {
-                i++;
-                s = s + Number(d4[LEN]);
-              }
-              this.showDS18Chart(d1, d2, d3, d4, dataDates, dataDates[0], dataDates[LEN], REGISTERS)
-              this.RANGES.DS18 = data.STEMPRANGES
-              this.VALUES.DS18 = Number(s / i);
-              this.colors.DS18 = data.STEMPCOLOR
-              this.sensors.DS18 = false;
-            } catch (error) {
-              this.sensors.DS18 = true;
-            }
-          }, error => {
-            this.deshabilitarDivs();
-            this.components.WithoutDevices = true;
-            this.components.AskingDevice = true;
-            this.components.NoDevice = false;
-          });
-        }
-      }, error => {
-        this.deshabilitarDivs();
-        this.components.WithoutDevices = true;
+          this.components.NoDevice = false;
+        });
+      }
+      this.components.WithoutDevices = true;
+      if (this.mostrarComo == "numbers") {
+        this.components.NoDevice = true;
         this.components.AskingDevice = true;
-        this.components.NoDevice = false;
-      });
-    })
+        this.components.GRAFICS = true;
+        this.components.NUMBERS = false;
+        this.http.getLastValues(this.ipDeviceSelected).subscribe(data => {
+          if (data.HUM != undefined) {//HUMEDAD DHT11
+            this.RANGES.HUM = data.HUMRANGES
+            this.VALUES.HUM = Math.round(data.HUM + Number.EPSILON * 100)
+            this.colors.humedad = data.HUMCOLOR
+            this.sensors.humedad = false;
+          } else {
+            this.sensors.humedad = true;
+          }
+          if (data.TEMP != undefined) {//TEMPERATURA DHT11
+            this.RANGES.TEMP = data.TEMPRANGES
+            this.VALUES.TEMP = Math.round(data.TEMP + Number.EPSILON * 100)
+            this.colors.temperatura = data.TEMPCOLOR
+            this.sensors.temperatura = false;
+
+          } else {
+            this.sensors.temperatura = true;
+          }
+          if (data.PH != undefined) {//PH Acuaponia
+            this.RANGES.PH = data.PHRANGES
+            this.VALUES.PH = Math.round(data.PH + Number.EPSILON * 100)
+            this.colors.ph = data.PHCOLOR
+            this.sensors.ph = false;
+          } else {
+            this.sensors.ph = true;
+          }
+          if (data.COND != undefined) {//Conductividad Acuaponia
+            this.RANGES.CONDUC = data.CONDRANGES
+            this.VALUES.CONDUC = Math.round(data.COND + Number.EPSILON * 100)
+            this.colors.conductividad = data.CONDCOLOR
+            this.sensors.conductividad = false;
+          } else {
+            this.sensors.conductividad = true;
+          }
+          if (data.OXY != undefined) {//Oxigenación Acuaponia
+            this.RANGES.OXY = data.OXYRANGES
+            this.VALUES.OXY = Math.round(data.OXY + Number.EPSILON * 100)
+            this.colors.oxigenacion = data.OXYCOLOR
+            this.sensors.oxigenacion = false;
+          } else {
+            this.sensors.oxigenacion = true;
+          }
+          if (data.TURVIDEZ != undefined) {//TURVIDEZ Acuaponia
+            this.RANGES.TURVIDEZ = data.TURVIDEZRANGES
+            this.VALUES.TURVIDEZ = Math.round(data.TURVIDEZ + Number.EPSILON * 100)
+            this.colors.turvidez = data.TURVIDEZCOLOR
+            this.sensors.turvidez = false;
+          } else {
+            this.sensors.turvidez = true;
+          }
+          if (data.PSHUM != undefined) {//Humedad en sustrato (YL)
+            this.RANGES.YL = data.SHUMRANGES
+            this.VALUES.YL = Math.round(data.PSHUM + Number.EPSILON * 100)
+            this.colors.YL = data.SHUMCOLOR
+            this.sensors.YL = false;
+          } else {
+            this.sensors.YL = true;
+          }
+          if (data.PSTEMP != undefined) {//Temperatura en sustrato (DS18)
+            this.RANGES.DS18 = data.STEMPRANGES
+            this.VALUES.DS18 = Math.round(data.PSTEMP + Number.EPSILON * 100)
+            this.colors.DS18 = data.STEMPCOLOR
+            this.sensors.DS18 = false;
+          } else {
+            this.sensors.DS18 = true;
+          }
+        }, error => {
+          this.deshabilitarDivs();
+          this.components.WithoutDevices = true;
+          this.components.AskingDevice = true;
+          this.components.NoDevice = false;
+        });
+
+      } else if (this.mostrarComo == "registers") {
+        this.components.NoDevice = true;
+        this.components.AskingDevice = true;
+        this.components.NUMBERS = true;
+        this.components.GRAFICS = false;
+        this.http.getAllElementValues(this.ipDeviceSelected).subscribe(data => {
+          const dataDates: String[] = []
+          data.dates.reverse().forEach(i => {
+            const d = new Date(i)
+            dataDates.push(d.toLocaleString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' }))
+          });
+          const LEN = Number(dataDates.length - 1);
+          const REGISTERS: number = data.REGISTERS;
+          try {//Temperatura DHT11
+            var d: number[] = data.temperatura.reverse()
+            this.showTempChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.TEMP = data.TEMPRANGES
+            this.VALUES.TEMP = d[d.length - 1]
+            this.colors.temperatura = data.TEMPCOLOR
+            this.sensors.temperatura = false;
+          } catch (error) {
+            this.sensors.temperatura = true;
+          }
+          try {//HUMEDAD DHT11
+            var d: number[] = data.humedad.reverse()
+            this.showHumChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.HUM = data.HUMRANGES
+            this.VALUES.HUM = d[d.length - 1]
+            this.colors.humedad = data.HUMCOLOR
+            this.sensors.humedad = false;
+          } catch (error) {
+            this.sensors.humedad = true;
+          }
+          try {//co2
+            var d: number[] = data.co2.reverse()
+            var c: number[] = data.amon.reverse()
+            this.showGasesGrillosChart(dataDates, d, c, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.CO2 = data.HUMRANGES
+            this.RANGES.AMON = data.AMONRANGES
+            this.VALUES.CO2 = d[d.length - 1]
+            this.VALUES.AMON = c[c.length - 1]
+            this.colors.co2 = data.CO2COLOR
+            this.sensors.co2 = false;
+          } catch (error) {
+            this.sensors.co2 = true;
+          }
+          try {//Oxigenación Acuaponia
+            var d: number[] = data.oxygen.reverse()
+            this.showOxygenChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.OXY = data.OXYRANGES
+            this.VALUES.OXY = d[d.length - 1]
+            this.colors.oxigenacion = data.OXYCOLOR
+            this.sensors.oxigenacion = false;
+          } catch (error) {
+            this.sensors.oxigenacion = true;
+          }
+          try {//Conductividad Acuaponia
+            var d: number[] = data.cond.reverse()
+            this.showConductivityChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.CONDUC = data.CONDRANGES
+            this.VALUES.CONDUC = d[d.length - 1]
+            this.colors.conductividad = data.CONDCOLOR
+            this.sensors.conductividad = false;
+          } catch (error) {
+            this.sensors.conductividad = true;
+          }
+          try {//TURVIDEZ Acuaponia
+            var d: number[] = data.turvidez.reverse()
+            this.showTurbChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.TURVIDEZ = data.TURVRANGES
+            this.VALUES.TURVIDEZ = d[d.length - 1]
+            this.colors.turvidez = data.TURVCOLOR
+            this.sensors.turvidez = false;
+          } catch (error) {
+            this.sensors.turvidez = true;
+          }
+          try {//PH Acuaponia
+            var d: number[] = data.ph.reverse()
+            this.showPhChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.PH = data.PHRANGES
+            this.VALUES.PH = d[d.length - 1]
+            this.colors.ph = data.PHCOLOR
+            this.sensors.ph = false;
+          } catch (error) {
+            this.sensors.ph = true;
+          }
+          try {//Temperatura Acuaponia
+            var d: number[] = data.Htemp.reverse()
+            this.showHTempChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.HTEMP = data.HTEMPRANGES
+            this.VALUES.HTEMP = d[d.length - 1]
+            this.colors.Htemperatura = data.HTEMPCOLOR
+            this.sensors.Htemperatura = false;
+          } catch (error) {
+            this.sensors.Htemperatura = true;
+          }
+          try {//Humedad en sustrato
+            var d1: number[] = data.s_h1.reverse()
+            var d2: number[] = data.s_h2.reverse()
+            var d3: number[] = data.s_h3.reverse()
+            var d4: number[] = data.s_h4.reverse()
+            var i = 0;
+            var s = 0;
+            if (d1[LEN] > 0) {
+              i++;
+              s += Number(d1[LEN]);
+            }
+            if (d2[LEN] > 0) {
+              i++;
+              s += Number(d2[LEN]);
+            }
+            if (d3[LEN] > 0) {
+              i++;
+              s += Number(d3[LEN]);
+            }
+            if (d4[LEN] > 0) {
+              i++;
+              s += Number(d4[LEN]);
+            }
+            this.showYLChart(d1, d2, d3, d4, dataDates, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.YL = data.SHUMRANGES
+            this.colors.YL = data.SHUMCOLOR
+            this.VALUES.YL = Number(s / i) ? Number(s / i) : 0;
+            this.sensors.YL = false;
+          } catch (error) {
+            this.sensors.YL = true;
+          }
+          try {//Temperatura en sustrato
+            var d1: number[] = data.s_t1.reverse()
+            var d2: number[] = data.s_t2.reverse()
+            var d3: number[] = data.s_t3.reverse()
+            var d4: number[] = data.s_t4.reverse()
+            var i = 0;
+            var s = 0;
+            if (d1[LEN] > 0) {
+              i++;
+              s = s + Number(d1[LEN]);
+            }
+            if (d2[LEN] > 0) {
+              i++;
+              s = s + Number(d2[LEN]);
+            }
+            if (d3[LEN] > 0) {
+              i++;
+              s = s + Number(d3[LEN]);
+            }
+            if (d4[LEN] > 0) {
+              i++;
+              s = s + Number(d4[LEN]);
+            }
+            this.showDS18Chart(d1, d2, d3, d4, dataDates, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.DS18 = data.STEMPRANGES
+            this.VALUES.DS18 = Number(s / i);
+            this.colors.DS18 = data.STEMPCOLOR
+            this.sensors.DS18 = false;
+          } catch (error) {
+            this.sensors.DS18 = true;
+          }
+        }, error => {
+          this.deshabilitarDivs();
+          this.components.WithoutDevices = true;
+          this.components.AskingDevice = true;
+          this.components.NoDevice = false;
+        });
+      }
+    }, error => {
+      this.deshabilitarDivs();
+      this.components.WithoutDevices = true;
+      this.components.AskingDevice = true;
+      this.components.NoDevice = false;
+    });
   }
   showTempChart(dates, temp, firstDate, lastDate, n) {
     if (this.lineChartGrillosTemp) {
@@ -682,7 +687,7 @@ export class Tab4Page implements OnInit {
       });
     }
   }
-  showTurbChart(data, dates, firstDate, lastDate, n) {
+  showTurbChart(dates, data, firstDate, lastDate, n) {
     if (this.lineChartTurb) {
       this.lineChartTurb.data.labels = dates;
       this.lineChartTurb.data.datasets[0].data = data;
@@ -743,7 +748,7 @@ export class Tab4Page implements OnInit {
       });
     }
   }
-  showHTempChart(data, dates, firstDate, lastDate, n) {
+  showHTempChart(dates, data, firstDate, lastDate, n) {
     if (this.lineChartTemp) {
       this.lineChartTemp.data.labels = dates;
       this.lineChartTemp.data.datasets[0].data = data;
@@ -865,7 +870,7 @@ export class Tab4Page implements OnInit {
       });
     }
   }
-  showConductivityChart(data, dates, firstDate, lastDate, n) {
+  showConductivityChart(dates, data, firstDate, lastDate, n) {
     if (this.lineChartConductivity) {
       this.lineChartConductivity.data.labels = dates;
       this.lineChartConductivity.data.datasets[0].data = data;
