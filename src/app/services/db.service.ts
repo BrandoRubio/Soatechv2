@@ -91,41 +91,50 @@ export class DbService {
           document.documentElement.style.setProperty('--ion-color-primary-shade', '#376ad1');
           document.documentElement.style.setProperty('--ion-color-primary-tint', '#5286f0');
         } else
-          if (res.rows.item(0).type == "ganadero") {
-            this.logo = "logo ganadero.png"
-            document.documentElement.style.setProperty('--ion-color-primary', '#3f79ee');
-            document.documentElement.style.setProperty('--ion-color-primary-rgb', '63,121,238');
+          if (res.rows.item(0).type == "floral") {
+            this.logo = "logo floral.png"
+            document.documentElement.style.setProperty('--ion-color-primary', '#6fb563');
+            document.documentElement.style.setProperty('--ion-color-primary-rgb', '111,181,99');
             document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');
             document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
-            document.documentElement.style.setProperty('--ion-color-primary-shade', '#376ad1');
-            document.documentElement.style.setProperty('--ion-color-primary-tint', '#5286f0');
+            document.documentElement.style.setProperty('--ion-color-primary-shade', '#629f57');
+            document.documentElement.style.setProperty('--ion-color-primary-tint', '#7dbc73');
           } else
-            if (res.rows.item(0).type == "avicola") {
-              this.logo = "logo avicola.png"
-              document.documentElement.style.setProperty('--ion-color-primary', '#E3C500');
-              document.documentElement.style.setProperty('--ion-color-primary-rgb', '227,197,0');
-              document.documentElement.style.setProperty('--ion-color-primary-contrast', '#000000');
-              document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '0,0,0');
-              document.documentElement.style.setProperty('--ion-color-primary-shade', '#c8ad00');
-              document.documentElement.style.setProperty('--ion-color-primary-tint', '#e6cb1a');
+            if (res.rows.item(0).type == "ganadero") {
+              this.logo = "logo ganadero.png"
+              document.documentElement.style.setProperty('--ion-color-primary', '#ff5757');
+              document.documentElement.style.setProperty('--ion-color-primary-rgb', '255,87,87');
+              document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');
+              document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
+              document.documentElement.style.setProperty('--ion-color-primary-shade', '#e04d4d');
+              document.documentElement.style.setProperty('--ion-color-primary-tint', '#ff6868');
             } else
-              if (res.rows.item(0).type == "integral") {
-                this.logo = "logotipo.png"
-                document.documentElement.style.setProperty('--ion-color-primary', '#01a3d2');
-                document.documentElement.style.setProperty('--ion-color-primary-rgb', '56, 128, 255');
+              if (res.rows.item(0).type == "avicola") {
+                this.logo = "logo avicola.png"
+                document.documentElement.style.setProperty('--ion-color-primary', '#E3C501');
+                document.documentElement.style.setProperty('--ion-color-primary-rgb', '227,197,1');
                 document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');
                 document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
-                document.documentElement.style.setProperty('--ion-color-primary-shade', '#3171e0');
-                document.documentElement.style.setProperty('--ion-color-primary-tint', '#4c8dff');
-              } else {
-                this.logo = "logotipo.png"
-                document.documentElement.style.setProperty('--ion-color-primary', '#01a3d2');
-                document.documentElement.style.setProperty('--ion-color-primary-rgb', '56, 128, 255');
-                document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');
-                document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
-                document.documentElement.style.setProperty('--ion-color-primary-shade', '#3171e0');
-                document.documentElement.style.setProperty('--ion-color-primary-tint', '#4c8dff');
-              }
+                document.documentElement.style.setProperty('--ion-color-primary-shade', '#c8ad01');
+                document.documentElement.style.setProperty('--ion-color-primary-tint', '#e6cb1a');
+              } else
+                if (res.rows.item(0).type == "integral") {
+                  this.logo = "logotipo.png"
+                  document.documentElement.style.setProperty('--ion-color-primary', '#01a3d2');
+                  document.documentElement.style.setProperty('--ion-color-primary-rgb', '56, 128, 255');
+                  document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');
+                  document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
+                  document.documentElement.style.setProperty('--ion-color-primary-shade', '#3171e0');
+                  document.documentElement.style.setProperty('--ion-color-primary-tint', '#4c8dff');
+                } else {
+                  this.logo = "logotipo.png"
+                  document.documentElement.style.setProperty('--ion-color-primary', '#01a3d2');
+                  document.documentElement.style.setProperty('--ion-color-primary-rgb', '56, 128, 255');
+                  document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');
+                  document.documentElement.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
+                  document.documentElement.style.setProperty('--ion-color-primary-shade', '#3171e0');
+                  document.documentElement.style.setProperty('--ion-color-primary-tint', '#4c8dff');
+                }
       return {
         id: res.rows.item(0).id,
         name: res.rows.item(0).name,

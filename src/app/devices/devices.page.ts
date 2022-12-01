@@ -67,7 +67,8 @@ export class DevicesPage implements OnInit {
   async showDeviceInformation(name, type, ip) {
     const alert = await this.alertController.create({
       header: name,
-      message: '<ul><li><p>Tipo: <b>' + type + '</b></p></li></ul>',
+      message: '<ul><li><p>Tipo: <b>' + type + '</b></p></li></ul>'+
+      '<ul><li><p>IP: <b>' + ip + '</b></p></li></ul>',
       buttons: ['OK'],
     });
 

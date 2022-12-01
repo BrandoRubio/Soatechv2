@@ -1,66 +1,121 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="p">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>Inicio</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content color="primary">
-  <img alt="logo" src="../../assets/icon/logo transparent.png" />
+<ion-content>
+  <img alt="logo" src="../../assets/icon/soatech.png" />
+  <ion-item lines="none">
+    <ion-label color="p" class="ion-text-wrap">
+      <h2>Misión:</h2>
+      <p>Crear diferenciadores en empresas competitivas implementando las mejores Soluciones en Tecnologías de la
+        Información.</p>
+    </ion-label>
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label color="p" class="ion-text-wrap">
+      <h2>Visión:</h2>
+      <p>Nuestros consultores estarán invirtiendo con Tecnologías de Información en empresas con potencial de
+        crecimiento.</p>
+    </ion-label>
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label color="p" class="ion-text-wrap">
+      <h2>Nuestras soluciones</h2>
+      <p>A continuación te mostramos las diferentes soluciones de Soatech.</p>
+    </ion-label>
+  </ion-item>
   <ion-grid>
     <ion-row class="ion-text-center" style="height: 100%">
       <ion-col>
-        <ion-card button [routerLink]="['/tabs','tab4']" color="primary">
+        <ion-card button id="insect">
           <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/icons/local_moni.png" />
+            <img alt="ícono" src="../../assets/icon/logos/insectos.png" />
           </ion-thumbnail>
-          <ion-card-header>
-            <ion-card-title color="light">Monitoreo Interno</ion-card-title>
-          </ion-card-header>
-          <!--ion-card-content>
-            Monitoreo en el mismo sitio.
-          </ion-card-content-->
         </ion-card>
+        <ion-popover trigger="insect">
+          <ng-template>
+            <ion-content class="ion-padding" color="light">
+              <ion-label color="p" class="ion-text-wrap">Monitoreo de insectos.</ion-label>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
       </ion-col>
       <ion-col>
-        <ion-card button url="/tab1" [routerLink]="['/tabs','tab1']" color="primary">
+        <ion-card button id="avic">
           <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/icons/cloud_moni.png"/>
+            <img alt="ícono" src="../../assets/icon/logos/avicola.png" />
           </ion-thumbnail>
-          <ion-card-header>
-            <ion-card-title color="light">Monitoreo online</ion-card-title>
-          </ion-card-header>
-          <!--ion-card-content>
-            Monitoreo desde cualquier lugar.
-          </ion-card-content-->
         </ion-card>
+        <ion-popover trigger="avic">
+          <ng-template>
+            <ion-content class="ion-padding" color="light">
+              <ion-label color="p" class="ion-text-wrap">Monitoreo de aves.</ion-label>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
+      </ion-col>
+      <ion-col>
+        <ion-card button id="ganad">
+          <ion-thumbnail>
+            <img alt="ícono" src="../../assets/icon/logos/ganado.png" />
+          </ion-thumbnail>
+        </ion-card>
+        <ion-popover trigger="ganad">
+          <ng-template>
+            <ion-content class="ion-padding" color="light">
+              <ion-label color="p" class="ion-text-wrap">Monitoreo de ganado.</ion-label>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
       </ion-col>
     </ion-row>
     <ion-row class="ion-text-center" style="height: 100%">
       <ion-col>
-        <ion-card button [routerLink]="['/tabs','tab2']" color="primary">
+        <ion-card button id="acuic">
           <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/icons/parameters.png"/>
+            <img alt="ícono" src="../../assets/icon/logos/acuicola.png" />
           </ion-thumbnail>
-          <ion-card-header>
-            <ion-card-title color="light">Parámetros</ion-card-title>
-          </ion-card-header>
-          <!--ion-card-content>
-            Red y rangos de los equipos.
-          </ion-card-content-->
         </ion-card>
+        <ion-popover trigger="acuic">
+          <ng-template>
+            <ion-content class="ion-padding" color="light">
+              <ion-label color="p" class="ion-text-wrap">Monitoreo de peces.</ion-label>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
       </ion-col>
       <ion-col>
-        <ion-card button [routerLink]="['/devices']" color="primary">
+        <ion-card button id="plant">
           <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/icons/devices.png"/>
+            <img alt="ícono" src="../../assets/icon/logos/plantas.png" />
           </ion-thumbnail>
-          <ion-card-header>
-            <ion-card-title color="light">Dispositivos</ion-card-title>
-          </ion-card-header>
-          <!--ion-card-content>
-            Equipos vinculados a la app.
-          </ion-card-content-->
         </ion-card>
+        <ion-popover trigger="plant">
+          <ng-template>
+            <ion-content class="ion-padding" color="light">
+              <ion-label color="p" class="ion-text-wrap">Monitoreo de plantas.</ion-label>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
+      </ion-col>
+      <ion-col>
+        <ion-card button id="integ">
+          <ion-thumbnail>
+            <img alt="ícono" src="../../assets/icon/logos/integral.png" />
+          </ion-thumbnail>
+        </ion-card>
+        <ion-popover trigger="integ">
+          <ng-template>
+            <ion-content class="ion-padding" color="light">
+              <ion-label color="p" class="ion-text-wrap">Solución integral.</ion-label>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
       </ion-col>
     </ion-row>
   </ion-grid>

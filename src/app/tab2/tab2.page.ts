@@ -31,6 +31,7 @@ export class Tab2Page {
   deviceSelected
   ipDeviceSelected = "192.168.4.1"
   firstTime: Boolean = true
+  DHTPines = [2, 4, 5, 13, 14, 15, 16, 17, 18, 19, 22, 23, 25, 27, 32, 33, 34, 35, 36, 37, 38, 39]
   generalPines = [1, 2, 4, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 20, 25, 26, 27, 32, 33, 34, 35, 36, 39]
   relePines = [1, 2, 4, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 20, 25, 26, 27, 32, 33, 34, 35, 36, 39]
   DHT11 = {
@@ -155,6 +156,14 @@ export class Tab2Page {
     PH: true,
     Cond: true,
   }
+  show = {
+    DHT : false,
+    DS18 : false,
+    YL : false,
+    Oxy : false,
+    PH : false,
+    Cond : false
+  }
 
   loading: Boolean = false
   showNotFound: Boolean = true
@@ -250,7 +259,7 @@ export class Tab2Page {
     this.disable.chDs18 = true
     this.disable.chYL = true
     this.sensors = true
-    this.ImAdmin = true;
+    this.ImAdmin = false;
     this.loading = false
     this.showLoading = false
     this.showNotFound = true
@@ -283,13 +292,13 @@ export class Tab2Page {
       }
     }
   }
-  GetIP(){
+  GetIP() {
     this.networkInterface.getWiFiIPAddress()
-    .then(address => {
-      console.log(address.ip);
-      this.myIP = address.ip
-    })
-    .catch(error => console.error(`Unable to get IP: ${error}`));
+      .then(address => {
+        console.log(address.ip);
+        this.myIP = address.ip
+      })
+      .catch(error => console.error(`Unable to get IP: ${error}`));
   }
   plusNumber() {
     if (this.NRegisters < 60) {
@@ -308,7 +317,7 @@ export class Tab2Page {
   }
   susMin() {
     if (this.minutes > 2) {
-    this.minutes = this.minutes - 1
+      this.minutes = this.minutes - 1
     }
   }
   tryCheck() {
@@ -330,6 +339,11 @@ export class Tab2Page {
         this.showLoading = true
         if (sensors.DHT11 != undefined) {//Asignación de variables a DHT11
           const DHT = sensors.DHT11
+          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin){
+            this.show.DHT = false;
+          }else{
+            this.show.DHT = true;
+          }
           this.disable.DHT = DHT.active == "true" ? true : false
           this.DHT11.a = DHT.active == "true" ? "Sensor activo" : "Sensor inactivo"
           this.DHT11.id = DHT.id
@@ -350,6 +364,11 @@ export class Tab2Page {
         }
         if (sensors.Ds18 != undefined) {//Asignación de variables a DHT11
           const DS18 = sensors.Ds18
+          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin){
+            this.show.DS18 = false;
+          }else{
+            this.show.DS18 = true;
+          }
           this.disable.DS18 = DS18.active == "true" ? true : false
           this.DS18.a = DS18.active == "true" ? "Sensor activo" : "Sensor inactivo"
           this.DS18.id = DS18.id
@@ -362,6 +381,11 @@ export class Tab2Page {
         }
         if (sensors.Oxygen != undefined) {//Asignación de variables a DHT11
           const Oxy = sensors.Oxygen
+          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin){
+            this.show.Oxy = false;
+          }else{
+            this.show.Oxy = true;
+          }
           this.disable.Oxy = Oxy.active == "true" ? true : false
           this.Oxy.a = Oxy.active == "true" ? "Sensor activo" : "Sensor inactivo"
           this.Oxy.id = Oxy.id
@@ -374,6 +398,11 @@ export class Tab2Page {
         }
         if (sensors.Conductividad != undefined) {//Asignación de variables a DHT11
           const Cond = sensors.Conductividad
+          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin){
+            this.show.Cond = false;
+          }else{
+            this.show.Cond = true;
+          }
           this.disable.Cond = Cond.active == "true" ? true : false
           this.Cond.a = Cond.active == "true" ? "Sensor activo" : "Sensor inactivo"
           this.Cond.id = Cond.id
@@ -386,6 +415,11 @@ export class Tab2Page {
         }
         if (sensors.PH != undefined) {//Asignación de variables a DHT11
           const PH = sensors.PH
+          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin){
+            this.show.PH = false;
+          }else{
+            this.show.PH = true;
+          }
           this.disable.PH = PH.active == "true" ? true : false
           this.PH.a = PH.active == "true" ? "Sensor activo" : "Sensor inactivo"
           this.PH.id = PH.id
@@ -398,6 +432,11 @@ export class Tab2Page {
         }
         if (sensors.YL != undefined) {//Asignación de variables a DHT11
           const YL = sensors.YL
+          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin){
+            this.show.YL = false;
+          }else{
+            this.show.YL = true;
+          }
           this.disable.YL = YL.active == "true" ? true : false
           this.YL.a = YL.active == "true" ? "Sensor activo" : "Sensor inactivo"
           this.YL.id = YL.id
@@ -442,7 +481,7 @@ export class Tab2Page {
       + "&newType=" + this.type
       + "&newName=" + this.name
       + "&newNR=" + this.NRegisters
-      + "&ip="+this.myIP
+      + "&ip=" + this.myIP
     this.http.changeParams(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       this.db.updateTypeDevice(this.deviceSelected, this.name, this.type)
@@ -503,7 +542,7 @@ export class Tab2Page {
       + "&newIdeal=" + this.DHT11.temperatura.ideal + "," + this.DHT11.humedad.ideal
       + "&active=" + this.disable.DHT
       + "&id=1"
-      + "&ip="+this.myIP
+      + "&ip=" + this.myIP
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       setTimeout(() => {
@@ -529,7 +568,7 @@ export class Tab2Page {
       + "&newIdeal=" + this.DS18.ideal
       + "&active=" + this.disable.DS18
       + "&id=4"
-      + "&ip="+this.myIP
+      + "&ip=" + this.myIP
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       setTimeout(() => {
@@ -555,9 +594,9 @@ export class Tab2Page {
       + "&newIdeal=" + this.Oxy.ideal
       + "&active=" + this.disable.Oxy
       + "&id=3"
-      + "&ip="+this.myIP
-      //console.log(newData);
-      
+      + "&ip=" + this.myIP
+    //console.log(newData);
+
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       setTimeout(() => {
@@ -583,9 +622,9 @@ export class Tab2Page {
       + "&newIdeal=" + this.PH.ideal
       + "&active=" + this.disable.PH
       + "&id=5"
-      + "&ip="+this.myIP
-      //console.log(newData);
-      
+      + "&ip=" + this.myIP
+    //console.log(newData);
+
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       setTimeout(() => {
@@ -611,9 +650,9 @@ export class Tab2Page {
       + "&newIdeal=" + this.Cond.ideal
       + "&active=" + this.disable.Cond
       + "&id=6"
-      + "&ip="+this.myIP
-      //console.log(newData);
-      
+      + "&ip=" + this.myIP
+    //console.log(newData);
+
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
       setTimeout(() => {
@@ -639,7 +678,7 @@ export class Tab2Page {
       + "&newIdeal=" + this.YL.ideal
       + "&active=" + this.disable.YL
       + "&id=2"
-      + "&ip="+this.myIP
+      + "&ip=" + this.myIP
     //console.log(newData);
     this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
       this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
@@ -663,9 +702,9 @@ export class Tab2Page {
     })
   }
   openLogger() {
-    let params : any = {
-      "ip" : this.ipDeviceSelected
-    } 
+    let params: any = {
+      "ip": this.ipDeviceSelected
+    }
     this.nav.navigateForward(['/logger'], { state: params })
   }
   async presentToast(msg) {
@@ -854,5 +893,21 @@ export class Tab2Page {
       //this.nav.back()
       this.nav.navigateRoot("")
     });
+  }
+  async showTag(txt) {
+    const alert = await this.alertController.create({
+      header: 'Recomendaciones',
+      message:  "<ul>"
+      + "<li><b></b> " + txt + "</li>"
+      + "</ul>",
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'cancel',
+        },
+      ]
+    });
+
+    await alert.present();
   }
 }

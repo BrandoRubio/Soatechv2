@@ -48,7 +48,7 @@ export class HttpService {
   }
   checkDeviceCM(ip): Observable<any> {
     return this.httpClient.get(this.endpoint + ip + "/checkDevice", ).pipe(
-      timeout(10000)
+      timeout(15000)
     )
   }
   getLastValues(ip): Observable<any> {

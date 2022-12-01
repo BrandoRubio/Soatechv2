@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DbService } from '../services/db.service';
 import { HttpService } from '../services/http.service';
 import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { Chart, registerables } from 'chart.js';
+import { Chart, ChartType, registerables } from 'chart.js';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 const { LocalNotifications } = Plugins;
@@ -32,6 +32,7 @@ export class Tab4Page implements OnInit {
   firstTime = true
   firstTimeDev = true
   intervalo
+  typeChart: ChartType = 'line'
   lineChartTemp: any;
   lineChartGrillosTemp: any;
   lineChartGrillosHum: any;
@@ -42,6 +43,7 @@ export class Tab4Page implements OnInit {
   lineChartTurb: any;
   lineChartOxygen: any;
   lineChartPh: any;
+  updating = false
   mode
   sensors = {
     temperatura: true,
@@ -93,7 +95,7 @@ export class Tab4Page implements OnInit {
     TEMP: 0,
     HUM: 0,
   }
-  mostrarComo = "registers"
+  mostrarComo = "registersl"
   components = {
     AskingDevice: false,
     NoDevice: true,
@@ -135,7 +137,7 @@ export class Tab4Page implements OnInit {
         this.components.WithoutDevices = false;
       } else {
         if (this.firstTime) {
-          this.components.AskingDevice = false;
+          //this.components.AskingDevice = false;
           this.deviceSelected = _[0].id
           this.firstTime = false
         } else {
@@ -150,11 +152,34 @@ export class Tab4Page implements OnInit {
     })
   }
   changeDevice(dev) {
+
     this.deviceSelected = dev.target.value;
     this.getDeviceData(this.deviceSelected);
   }
   changeMood(value) {
+    if (value == "registersl") {
+      this.typeChart = 'line'
+      //document.getElementById("canvas") ? console.log("Este existe") : console.log("no existe");
+      this.destroyAllCharts()
+    } else if (value == "registersb") {
+      this.typeChart = 'bar'
+      //document.getElementById("lineCanvasTemp") ? console.log("Este existe") : console.log("no existe");
+      this.destroyAllCharts()
+    }
     this.getDeviceData(this.deviceSelected);
+  }
+  destroyAllCharts() {
+    this.updating = true
+    this.lineChartTemp ? this.lineChartTemp.destroy() : null
+    this.lineChartGrillosTemp ? this.lineChartGrillosTemp.destroy() : null
+    this.lineChartGrillosHum ? this.lineChartGrillosHum.destroy() : null
+    this.lineChartGrillosGases ? this.lineChartGrillosGases.destroy() : null
+    this.lineChartConductivity ? this.lineChartConductivity.destroy() : null
+    this.lineChartYL ? this.lineChartYL.destroy() : null
+    this.lineChartDS18 ? this.lineChartDS18.destroy() : null
+    this.lineChartTurb ? this.lineChartTurb.destroy() : null
+    this.lineChartOxygen ? this.lineChartOxygen.destroy() : null
+    this.lineChartPh ? this.lineChartPh.destroy() : null
   }
   getDeviceData(id) {
     this.db.getDevice(id).then(_ => {
@@ -249,7 +274,7 @@ export class Tab4Page implements OnInit {
           this.components.NoDevice = false;
         });
 
-      } else if (this.mostrarComo == "registers") {
+      } else if (this.mostrarComo == "registersl" || this.mostrarComo == "registersb") {
         this.http.getAllElementValues(this.ipDeviceSelected).subscribe(data => {
           this.components.NoDevice = true;
           this.components.AskingDevice = true;
@@ -407,6 +432,8 @@ export class Tab4Page implements OnInit {
           } catch (error) {
             this.sensors.DS18 = true;
           }
+
+          this.updating = false
         }, error => {
           this.deshabilitarDivs();
           this.components.WithoutDevices = true;
@@ -422,38 +449,22 @@ export class Tab4Page implements OnInit {
     });
   }
   showTempChart(dates, temp, firstDate, lastDate, n) {
-    if (this.lineChartGrillosTemp) {
+    if (this.lineChartGrillosTemp && !this.updating) {
       this.lineChartGrillosTemp.data.labels = dates;
       this.lineChartGrillosTemp.data.datasets[0].data = temp;
       this.lineChartGrillosTemp.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartGrillosTemp.update('none');
     } else {
       this.lineChartGrillosTemp = new Chart(this.lineCanvasGrillosTemp.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
               label: "Temperatura",
-              fill: false,
-              tension: 0,
               backgroundColor: 'rgba(66, 111, 245,0.4)',
               borderColor: 'rgba(66, 111, 245,1)',
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(66, 111, 245,1)',
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(66, 111, 245,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 2,
-              pointHitRadius: 10,
               data: temp,
-              spanGaps: false,
             },
           ]
         },
@@ -483,38 +494,38 @@ export class Tab4Page implements OnInit {
     }
   }
   showHumChart(dates, hum, firstDate, lastDate, n) {
-    if (this.lineChartGrillosHum) {
+    if (this.lineChartGrillosHum && !this.updating) {
       this.lineChartGrillosHum.data.labels = dates;
       this.lineChartGrillosHum.data.datasets[0].data = hum;
       this.lineChartGrillosHum.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartGrillosHum.update('none');
     } else {
       this.lineChartGrillosHum = new Chart(this.lineCanvasGrillosHum.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
               label: "Humedad",
-              fill: false,
-              tension: 0,
+              //fill: false,
+              //tension: 0,
               backgroundColor: 'rgba(66, 111, 245,0.4)',
               borderColor: 'rgba(66, 111, 245,1)',
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(66, 111, 245,1)',
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(66, 111, 245,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 2,
-              pointHitRadius: 10,
+              //borderCapStyle: 'butt',
+              //borderDash: [],
+              //borderDashOffset: 0.0,
+              //borderJoinStyle: 'miter',
+              //pointBorderColor: 'rgba(66, 111, 245,1)',
+              //pointBackgroundColor: '#fff',
+              //pointBorderWidth: 1,
+              //pointHoverRadius: 5,
+              //pointHoverBackgroundColor: 'rgba(66, 111, 245,1)',
+              //pointHoverBorderColor: 'rgba(220,220,220,1)',
+              //pointHoverBorderWidth: 2,
+              //pointRadius: 2,
+              //pointHitRadius: 10,
               data: hum,
-              spanGaps: false,
+              //spanGaps: false,
             },
           ]
         },
@@ -544,7 +555,7 @@ export class Tab4Page implements OnInit {
     }
   }
   showGasesGrillosChart(dates, co2, amon, firstDate, lastDate, n) {
-    if (this.lineChartGrillosGases) {
+    if (this.lineChartGrillosGases && !this.updating) {
       this.lineChartGrillosGases.data.labels = dates;
       this.lineChartGrillosGases.data.datasets[1].data = co2;
       this.lineChartGrillosGases.data.datasets[0].data = amon;
@@ -552,16 +563,16 @@ export class Tab4Page implements OnInit {
       this.lineChartGrillosGases.update('none');
     } else {
       this.lineChartGrillosGases = new Chart(this.lineCanvasGrillosGases.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
-              label: "NH3",
+              label: "NH3",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(209,0,157,0.4)',
-              borderColor: 'rgba(209,0,157,1)',
+              borderColor: 'rgba(209,0,157,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -574,9 +585,9 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: co2,
-              spanGaps: false,
+              //spanGaps: false,
             },
             {
               label: "CO2",
@@ -628,23 +639,23 @@ export class Tab4Page implements OnInit {
     }
   }
   showOxygenChart(dates, data, firstDate, lastDate, n) {
-    if (this.lineChartOxygen) {
+    if (this.lineChartOxygen && !this.updating) {
       this.lineChartOxygen.data.labels = dates;
       this.lineChartOxygen.data.datasets[0].data = data;
       this.lineChartOxygen.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartOxygen.update('none');
     } else {
       this.lineChartOxygen = new Chart(this.lineCanvasOxygen.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
-              label: "Oxigenación",
+              label: "Oxigenación",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -657,9 +668,9 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data,
-              spanGaps: false,
+              //spanGaps: false,
             }
           ]
         },
@@ -689,23 +700,23 @@ export class Tab4Page implements OnInit {
     }
   }
   showTurbChart(dates, data, firstDate, lastDate, n) {
-    if (this.lineChartTurb) {
+    if (this.lineChartTurb && !this.updating) {
       this.lineChartTurb.data.labels = dates;
       this.lineChartTurb.data.datasets[0].data = data;
       this.lineChartTurb.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartTurb.update('none');
     } else {
       this.lineChartTurb = new Chart(this.lineCanvasTurb.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
-              label: "Turbidez",
+              label: "Turbidez",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -718,9 +729,9 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data,
-              spanGaps: false,
+              //spanGaps: false,
             }
           ]
         },
@@ -750,23 +761,23 @@ export class Tab4Page implements OnInit {
     }
   }
   showHTempChart(dates, data, firstDate, lastDate, n) {
-    if (this.lineChartTemp) {
+    if (this.lineChartTemp && !this.updating) {
       this.lineChartTemp.data.labels = dates;
       this.lineChartTemp.data.datasets[0].data = data;
       this.lineChartTemp.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartTemp.update('none');
     } else {
       this.lineChartTemp = new Chart(this.lineCanvasTemp.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
               label: "Temperatura",
-              fill: false,
-              tension: 0,
+              /*fill: false,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -779,9 +790,9 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data,
-              spanGaps: false,
+              //spanGaps: false,
             }
           ]
         },
@@ -811,24 +822,24 @@ export class Tab4Page implements OnInit {
     }
   }
   showPhChart(data, dates, firstDate, lastDate, n) {
-    if (this.lineChartPh) {
+    if (this.lineChartPh && !this.updating) {
       this.lineChartPh.data.labels = dates;
       this.lineChartPh.data.datasets[0].data = data;
       this.lineChartPh.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartPh.update('none');
     } else {
       this.lineChartPh = new Chart(this.lineCanvasPh.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
-              label: "PH",
+              label: "PH",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
-              borderCapStyle: 'butt',
+              borderColor: 'rgba(66, 111, 245,1)',/*
+              borderCapStyle: 'butt',/
               borderDash: [],
               borderDashOffset: 0.0,
               borderJoinStyle: 'miter',
@@ -840,9 +851,9 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data,
-              spanGaps: false,
+              //spanGaps: false,
             }
           ]
         },
@@ -872,23 +883,23 @@ export class Tab4Page implements OnInit {
     }
   }
   showConductivityChart(dates, data, firstDate, lastDate, n) {
-    if (this.lineChartConductivity) {
+    if (this.lineChartConductivity && !this.updating) {
       this.lineChartConductivity.data.labels = dates;
       this.lineChartConductivity.data.datasets[0].data = data;
       this.lineChartConductivity.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartConductivity.update('none');
     } else {
       this.lineChartConductivity = new Chart(this.lineCanvasConductivity.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
-              label: "Conductividad",
+              label: "Conductividad",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -901,9 +912,9 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data,
-              spanGaps: false,
+              //spanGaps: false,
             }
           ]
         },
@@ -933,7 +944,7 @@ export class Tab4Page implements OnInit {
     }
   }
   showYLChart(data1, data2, data3, data4, dates, firstDate, lastDate, n) {
-    if (this.lineChartYL) {
+    if (this.lineChartYL && !this.updating) {
       this.lineChartYL.data.labels = dates;
       this.lineChartYL.data.datasets[0].data = data1;
       this.lineChartYL.data.datasets[1].data = data2;
@@ -943,16 +954,16 @@ export class Tab4Page implements OnInit {
       this.lineChartYL.update('none');
     } else {
       this.lineChartYL = new Chart(this.lineCanvasYL.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
-              label: "H1",
+              label: "H1",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -965,16 +976,16 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data1,
-              spanGaps: false,
+              //spanGaps: false,
             },
             {
               label: "H2",
-              fill: false,
-              tension: 0,
+              /*fill: false,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -987,16 +998,16 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data2,
-              spanGaps: false,
+              //spanGaps: false,
             },
             {
               label: "H3",
-              fill: false,
-              tension: 0,
+              /*fill: false,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1009,16 +1020,16 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data3,
-              spanGaps: false,
+              //spanGaps: false,
             },
             {
-              label: "H4",
+              label: "H4",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1031,9 +1042,9 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data4,
-              spanGaps: false,
+              //spanGaps: false,
             },
           ],
         },
@@ -1063,7 +1074,7 @@ export class Tab4Page implements OnInit {
     }
   }
   showDS18Chart(data1, data2, data3, data4, dates, firstDate, lastDate, n) {
-    if (this.lineChartDS18) {
+    if (this.lineChartDS18 && !this.updating) {
       this.lineChartDS18.data.labels = dates;
       this.lineChartDS18.data.datasets[0].data = data1;
       this.lineChartDS18.data.datasets[1].data = data2;
@@ -1073,16 +1084,16 @@ export class Tab4Page implements OnInit {
       this.lineChartDS18.update('none');
     } else {
       this.lineChartDS18 = new Chart(this.lineCanvasDS18.nativeElement, {
-        type: 'line',
+        type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
-              label: "T1",
+              label: "T1",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1095,16 +1106,16 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data1,
-              spanGaps: false,
+              //spanGaps: false,
             },
             {
-              label: "T2",
+              label: "T2",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1117,16 +1128,16 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data2,
-              spanGaps: false,
+              //spanGaps: false,
             },
             {
-              label: "T3",
+              label: "T3",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1139,16 +1150,16 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data3,
-              spanGaps: false,
+              //spanGaps: false,
             },
             {
-              label: "T4",
+              label: "T4",/*
               fill: false,
-              tension: 0,
+              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',
+              borderColor: 'rgba(66, 111, 245,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1161,9 +1172,9 @@ export class Tab4Page implements OnInit {
               pointHoverBorderColor: 'rgba(220,220,220,1)',
               pointHoverBorderWidth: 2,
               pointRadius: 2,
-              pointHitRadius: 10,
+              pointHitRadius: 10,*/
               data: data4,
-              spanGaps: false,
+              //spanGaps: false,
             },
           ],
         },

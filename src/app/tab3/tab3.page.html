@@ -5,6 +5,9 @@
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title color="light">
       <ion-select value="{{deviceSelected}}" (ionChange)="changeDevice($event)" [interfaceOptions]="optionsDevice"
         placeholder="0 dispositivos">

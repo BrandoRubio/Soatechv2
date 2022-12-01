@@ -5,6 +5,9 @@
         <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title color="light">
       <ion-select value="{{deviceSelected}}" [interfaceOptions]="optionsDevice" (ionChange)="changeDevice($event)"
         placeholder="0 dispositivos">
@@ -25,14 +28,18 @@
             <ion-label>Ayuda</ion-label>
             <ion-icon slot="end" name="help" color="primary"></ion-icon>
           </ion-item>
-          <ion-radio-group (ionChange)="changeMood($event)" [(ngModel)]="mostrarComo">
+          <ion-radio-group (ngModelChange)="changeMood($event)" [(ngModel)]="mostrarComo">
+            <ion-item>
+              <ion-label>Gráficos de líneas</ion-label>
+              <ion-radio slot="start" value="registersl"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Gráficos de barras</ion-label>
+              <ion-radio slot="start" value="registersb"></ion-radio>
+            </ion-item>
             <ion-item>
               <ion-label>Valor en tiempo real</ion-label>
               <ion-radio slot="start" value="numbers"></ion-radio>
-            </ion-item>
-            <ion-item>
-              <ion-label>Registros en gráficos</ion-label>
-              <ion-radio slot="start" value="registers"></ion-radio>
             </ion-item>
           </ion-radio-group>
           <ion-popover trigger="aboutColors">
@@ -145,7 +152,7 @@
           <ion-icon name="thermometer"></ion-icon>
         </ion-card-header>
         <ion-card-content>
-          <canvas #lineCanvasGrillosTemp style="position: relative; height:40vh; width: 120vw">
+          <canvas #lineCanvasGrillosTemp style="position: relative;">
           </canvas>
         </ion-card-content>
       </ion-card>
@@ -157,7 +164,7 @@
           <ion-icon name="water"></ion-icon>
         </ion-card-header>
         <ion-card-content>
-          <canvas #lineCanvasGrillosHum style="position: relative; height:40vh; width:120vw">
+          <canvas #lineCanvasGrillosHum style="position: relative;">
           </canvas>
         </ion-card-content>
       </ion-card>

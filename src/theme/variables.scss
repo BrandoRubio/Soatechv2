@@ -4,10 +4,6 @@
 /** Ionic CSS Variables **/
 :root {
 
-  --ion-color-oxygen: #13a3cf;
-  --ion-color-temperature: #28eb6c;
-  --ion-color-conductivity: #eb9028;
-  --ion-color-ph: #fa4d50;
   /** primary **/
   --ion-color-primary: #01a3d2;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -15,13 +11,13 @@
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #3171e0;
   --ion-color-primary-tint: #4c8dff;
-  /*--ion-color-primary: #a34f00;
-	--ion-color-primary-rgb: 163,79,0;
-	--ion-color-primary-contrast: #ffffff;
-	--ion-color-primary-contrast-rgb: 255,255,255;
-	--ion-color-primary-shade: #8f4600;
-	--ion-color-primary-tint: #ac611a;*/
-
+  /** p **/
+  --ion-color-p: #01a3d2;
+  --ion-color-p-rgb: 56, 128, 255;
+  --ion-color-p-contrast: #ffffff;
+  --ion-color-p-contrast-rgb: 255, 255, 255;
+  --ion-color-p-shade: #3171e0;
+  --ion-color-p-tint: #4c8dff;
   /** secondary **/
   --ion-color-secondary: #3dc2ff;
   --ion-color-secondary-rgb: 61, 194, 255;
@@ -92,14 +88,6 @@
    * Dark Colors
    * -------------------------------------------
    */
-  body.grillos {
-    --ion-color-primary: #a34f00;
-    --ion-color-primary-rgb: 163, 79, 0;
-    --ion-color-primary-contrast: #ffffff;
-    --ion-color-primary-contrast-rgb: 255, 255, 255;
-    --ion-color-primary-shade: #8f4600;
-    --ion-color-primary-tint: #ac611a;
-  }
 
   /*
    * iOS Dark Theme
@@ -187,4 +175,12 @@
 
     --ion-card-background: #1e1e1e;
   }
+}
+.ion-color-p {
+  --ion-color-base: var(--ion-color-p);
+  --ion-color-base-rgb: var(--ion-color-p-rgb);
+  --ion-color-contrast: var(--ion-color-p-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-p-contrast-rgb);
+  --ion-color-shade: var(--ion-color-p-shade);
+  --ion-color-tint: var(--ion-color-p-tint);
 }

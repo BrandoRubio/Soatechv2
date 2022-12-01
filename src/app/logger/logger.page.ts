@@ -146,7 +146,7 @@ export class LoggerPage implements OnInit {
       + "</ul>",
       buttons: [
         {
-          text: 'Atrás',
+          text: 'Ok',
           role: 'cancel',
         },
       ]
