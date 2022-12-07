@@ -1,7 +1,25 @@
+ion-thumbnail {
+  height: 50%;
+  width: 50%;
+  margin: auto;
+  display: block;
+}
 
-  ion-thumbnail{
-    height: 50%;
-    width: 50%;
-    margin: auto;
-    display: block;
-  }
+.li {
+  --color: #a34f00
+}
+.lg {
+  --color: #E3C501
+}
+.le {
+  --color: #ff5757
+}
+.la {
+  --color: #3f79ee
+}
+.lf {
+  --color: #6fb563
+}
+.lp {
+  --color: #01a3d2
+}

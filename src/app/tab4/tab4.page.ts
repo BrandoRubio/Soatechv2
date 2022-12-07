@@ -984,8 +984,8 @@ export class Tab4Page implements OnInit {
               label: "H2",
               /*fill: false,
               tension: 0,*/
-              backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
+              backgroundColor: 'rgba(21, 0, 250,0.4)',
+              borderColor: 'rgba(21, 0, 250,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1006,8 +1006,8 @@ export class Tab4Page implements OnInit {
               label: "H3",
               /*fill: false,
               tension: 0,*/
-              backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
+              backgroundColor: 'rgba(142, 0, 250,0.4)',
+              borderColor: 'rgba(142, 0, 250,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1028,8 +1028,8 @@ export class Tab4Page implements OnInit {
               label: "H4",/*
               fill: false,
               tension: 0,*/
-              backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
+              backgroundColor: 'rgba(0, 250, 121,0.4)',
+              borderColor: 'rgba(0, 250, 121,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1114,8 +1114,8 @@ export class Tab4Page implements OnInit {
               label: "T2",/*
               fill: false,
               tension: 0,*/
-              backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
+              backgroundColor: 'rgba(21, 0, 250,0.4)',
+              borderColor: 'rgba(21, 0, 250,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1136,8 +1136,8 @@ export class Tab4Page implements OnInit {
               label: "T3",/*
               fill: false,
               tension: 0,*/
-              backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
+              backgroundColor: 'rgba(142, 0, 250,0.4)',
+              borderColor: 'rgba(142, 0, 250,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -1158,8 +1158,8 @@ export class Tab4Page implements OnInit {
               label: "T4",/*
               fill: false,
               tension: 0,*/
-              backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
+              backgroundColor: 'rgba(0, 250, 121,0.4)',
+              borderColor: 'rgba(0, 250, 121,1)',/*
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,

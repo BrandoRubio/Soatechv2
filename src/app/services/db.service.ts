@@ -91,7 +91,7 @@ export class DbService {
           document.documentElement.style.setProperty('--ion-color-primary-shade', '#376ad1');
           document.documentElement.style.setProperty('--ion-color-primary-tint', '#5286f0');
         } else
-          if (res.rows.item(0).type == "floral") {
+          if (res.rows.item(0).type == "agricola") {
             this.logo = "logo floral.png"
             document.documentElement.style.setProperty('--ion-color-primary', '#6fb563');
             document.documentElement.style.setProperty('--ion-color-primary-rgb', '111,181,99');
@@ -100,8 +100,8 @@ export class DbService {
             document.documentElement.style.setProperty('--ion-color-primary-shade', '#629f57');
             document.documentElement.style.setProperty('--ion-color-primary-tint', '#7dbc73');
           } else
-            if (res.rows.item(0).type == "ganadero") {
-              this.logo = "logo ganadero.png"
+            if (res.rows.item(0).type == "especies exoticas") {
+              this.logo = "logo especies.png"
               document.documentElement.style.setProperty('--ion-color-primary', '#ff5757');
               document.documentElement.style.setProperty('--ion-color-primary-rgb', '255,87,87');
               document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');
@@ -109,8 +109,8 @@ export class DbService {
               document.documentElement.style.setProperty('--ion-color-primary-shade', '#e04d4d');
               document.documentElement.style.setProperty('--ion-color-primary-tint', '#ff6868');
             } else
-              if (res.rows.item(0).type == "avicola") {
-                this.logo = "logo avicola.png"
+              if (res.rows.item(0).type == "ganadero") {
+                this.logo = "logo ganadero.png"
                 document.documentElement.style.setProperty('--ion-color-primary', '#E3C501');
                 document.documentElement.style.setProperty('--ion-color-primary-rgb', '227,197,1');
                 document.documentElement.style.setProperty('--ion-color-primary-contrast', '#ffffff');

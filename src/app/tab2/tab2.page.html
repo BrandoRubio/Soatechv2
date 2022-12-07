@@ -237,13 +237,13 @@
             <ion-select value="{{type}}" [(ngModel)]="type" [interfaceOptions]="optionsDevice">
               <ion-select-option value="acuicola">Acuicola
               </ion-select-option>
-              <ion-select-option value="avicola">Avícola
+              <ion-select-option value="ganadero">Ganadero
               </ion-select-option>
               <ion-select-option value="insectos">Insectos
               </ion-select-option>
-              <ion-select-option value="ganadero">Ganadero
+              <ion-select-option value="especies exoticas">Especies exoticas
               </ion-select-option>
-              <ion-select-option value="ganadero">Floral
+              <ion-select-option value="agricola">Agrícola
               </ion-select-option>
               <ion-select-option value="integral">Integral
               </ion-select-option>
@@ -295,7 +295,7 @@
       </ion-accordion>
       <ion-accordion value="dht11" [hidden]="show.DHT">
         <ion-item slot="header" color="light">
-          <ion-label>Humedad y Temperatura en el aire</ion-label>
+          <ion-label>Humedad y Temperatura relativa</ion-label>
           <ion-note slot="end" color="dark" [hidden]="disable.chDht">*</ion-note>
           <ion-icon slot="start" color="primary" name="hardware-chip"></ion-icon>
         </ion-item>
@@ -307,7 +307,7 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos de temperatura</ion-label>
-            <ion-button (click)="showTag('Ayuda de temperatura')">
+            <ion-button (click)="showTag('<b>Temperatura</b> (calor o frío) en el sitio de producción.','Rango productivo:  <b>15-38 °C</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -327,7 +327,7 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos de humedad</ion-label>
-            <ion-button (click)="showTag('Ayuda de humedad')">
+            <ion-button (click)="showTag('<b>La Humedad relativa</b> es  la cantidad de agua que se transporta por el aire medida en porcentajes, es importante para determinar el desarrollo de tu producción','Rango productivo: <b>0% - 100%</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -461,12 +461,12 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('Ayuda de temperatura')">
+            <ion-button (click)="showTag('<b>Temperatura en sustrato</b> en el sustrato(material de cultivo) de producción','Rangos recomendables: <b>10 - 40%</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
           <ion-item [disabled]="!disable.DS18" lines="none">
-            <ion-range [min]="10" [max]="45" [pin]="true" [(ngModel)]="DS18.ranges" [dualKnobs]="true"
+            <ion-range [min]="0" [max]="50" [pin]="true" [(ngModel)]="DS18.ranges" [dualKnobs]="true"
               [value]="{ lower: DS18.ranges.lower, upper: DS18.ranges.upper }"></ion-range>
           </ion-item>
           <ion-item [disabled]="!disable.DS18" lines="none">
@@ -542,7 +542,7 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('Ayuda de Humedad en el suelo')">
+            <ion-button (click)="showTag('<b>Humedad en sustrato:</b>Determina la cantidad de agua que tiene la tierra o un sustrato','Rangos recomendables: <b>40% - 100%</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -647,7 +647,7 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('Ayuda de Oxigenación')">
+            <ion-button (click)="showTag('La magnitud de <b>medida oxígeno</b> disuelto indica la cantidad de oxígeno gaseoso disuelto físicamente en la fase acuosa en mg/l (ppm) o la saturación de oxígeno del agua en%Se puede utilizar tanto para el monitoreo de aguas más ricas en oxígeno, como agua superficial o agua potable, como para la regulación de la aireación en tanques de activación de plantas de tratamiento')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -728,7 +728,7 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('Ayuda de conductividad')">
+            <ion-button (click)="showTag('<b>Conductividad:</b> es la característica  de todo elemento que tiene la capacidad de conducir la electricidad se mide en miliSiemens/cm (mS/cm)','Rangos recomendables: <b>0 - 1200 mS/cm</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -809,7 +809,8 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('Ayuda de PH')">
+            <ion-button (click)="showTag('El <b>pH</b> es una variable química que nos permite medir el grado de acidez  o alcalino  de una sustancia un ejemplo  limón es ácido y el cloro es alcalino','El <b>pH</b> se  mide de una escala del 0 a 14, donde 7 es neutro, de 7 a 0 es ácido y de 7- 14 es alcalino. La mayoría de las especies se sienten cómodas en un pH de 6-8.5.
+              ')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>

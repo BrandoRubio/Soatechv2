@@ -864,6 +864,12 @@ export class Tab2Page {
               this.presentToast("Contraseña no válida.")
             } else {
               this.ImAdmin = true;
+              this.show.DHT = false
+              this.show.DS18 = false
+              this.show.Cond = false
+              this.show.Oxy = false
+              this.show.YL = false
+              this.show.PH = false
               this.presentToast("Eres admin.")
             }
           }
@@ -894,11 +900,14 @@ export class Tab2Page {
       this.nav.navigateRoot("")
     });
   }
-  async showTag(txt) {
+  async showTag(txt1, txt2) {
+    /*let txt1 = String(txt.split("?")[0])
+    let txt2 = String(txt.split("?")[1]) */
     const alert = await this.alertController.create({
       header: 'Recomendaciones',
       message:  "<ul>"
-      + "<li><b></b> " + txt + "</li>"
+      + "<li>" + txt1 + "</li>"
+      + "<li>" + txt2 + "</li>"
       + "</ul>",
       buttons: [
         {

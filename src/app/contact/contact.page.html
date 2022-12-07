@@ -1,0 +1,81 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="p">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Contáctanos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <img alt="logo" src="../../assets/icon/Soatech-Condor.png" />
+  <ion-accordion-group expand="inset" [value]="['ventas']">
+    <ion-accordion value="ventas">
+      <ion-item slot="header" color="p">
+        <ion-label>Departamento de Ventas</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-item>
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+          <ion-label>Karen Alvarado</ion-label>
+          <ion-button fill="clear" (click)="copy('karen.alvarado@i-condor.com')"><ion-icon slot="end" name="mail-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear" (click)="copy('+525535337931')"><ion-icon slot="end" name="call-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear" href="https://wa.me/+525535337931"><ion-icon slot="end" name="logo-whatsapp" color="success"></ion-icon></ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+          <ion-label>Fernando Calleja</ion-label>
+          <ion-button fill="clear" (click)="copy('fernando.calleja.condor@gmail.com')"><ion-icon slot="end" name="mail-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear" (click)="copy('+525525595609')"><ion-icon slot="end" name="call-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear" href="https://wa.me/+525525595609"><ion-icon slot="end" name="logo-whatsapp" color="success"></ion-icon></ion-button>
+        </ion-item>
+      </div>
+    </ion-accordion>
+    <ion-accordion value="biologia">
+      <ion-item slot="header" color="p">
+        <ion-label>Departamento de Biología</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-item>
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+          <ion-label>Fernando Calleja</ion-label>
+          <ion-button fill="clear" (click)="copy('fernando.calleja.condor@gmail.com')"><ion-icon slot="end" name="mail-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear" (click)="copy('+525525595609')"><ion-icon slot="end" name="call-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear"href="https://wa.me/+525525595609"><ion-icon slot="end" name="logo-whatsapp" color="success"></ion-icon></ion-button>
+        </ion-item>
+      </div>
+    </ion-accordion>
+    <ion-accordion value="hardware">
+      <ion-item slot="header" color="p">
+        <ion-label>Equipo técnico (software/hardware)</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-item>
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+          <ion-label>Uzziel Perez</ion-label>
+          <ion-button fill="clear" (click)="copy('uzziel.perez.condor@gmail.com')"><ion-icon slot="end" name="mail-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear" (click)="copy('+527292427782')"><ion-icon slot="end" name="call-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear" href="https://wa.me/+527292427782"><ion-icon slot="end" name="logo-whatsapp" color="success"></ion-icon></ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+          <ion-label>Brando Rubio</ion-label>
+          <ion-button fill="clear" (click)="copy('brando.rubio.condor@gmail.com')"><ion-icon slot="end" name="mail-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear" (click)="copy('+527351358161')"><ion-icon slot="end" name="call-outline" color="p"></ion-icon></ion-button>
+          <ion-button fill="clear"href="https://wa.me/+527351358161"><ion-icon slot="end" name="logo-whatsapp" color="success"></ion-icon></ion-button>
+        </ion-item>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>

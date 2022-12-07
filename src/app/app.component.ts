@@ -15,10 +15,13 @@ export class AppComponent {
     private router: Router,
     private db: DbService,
     private menu: MenuController,
-    private alertController: AlertController
+    private alertController: AlertController,
     ) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       this.navigate();
+    });
+    this.platform.ready().then(() => {
+      //this.storage.create()
     });
   }
   devices : any []

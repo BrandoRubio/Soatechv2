@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../services/http.service';
-import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { NavController, ToastController, AlertController, Platform } from '@ionic/angular';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 import { Router } from '@angular/router';
@@ -16,11 +15,12 @@ export class LoggerPage implements OnInit {
   ipDeviceSelected = ""
   rutas: any
   ruteSelected
-  filesLogger: any
-  filesLogging: any
-  filesUserLogging: any
+  filesLogger: any = []
+  filesLogging: any = []
+  filesUserLogging: any = []
   files: any
   nFiles : number = 0
+  disableFiles = true
   fileSelected
   data = []
   header = true
@@ -57,15 +57,18 @@ export class LoggerPage implements OnInit {
   }
   changesRute() {
     if (this.ruteSelected == "Logger") {
-      this.files = this.filesLogger
+      this.files = this.filesLogger.reverse();
       this.nFiles = this.filesLogger.length
     }
     if (this.ruteSelected == "Logging") {
-      this.files = this.filesLogging
+      this.files = this.filesLogging.reverse();
+      this.nFiles = this.filesLogging.length
     }
     if (this.ruteSelected == "UserLogging") {
-      this.files = this.filesUserLogging
+      this.files = this.filesUserLogging.reverse();
+      this.nFiles = this.filesUserLogging.length
     }
+    this.disableFiles = this.nFiles ? false : true
   }
   changesFile() {
     this.files.forEach(i => {
@@ -100,11 +103,10 @@ export class LoggerPage implements OnInit {
     });
   }
   async readFile(rute) {
-    this.http.dismissLoader()
     this.down.readLog(rute).then(_ => {
       //this.data = _
       this.data = [];
-      let logs : [] = _
+      let logs : [] = _.reverse()
       
       for (let i = 0; i < logs.length-1; i++) {
         const log = {
@@ -117,8 +119,10 @@ export class LoggerPage implements OnInit {
       }
       if(this.data.length > 0){
         this.header = false
+        this.http.dismissLoader()
       }else{
         this.header = true
+        this.http.dismissLoader()
       }
     })
   }

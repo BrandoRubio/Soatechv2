@@ -7,46 +7,71 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
-        <ion-item button [routerLink]="['/tabs','home']" (click)="hideMenu()">
-          <ion-icon name="home" slot="start" color="primary"></ion-icon>
-          <ion-label>Inicio</ion-label>
-        </ion-item>
-        <ion-item button [routerLink]="['/tabs','tab4']" (click)="hideMenu()">
-          <ion-icon name="point" slot="start" color="primary"></ion-icon>
-          <ion-label>Monitoreo en sitio</ion-label>
-        </ion-item>
-        <ion-item button [routerLink]="['/tabs','tab1']" (click)="hideMenu()">
-          <ion-icon name="cloud" slot="start" color="primary"></ion-icon>
-          <ion-label>Monitoreo online</ion-label>
-        </ion-item>
-        <ion-item button [routerLink]="['/tabs','tab2']" (click)="hideMenu()">
-          <ion-icon name="code-working" slot="start" color="primary"></ion-icon>
-          <ion-label>Prarámetros</ion-label>
-        </ion-item>
-        <ion-accordion-group [value]="['devs']">
-          <ion-accordion value="devs">
-            <ion-item slot="header" color="light">
-              <ion-label>Dispositivos</ion-label>
-              <ion-icon slot="start" color="primary" name="hardware-chip"></ion-icon>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              <ion-item [button]="true" (click)="showDeviceInformation(item.name, item.type, item.ip)"
-                *ngFor="let item of devices; trackBy:trackItems" lines="none">
-                <ion-icon name="information" slot="start" color="primary"></ion-icon>
-                <ion-label>{{ item.name }}</ion-label>
+        <ion-item-group>
+          <ion-item-divider>
+            <ion-label>
+              Navegación
+            </ion-label>
+          </ion-item-divider>
+          <ion-item button [routerLink]="['/tabs','home']" (click)="hideMenu()">
+            <ion-icon name="home" slot="start" color="primary"></ion-icon>
+            <ion-label>Inicio</ion-label>
+          </ion-item>
+          <ion-item button [routerLink]="['/tabs','tab4']" (click)="hideMenu()">
+            <ion-icon name="point" slot="start" color="primary"></ion-icon>
+            <ion-label>Monitoreo en sitio</ion-label>
+          </ion-item>
+          <ion-item button [routerLink]="['/tabs','tab1']" (click)="hideMenu()">
+            <ion-icon name="cloud" slot="start" color="primary"></ion-icon>
+            <ion-label>Monitoreo online</ion-label>
+          </ion-item>
+          <ion-item button [routerLink]="['/tabs','tab2']" (click)="hideMenu()">
+            <ion-icon name="code-working" slot="start" color="primary"></ion-icon>
+            <ion-label>Prarámetros</ion-label>
+          </ion-item>
+          <ion-accordion-group>
+            <ion-accordion value="devs">
+              <ion-item slot="header" color="light">
+                <ion-label>Dispositivos</ion-label>
+                <ion-icon slot="start" color="primary" name="hardware-chip"></ion-icon>
               </ion-item>
-              <ion-item button [routerLink]="['/devices']" (click)="hideMenu()">
-                <ion-icon name="add" slot="start" color="primary"></ion-icon>
-                <ion-label>Agregar</ion-label>
-              </ion-item>
-              <ion-item lines="none">
-              </ion-item>
-              <ion-item lines="none" button>
-                <ion-note>App Version: 2.1.22.1130</ion-note>
-              </ion-item>
-            </div>
-          </ion-accordion>
-        </ion-accordion-group>
+              <div class="ion-padding" slot="content">
+                <ion-item [button]="true" (click)="showDeviceInformation(item.name, item.type, item.ip)"
+                  *ngFor="let item of devices; trackBy:trackItems" lines="none">
+                  <ion-icon name="information" slot="start" color="primary"></ion-icon>
+                  <ion-label>{{ item.name }}</ion-label>
+                </ion-item>
+                <ion-item button [routerLink]="['/devices']" (click)="hideMenu()">
+                  <ion-icon name="add" slot="start" color="primary"></ion-icon>
+                  <ion-label>Agregar</ion-label>
+                </ion-item>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+          <ion-item-divider>
+            <ion-label>
+              Otros
+            </ion-label>
+          </ion-item-divider>
+          <ion-item button [routerLink]="['/profile']" (click)="hideMenu()">
+            <ion-icon name="person" slot="start" color="primary"></ion-icon>
+            <ion-label>Mis datos</ion-label>
+          </ion-item>
+          <ion-item button [routerLink]="['/contact']" (click)="hideMenu()">
+            <ion-icon name="call" slot="start" color="primary"></ion-icon>
+            <ion-label>Contáctanos</ion-label>
+          </ion-item>
+          <ion-item button [routerLink]="['/about']" (click)="hideMenu()">
+            <ion-icon name="information-circle" slot="start" color="primary"></ion-icon>
+            <ion-label>Acerca de</ion-label>
+          </ion-item>
+          <ion-item lines="none">
+          </ion-item>
+          <ion-item lines="none">
+            <ion-icon name="blank" slot="start"></ion-icon>
+            <ion-note class="note-center">App Version: 2.1.22.1130</ion-note>
+          </ion-item>
+        </ion-item-group>
       </ion-list>
     </ion-content>
   </ion-menu>

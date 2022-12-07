@@ -20,7 +20,7 @@
       </ion-select>
     </ion-item>
     <!--ruta-->
-    <ion-item>
+    <ion-item [disabled]="disableFiles">
       <ion-label color="primary">Archivo {{ruteSelected}} ({{nFiles}})</ion-label>
       <ion-select placeholder="Seleccione" value="{{fileSelected}}" [(ngModel)]="fileSelected"
         (ionChange)="changesFile()">

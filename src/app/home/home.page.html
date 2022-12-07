@@ -9,114 +9,150 @@
 
 <ion-content>
   <img alt="logo" src="../../assets/icon/soatech.png" />
-  <ion-item lines="none">
-    <ion-label color="p" class="ion-text-wrap">
-      <h2>Misión:</h2>
-      <p>Crear diferenciadores en empresas competitivas implementando las mejores Soluciones en Tecnologías de la
-        Información.</p>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none">
-    <ion-label color="p" class="ion-text-wrap">
-      <h2>Visión:</h2>
-      <p>Nuestros consultores estarán invirtiendo con Tecnologías de Información en empresas con potencial de
-        crecimiento.</p>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none">
-    <ion-label color="p" class="ion-text-wrap">
-      <h2>Nuestras soluciones</h2>
-      <p>A continuación te mostramos las diferentes soluciones de Soatech.</p>
-    </ion-label>
-  </ion-item>
-  <ion-grid>
-    <ion-row class="ion-text-center" style="height: 100%">
-      <ion-col>
-        <ion-card button id="insect">
-          <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/logos/insectos.png" />
-          </ion-thumbnail>
-        </ion-card>
-        <ion-popover trigger="insect">
-          <ng-template>
-            <ion-content class="ion-padding" color="light">
-              <ion-label color="p" class="ion-text-wrap">Monitoreo de insectos.</ion-label>
-            </ion-content>
-          </ng-template>
-        </ion-popover>
-      </ion-col>
-      <ion-col>
-        <ion-card button id="avic">
-          <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/logos/avicola.png" />
-          </ion-thumbnail>
-        </ion-card>
-        <ion-popover trigger="avic">
-          <ng-template>
-            <ion-content class="ion-padding" color="light">
-              <ion-label color="p" class="ion-text-wrap">Monitoreo de aves.</ion-label>
-            </ion-content>
-          </ng-template>
-        </ion-popover>
-      </ion-col>
-      <ion-col>
-        <ion-card button id="ganad">
-          <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/logos/ganado.png" />
-          </ion-thumbnail>
-        </ion-card>
-        <ion-popover trigger="ganad">
-          <ng-template>
-            <ion-content class="ion-padding" color="light">
-              <ion-label color="p" class="ion-text-wrap">Monitoreo de ganado.</ion-label>
-            </ion-content>
-          </ng-template>
-        </ion-popover>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-text-center" style="height: 100%">
-      <ion-col>
-        <ion-card button id="acuic">
-          <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/logos/acuicola.png" />
-          </ion-thumbnail>
-        </ion-card>
-        <ion-popover trigger="acuic">
-          <ng-template>
-            <ion-content class="ion-padding" color="light">
-              <ion-label color="p" class="ion-text-wrap">Monitoreo de peces.</ion-label>
-            </ion-content>
-          </ng-template>
-        </ion-popover>
-      </ion-col>
-      <ion-col>
-        <ion-card button id="plant">
-          <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/logos/plantas.png" />
-          </ion-thumbnail>
-        </ion-card>
-        <ion-popover trigger="plant">
-          <ng-template>
-            <ion-content class="ion-padding" color="light">
-              <ion-label color="p" class="ion-text-wrap">Monitoreo de plantas.</ion-label>
-            </ion-content>
-          </ng-template>
-        </ion-popover>
-      </ion-col>
-      <ion-col>
-        <ion-card button id="integ">
-          <ion-thumbnail>
-            <img alt="ícono" src="../../assets/icon/logos/integral.png" />
-          </ion-thumbnail>
-        </ion-card>
-        <ion-popover trigger="integ">
-          <ng-template>
-            <ion-content class="ion-padding" color="light">
-              <ion-label color="p" class="ion-text-wrap">Solución integral.</ion-label>
-            </ion-content>
-          </ng-template>
-        </ion-popover>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-slides #slide [options]="slideOptsOne">
+    <ion-slide>
+      <div class="slide">
+        <ion-thumbnail>
+          <img alt="ícono" src="../../assets/icon/hi.png"/>
+        </ion-thumbnail>
+        <ion-card-header class="ion-text-center">
+          <ion-card-title color="p">Bienvenido</ion-card-title>
+        </ion-card-header>
+        <ion-card-content color="p">
+          <p>
+            ¿Sabías que <b>Soatech</b> tiene bastantes soluciones para hacer crecer tu sector? A continuación las puede ver o solicitar, deslice la pantalla o pulse la flecha.
+          </p>
+          <ion-button fill="clear" color="p" (click)="startSlides()">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide">
+        <ion-thumbnail>
+          <img alt="ícono" src="../../assets/icon/logos/insectos.png" />
+        </ion-thumbnail>
+        <ion-card-header class="ion-text-center">
+          <ion-card-title class="li">Insectos</ion-card-title>
+        </ion-card-header>
+        <ion-card-content color="p">
+          <p>
+            <b>Soatech</b> tiene la solución de monitoreo para insectos (entomocultura y lombricutura)
+          </p>
+          <ion-button fill="clear" class="li" (click)="requestSector('Insectos')">¡Lo quiero!
+            <ion-icon slot="end" name="mail"></ion-icon></ion-button>
+        </ion-card-content>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide">
+        <ion-thumbnail>
+          <img alt="ícono" src="../../assets/icon/logos/avicola.png" />
+        </ion-thumbnail>
+        <ion-card-header class="ion-text-center">
+          <ion-card-title class="lg">Ganadero</ion-card-title>
+        </ion-card-header>
+        <ion-card-content color="p">
+          <p>
+            <b>Soatech</b> tiene la solución de monitoreo para ganado (avícola, cunícola, porcícola, etc.)
+          </p>
+          <ion-button fill="clear" class="lg" (click)="requestSector('Ganadero')">¡Lo quiero!
+            <ion-icon slot="end" name="mail"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide">
+        <ion-thumbnail>
+          <img alt="ícono" src="../../assets/icon/logos/ganado.png" />
+        </ion-thumbnail>
+        <ion-card-header class="ion-text-center">
+          <ion-card-title class="le">Especies exóticas</ion-card-title>
+        </ion-card-header>
+        <ion-card-content color="p">
+          <p>
+            <b>Soatech</b> tiene la solución de monitoreo para especies exóticas (Zoo, PIMVS, UMA, etc.)
+          </p>
+          <ion-button fill="clear" class="le" (click)="requestSector('Especies Exóticas')">¡Lo quiero!
+            <ion-icon slot="end" name="mail"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide">
+        <ion-thumbnail>
+          <img alt="ícono" src="../../assets/icon/logos/acuicola.png" />
+        </ion-thumbnail>
+        <ion-card-header class="ion-text-center">
+          <ion-card-title class="la">Acuícola</ion-card-title>
+        </ion-card-header>
+        <ion-card-content color="p">
+          <p>
+            <b>Soatech</b> tiene la solución de monitoreo para calidad de agua (Acuícola, acuaponía e hidroponía)
+          </p>
+          <ion-button fill="clear" class="la" (click)="requestSector('Acuícola')">¡Lo quiero!
+            <ion-icon slot="end" name="mail"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide">
+        <ion-thumbnail>
+          <img alt="ícono" src="../../assets/icon/logos/plantas.png" />
+        </ion-thumbnail>
+        <ion-card-header class="ion-text-center">
+          <ion-card-title class="lf">Agrícola</ion-card-title>
+        </ion-card-header>
+        <ion-card-content color="p">
+          <p>
+            <b>Soatech</b> tiene la solución de monitoreo agrícola (Humedad, conductividad, temperatura y pH)
+          </p>
+          <ion-button fill="clear" class="lf" (click)="requestSector('Agrícola')">¡Lo quiero!
+            <ion-icon slot="end" name="mail"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide">
+        <ion-thumbnail>
+          <img alt="ícono" src="../../assets/icon/logos/integral.png" />
+        </ion-thumbnail>
+        <ion-card-header class="ion-text-center">
+          <ion-card-title color="p">Integral</ion-card-title>
+        </ion-card-header>
+        <ion-card-content color="p">
+          <p>
+            <b>Soatech</b> tiene soluciones integrales de monitoreo y control. <b>Aplicaciones a futuro:</b> Industria
+            vinícola, lácteos.
+          </p>
+          <ion-button fill="clear" (click)="requestSector('Industrial')" color="p">¡Lo quiero!
+            <ion-icon slot="end" name="mail"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <!--ion-card button>
+    Soatech es una empresa en constante crecimiento en busca de ser líder en soluciones de IoT para la industria agropecuaria.
+    Tenemos experiencia creando soluciones innovadoras que vuelvan competitivo al agro productor.
+
+    <ion-card-header class="ion-text-center" color="p">
+      <ion-card-title>Misión</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>Mejorar la eficiencia del sector agroindustrial proporcionando soluciones sencillas e innovadoras
+      basadas en IoT para productores de pequeña a gran escala.
+    </ion-card-content>
+  </ion-card>
+  <ion-card button>
+    <ion-card-header class="ion-text-center" color="p">
+      <ion-card-title>Visión</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>Nuestro profesionales integrarán IoT a empresas agropecuarias con potencial de crecimiento.
+    </ion-card-content>
+  </ion-card-->
 </ion-content>

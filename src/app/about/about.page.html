@@ -1,0 +1,73 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="p">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Acerca de
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+      <img alt="foto de soatech" src="../../assets/icon/Soatech-Condor.png" (click)="openCondorPage()"/>
+    <ion-card-header>
+      <ion-card-subtitle color="warning">¿Quiénes somos?</ion-card-subtitle>
+      
+    </ion-card-header>
+    <ion-card-content>
+      <b>Soatech</b> es una empresa en constante crecimiento en busca de ser líder en soluciones de IoT para la industria agropecuaria.
+    Tenemos experiencia creando soluciones innovadoras que vuelvan competitivo al agro productor.
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle color="warning">Misión</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+      Mejorar la eficiencia del sector agroindustrial proporcionando soluciones sencillas e innovadoras
+      basadas en IoT para productores de pequeña a gran escala.
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle color="warning">Visión</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+      Nuestro profesionales integrarán IoT a empresas agropecuarias con potencial de crecimiento.
+    </ion-card-content>
+  </ion-card>
+  <ion-fab slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button color="p">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button href="https://www.youtube.com/channel/UCkVbRbY7dbZlO6wXBuB26fA">
+        <ion-icon name="logo-youtube" color="danger"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button href="https://i-condor.com/?p=17810">
+        <ion-icon name="globe-outline" color="warning"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="openGmail()">
+        <ion-icon name="mail-outline" color="danger"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button href="https://www.facebook.com/profile.php?id=100087081136325">
+        <ion-icon name="logo-facebook" class="fb"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button href="https://www.instagram.com/soatechnology/">
+        <ion-icon name="logo-instagram" class="in"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button href="https://wa.me/+525525595609">
+        <ion-icon name="logo-whatsapp" class="wh"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button href="https://www.linkedin.com/company/i-condor/">
+        <ion-icon name="logo-linkedin" class="ln"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button href="https://goo.gl/maps/6Az68C68r23Q2EkQ6">
+        <ion-icon name="point" color="danger"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

@@ -18,21 +18,28 @@ import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { NetworkInterface } from '@awesome-cordova-plugins/network-interface/ngx';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { BluetoothLE } from '@awesome-cordova-plugins/bluetooth-le/ngx';
+import { EmailComposer } from '@awesome-cordova-plugins/email-composer/ngx';
+import { Storage } from '@ionic/storage';
+import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
+//import {EmailComposer} from "@ionic-native/email-composer/ngx";
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    FileTransfer, 
-    File, 
+    FileTransfer,
+    File,
     FileOpener,
     NetworkInterface,
     BluetoothSerial,
     BluetoothLE,
+    Storage,
+    Clipboard,
     //LocalNotifications,
-    InAppBrowser, 
-    DownloadsService, 
-    HttpService, 
+    EmailComposer,
+    InAppBrowser,
+    DownloadsService,
+    HttpService,
     Network,
     SQLite],
   bootstrap: [AppComponent],
