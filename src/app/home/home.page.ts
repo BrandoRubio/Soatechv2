@@ -24,7 +24,6 @@ export class HomePage implements OnInit {
   company: String
   sector: String
   ubicacion: String
-  rol: String
   correo: String
   telefono: String
   constructor(
@@ -57,14 +56,14 @@ export class HomePage implements OnInit {
     await this.storage.get("company").then((res) => {
       this.company = res
     });
-    await this.storage.get("rol").then((res) => {
-      this.rol = res
-    });
     await this.storage.get("sector").then((res) => {
       this.sector = res
     });
     await this.storage.get("telefono").then((res) => {
       this.telefono = res
+    });
+    await this.storage.get("ubicacion").then((res) => {
+      this.ubicacion = res
     });
     await this.storage.get("correo").then((res) => {
       this.correo = res
@@ -72,11 +71,11 @@ export class HomePage implements OnInit {
   }
   requestSector(sect) {
     this.loadProfile().then(() => {
-      if (this.name && this.company && this.rol && this.sector && this.telefono && this.correo) {
+      if (this.name && this.company  && this.sector && this.ubicacion && this.telefono && this.correo) {
         this.openEmail(sect)
       } else {
         this.loadProfile().then(() => {
-          if (this.name && this.company && this.rol && this.sector && this.telefono && this.correo) {
+          if (this.name && this.company  && this.sector && this.ubicacion && this.telefono && this.correo) {
             this.openEmail(sect)
           } else {
             this.showAlert()
@@ -94,10 +93,10 @@ export class HomePage implements OnInit {
 
       ],
       subject: 'Requiero una solución para sector ' + sect,
-      body: 'Hola, mi nombre es ' + this.name + ' soy ' + this.rol + ' de ' + this.company + ' (sector ' + this.sector + ')' +
-        ' y solicito una solución para sector ' + this.sector + ', mi número de contacto es ' + this.telefono +
-        ' estoy ubicado en ******' +
-        '\n**Adiciona más información**',
+      body: 'Hola qué tal, soy ' + this.name + ' y trabajo en ' + this.company + ' en el sector ' + this.sector +
+        ' con sede en '+ this.ubicacion+'.'+
+        '\nMe interesaría recibir información de su solución en el sector  ' + this.sector + ', para ello facilito mi teléfono que es ' + this.telefono+'.'+
+        '\n\n*Puedes aducionar más información*',
       isHtml: false
     }
     //this.emailComposer.addAlias('gmail', 'com.google.android.gm')

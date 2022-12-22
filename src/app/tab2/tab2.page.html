@@ -307,7 +307,8 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos de temperatura</ion-label>
-            <ion-button (click)="showTag('<b>Temperatura</b> (calor o frío) en el sitio de producción.','Rango productivo:  <b>15-38 °C</b>')">
+            <ion-button
+              (click)="showTag('<b>Temperatura</b> (calor o frío) en el sitio de producción.','Rango productivo:  <b>15-38 °C</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -327,7 +328,8 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos de humedad</ion-label>
-            <ion-button (click)="showTag('<b>La Humedad relativa</b> es  la cantidad de agua que se transporta por el aire medida en porcentajes, es importante para determinar el desarrollo de tu producción','Rango productivo: <b>0% - 100%</b>')">
+            <ion-button
+              (click)="showTag('<b>La Humedad relativa</b> es  la cantidad de agua que se transporta por el aire medida en porcentajes, es importante para determinar el desarrollo de tu producción','Rango productivo: <b>0% - 100%</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -461,7 +463,8 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('<b>Temperatura en sustrato</b> en el sustrato(material de cultivo) de producción','Rangos recomendables: <b>10 - 40%</b>')">
+            <ion-button
+              (click)="showTag('<b>Temperatura en sustrato</b> en el sustrato(material de cultivo) de producción','Rangos recomendables: <b>10 - 40%</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -542,7 +545,8 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('<b>Humedad en sustrato:</b>Determina la cantidad de agua que tiene la tierra o un sustrato','Rangos recomendables: <b>40% - 100%</b>')">
+            <ion-button
+              (click)="showTag('<b>Humedad en sustrato:</b>Determina la cantidad de agua que tiene la tierra o un sustrato','Rangos recomendables: <b>40% - 100%</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -647,7 +651,8 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('La magnitud de <b>medida oxígeno</b> disuelto indica la cantidad de oxígeno gaseoso disuelto físicamente en la fase acuosa en mg/l (ppm) o la saturación de oxígeno del agua en%Se puede utilizar tanto para el monitoreo de aguas más ricas en oxígeno, como agua superficial o agua potable, como para la regulación de la aireación en tanques de activación de plantas de tratamiento')">
+            <ion-button
+              (click)="showTag('La magnitud de <b>medida oxígeno</b> disuelto indica la cantidad de oxígeno gaseoso disuelto físicamente en la fase acuosa en mg/l (ppm) o la saturación de oxígeno del agua en%Se puede utilizar tanto para el monitoreo de aguas más ricas en oxígeno, como agua superficial o agua potable, como para la regulación de la aireación en tanques de activación de plantas de tratamiento')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -728,7 +733,8 @@
           </ion-item>
           <ion-list-header>
             <ion-label color="success">Rangos</ion-label>
-            <ion-button (click)="showTag('<b>Conductividad:</b> es la característica  de todo elemento que tiene la capacidad de conducir la electricidad se mide en miliSiemens/cm (mS/cm)','Rangos recomendables: <b>0 - 1200 mS/cm</b>')">
+            <ion-button
+              (click)="showTag('<b>Conductividad:</b> es la característica  de todo elemento que tiene la capacidad de conducir la electricidad se mide en miliSiemens/cm (mS/cm)','Rangos recomendables: <b>0 - 1200 mS/cm</b>')">
               <ion-icon slot="icon-only" name="help"></ion-icon>
             </ion-button>
           </ion-list-header>
@@ -879,7 +885,8 @@
     </ion-accordion-group>
   </div>
   <div [hidden]=SSIDPASS>
-    <ion-item>
+      <ion-note color="medium">No disponible</ion-note>
+    <ion-item disabled="true">
       <ion-label color="primary">Dispositivo</ion-label>
       <ion-select [(ngModel)]="deviceBLE" placeholder="Seleccione" (ionChange)="onBleChanged($event)">
         <ion-select-option value="{{item.id}}" *ngFor="let item of BLEDEVS; trackBy:trackItems">{{item.name || 'Sin
@@ -889,14 +896,15 @@
     </ion-item>
     <ion-item>
       <ion-label color="primary">Nueva red</ion-label>
-      <ion-input [(ngModel)]="SSID" placeholder="ej. INFINITUM43048_2.4" class="ion-text-right"></ion-input>
+      <ion-input disabled="true" [(ngModel)]="SSID" placeholder="ej. INFINITUM43048_2.4"
+        class="ion-text-right"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label color="primary">Nueva contraseña</ion-label>
-      <ion-input [(ngModel)]="PASS" placeholder="**************" class="ion-text-right"></ion-input>
+      <ion-input disabled="true" [(ngModel)]="PASS" placeholder="**************" class="ion-text-right"></ion-input>
     </ion-item>
     <div class="ion-text-center">
-      <ion-button expand="block" (click)="sendSSIDPASS()" color="primary">
+      <ion-button disabled="true" expand="block" (click)="sendSSIDPASS()" color="primary">
         <ion-icon slot="end" name="bluetooth-outline"></ion-icon>
         Enviar datos
       </ion-button>
@@ -928,11 +936,11 @@
         </section>
       </ion-card-content>
     </ion-card>
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <!--ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button (click)="scanDevices()" color="primary">
         <ion-icon name="bluetooth"></ion-icon>
       </ion-fab-button>
-    </ion-fab>
+    </ion-fab-->
   </div>
   <ion-fab [hidden]="!ImAdmin" vertical="bottom" horizontal="start" slot="fixed">
     <ion-fab-button (click)="openLogger()" color="primary">

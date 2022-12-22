@@ -1,4 +1,4 @@
-package space.agroindustria.com;
+package com.condor.soatechapp;
 
 import com.getcapacitor.BridgeActivity;
 

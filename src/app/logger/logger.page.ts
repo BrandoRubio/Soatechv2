@@ -107,7 +107,6 @@ export class LoggerPage implements OnInit {
       //this.data = _
       this.data = [];
       let logs : [] = _.reverse()
-      
       for (let i = 0; i < logs.length-1; i++) {
         const log = {
           hora : String(logs[i][0]),

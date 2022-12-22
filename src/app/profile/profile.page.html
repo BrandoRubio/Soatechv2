@@ -9,11 +9,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-item lines="none">
-  </ion-item>
-  <ion-avatar class="ion-text-center">
-  <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-</ion-avatar>
+  <ion-img alt="Silhouette of a person's head" src="./../../assets/icon/user.png"></ion-img>
   <ion-list (ionChange)="changeForm()">
     <ion-list-header>
       <ion-label>Ingresa tus datos</ion-label>
@@ -43,23 +39,16 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <!--Rol-->
-      <ion-label color="primary">Rol dentro de la empresa:</ion-label>
-      <ion-note [hidden]="rol" color="danger">*</ion-note>
-      <ion-select [(ngModel)]="rol" placeholder="seleccione">
-        <ion-select-option value="Director general">Director general</ion-select-option>
-        <ion-select-option value="del área de ventas">Vendedor</ion-select-option>
-        <ion-select-option value="del área de Recursos Humanos">Recursos Humanos</ion-select-option>
-        <ion-select-option value="consultor">Consultor</ion-select-option>
-        <ion-select-option value="empleado">Empleado</ion-select-option>
-        <ion-select-option value="empleado">Otro</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
       <!--telefono-->
       <ion-label color="primary">Teléfono de contacto:</ion-label>
       <ion-note [hidden]="telefono" color="danger">*</ion-note>
       <ion-input [(ngModel)]="telefono" type="number" class="ion-text-right" placeholder="ej. 5512681489"></ion-input>
+    </ion-item>
+    <ion-item>
+      <!--telefono-->
+      <ion-label color="primary">Ubicación:</ion-label>
+      <ion-note [hidden]="ubicacion" color="danger">*</ion-note>
+      <ion-textarea  [(ngModel)]="ubicacion" type="textarea" class="ion-text-right" placeholder="ej. Artemisa 7, Sta Maria Guadalupe, 54769 Cuautitlán Izcalli, Méx."></ion-textarea >
     </ion-item>
     <ion-item>
       <!--correo electrónico-->
@@ -72,4 +61,9 @@
       <ion-label color="danger">{{text}}</ion-label>
     </ion-item>
   </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="saveData()" color="p">
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

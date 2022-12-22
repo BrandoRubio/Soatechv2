@@ -17,7 +17,6 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { NetworkInterface } from '@awesome-cordova-plugins/network-interface/ngx';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
-import { BluetoothLE } from '@awesome-cordova-plugins/bluetooth-le/ngx';
 import { EmailComposer } from '@awesome-cordova-plugins/email-composer/ngx';
 import { Storage } from '@ionic/storage';
 import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
@@ -32,7 +31,6 @@ import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
     FileOpener,
     NetworkInterface,
     BluetoothSerial,
-    BluetoothLE,
     Storage,
     Clipboard,
     //LocalNotifications,

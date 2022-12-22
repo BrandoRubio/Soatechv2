@@ -493,8 +493,10 @@ export class Tab2Page {
   }
   scanDevices() {
     this.BLEDEVS = []
+    console.log(this.BLSE);
     this.BLSE.list().then(d => {
       d.forEach(i => {
+        console.log(i);
         this.BLEDEVS.push(i)
       });
     })

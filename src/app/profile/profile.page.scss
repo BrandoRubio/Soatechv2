@@ -1,3 +1,9 @@
 ion-avatar{
     margin: auto;
  }
+ ion-img::part(image) {
+    width: 40%;
+    /* or whatever value */
+    /* you can set the height value too */
+    margin: auto;
+}
