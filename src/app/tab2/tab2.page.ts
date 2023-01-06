@@ -41,11 +41,14 @@ export class Tab2Page {
       pin1: "0",
       pin2: "0",
       pin3: "0",
-      pin4: "0"
+      pin4: "0",
+      pin5: "0",
+      pin6: "0"
     },
     temperatura: {
       pin_min: "0",
       pin_max: "0",
+      pin_fan: "0",
       ranges: {
         lower: 0,
         upper: 0
@@ -140,6 +143,31 @@ export class Tab2Page {
     control_min_pin: "0",
     control_max_pin: "0"
   }
+  CO2 = {
+    id: 7,
+    a: "Sensor inactivo",
+    ranges: {
+      lower: 0,
+      upper: 0
+    },
+    ideal: 0,
+    pines: {
+      pin1: "0",
+    },
+    control_min_pin: "0",
+    control_max_pin: "0"
+  }
+  LUM = {
+    id: 8,
+    a: "Sensor inactivo",
+    ranges: {
+      lower: 0,
+      upper: 0
+    },
+    ideal: 0,
+    control_min_pin: "0",
+    control_max_pin: "0"
+  }
   disable = {
     loading: true,
     chDev: true,
@@ -149,9 +177,13 @@ export class Tab2Page {
     chPH: true,
     chCond: true,
     chYL: true,
+    chCO2: true,
+    chLUM: true,
     DHT: true,
     DS18: true,
     YL: true,
+    CO2: true,
+    LUM: true,
     Oxy: true,
     PH: true,
     Cond: true,
@@ -160,9 +192,11 @@ export class Tab2Page {
     DHT : false,
     DS18 : false,
     YL : false,
+    CO2 : false,
+    LUM : false,
     Oxy : false,
     PH : false,
-    Cond : false
+    Cond : false,
   }
 
   loading: Boolean = false
@@ -246,6 +280,18 @@ export class Tab2Page {
       this.YL.a = Boolean(this.disable.YL) ? "Sensor activo" : "Sensor inactivo"
     }
   }
+  changesCO2() {
+    if (!this.disable.loading) {
+      this.disable.chCO2 = false;
+      this.CO2.a = Boolean(this.disable.CO2) ? "Sensor activo" : "Sensor inactivo"
+    }
+  }
+  changesLUM() {
+    if (!this.disable.loading) {
+      this.disable.chLUM = false;
+      this.LUM.a = Boolean(this.disable.LUM) ? "Sensor activo" : "Sensor inactivo"
+    }
+  }
   ionViewWillEnter() {
     this.loadData()
   }
@@ -258,6 +304,8 @@ export class Tab2Page {
     this.disable.chPH = true
     this.disable.chDs18 = true
     this.disable.chYL = true
+    this.disable.chLUM = true
+    this.disable.chCO2 = true
     this.sensors = true
     this.ImAdmin = false;
     this.loading = false
@@ -339,7 +387,8 @@ export class Tab2Page {
         this.showLoading = true
         if (sensors.DHT11 != undefined) {//Asignación de variables a DHT11
           const DHT = sensors.DHT11
-          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin){
+          this.disable.DHT = DHT.active == "true" ? true : false
+          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.DHT){
             this.show.DHT = false;
           }else{
             this.show.DHT = true;
@@ -351,6 +400,8 @@ export class Tab2Page {
           this.DHT11.pines.pin2 = String(DHT.read_pin).split(",")[1]
           this.DHT11.pines.pin3 = String(DHT.read_pin).split(",")[2]
           this.DHT11.pines.pin4 = String(DHT.read_pin).split(",")[3]
+          this.DHT11.pines.pin5 = String(DHT.read_pin).split(",")[4]
+          this.DHT11.pines.pin6 = String(DHT.read_pin).split(",")[5]
           this.DHT11.temperatura.ideal = Number(String(DHT.ideal).split(",")[0])
           this.DHT11.humedad.ideal = Number(String(DHT.ideal).split(",")[1])
           this.DHT11.temperatura.ranges.lower = Number(String(DHT.min).split(",")[0])
@@ -359,12 +410,14 @@ export class Tab2Page {
           this.DHT11.humedad.ranges.upper = Number(String(DHT.max).split(",")[1])
           this.DHT11.temperatura.pin_min = String(DHT.pin_min).split(",")[0]
           this.DHT11.humedad.pin_min = String(DHT.pin_min).split(",")[1]
+          this.DHT11.temperatura.pin_fan = String(DHT.pin_min).split(",")[2]
           this.DHT11.temperatura.pin_max = String(DHT.pin_max).split(",")[0]
           this.DHT11.humedad.pin_max = String(DHT.pin_max).split(",")[1]
         }
         if (sensors.Ds18 != undefined) {//Asignación de variables a DHT11
           const DS18 = sensors.Ds18
-          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin){
+          this.disable.DS18 = DS18.active == "true" ? true : false
+          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.DS18){
             this.show.DS18 = false;
           }else{
             this.show.DS18 = true;
@@ -381,7 +434,8 @@ export class Tab2Page {
         }
         if (sensors.Oxygen != undefined) {//Asignación de variables a DHT11
           const Oxy = sensors.Oxygen
-          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin){
+          this.disable.Oxy = Oxy.active == "true" ? true : false
+          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.Oxy){
             this.show.Oxy = false;
           }else{
             this.show.Oxy = true;
@@ -398,12 +452,12 @@ export class Tab2Page {
         }
         if (sensors.Conductividad != undefined) {//Asignación de variables a DHT11
           const Cond = sensors.Conductividad
-          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin){
+          this.disable.Cond = Cond.active == "true" ? true : false
+          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.Cond){
             this.show.Cond = false;
           }else{
             this.show.Cond = true;
           }
-          this.disable.Cond = Cond.active == "true" ? true : false
           this.Cond.a = Cond.active == "true" ? "Sensor activo" : "Sensor inactivo"
           this.Cond.id = Cond.id
           this.Cond.pines.pin1 = String(Cond.read_pin)
@@ -415,7 +469,8 @@ export class Tab2Page {
         }
         if (sensors.PH != undefined) {//Asignación de variables a DHT11
           const PH = sensors.PH
-          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin){
+          this.disable.PH = PH.active == "true" ? true : false
+          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.PH){
             this.show.PH = false;
           }else{
             this.show.PH = true;
@@ -432,12 +487,12 @@ export class Tab2Page {
         }
         if (sensors.YL != undefined) {//Asignación de variables a DHT11
           const YL = sensors.YL
-          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin){
+          this.disable.YL = YL.active == "true" ? true : false
+          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.YL){
             this.show.YL = false;
           }else{
             this.show.YL = true;
           }
-          this.disable.YL = YL.active == "true" ? true : false
           this.YL.a = YL.active == "true" ? "Sensor activo" : "Sensor inactivo"
           this.YL.id = YL.id
           this.YL.pines.pin1 = String(YL.read_pin).split(",")[0]
@@ -449,6 +504,39 @@ export class Tab2Page {
           this.YL.ranges.upper = Number(String(YL.max))
           this.YL.control_min_pin = String(YL.pin_min)
           this.YL.control_max_pin = String(YL.pin_max)
+        }
+        if (sensors.CO2 != undefined) {//Asignación de variables a DHT11
+          const CO2 = sensors.CO2
+          this.disable.CO2 = CO2.active == "true" ? true : false
+          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.CO2){
+            this.show.CO2 = false;
+          }else{
+            this.show.CO2 = true;
+          }
+          this.CO2.a = CO2.active == "true" ? "Sensor activo" : "Sensor inactivo"
+          this.CO2.id = CO2.id
+          this.CO2.pines.pin1 = String(CO2.read_pin)
+          this.CO2.ideal = Number(String(CO2.ideal))
+          this.CO2.ranges.lower = Number(String(CO2.min))
+          this.CO2.ranges.upper = Number(String(CO2.max))
+          this.CO2.control_min_pin = String(CO2.pin_min)
+          this.CO2.control_max_pin = String(CO2.pin_max)
+        }
+        if (sensors.Luminosidad != undefined) {//Asignación de variables a DHT11
+          const LUM = sensors.Luminosidad
+          this.disable.LUM = LUM.active == "true" ? true : false
+          if(_.type == "insectos" || _.type == "integral" ||  _.type == "agricola" || this.ImAdmin || this.disable.LUM){
+            this.show.LUM = false;
+          }else{
+            this.show.LUM = true;
+          }
+          this.LUM.a = LUM.active == "true" ? "Sensor activo" : "Sensor inactivo"
+          this.LUM.id = LUM.id
+          this.LUM.ideal = Number(String(LUM.ideal))
+          this.LUM.ranges.lower = Number(String(LUM.min))
+          this.LUM.ranges.upper = Number(String(LUM.max))
+          this.LUM.control_min_pin = String(LUM.pin_min)
+          this.LUM.control_max_pin = String(LUM.pin_max)
         }
         this.sensors = false
         setTimeout(() => {
@@ -536,8 +624,8 @@ export class Tab2Page {
   updateSensorDHT() {
     let newData
     newData = "?newUbiVar=temperatura,humedad"
-      + "&newReadPin=" + this.DHT11.pines.pin1 + "," + this.DHT11.pines.pin2 + "," + this.DHT11.pines.pin3 + "," + this.DHT11.pines.pin4
-      + "&newControlPinMin=" + this.DHT11.temperatura.pin_min + "," + this.DHT11.humedad.pin_min
+      + "&newReadPin=" + this.DHT11.pines.pin1 + "," + this.DHT11.pines.pin2 + "," + this.DHT11.pines.pin3 + "," + this.DHT11.pines.pin4 + "," + this.DHT11.pines.pin5 + "," + this.DHT11.pines.pin6
+      + "&newControlPinMin=" + this.DHT11.temperatura.pin_min + "," + this.DHT11.humedad.pin_min + "," + this.DHT11.temperatura.pin_fan
       + "&newControlPinMax=" + this.DHT11.temperatura.pin_max + "," + this.DHT11.humedad.pin_max
       + "&newMin=" + this.DHT11.temperatura.ranges.lower + "," + this.DHT11.humedad.ranges.lower
       + "&newMax=" + this.DHT11.temperatura.ranges.upper + "," + this.DHT11.humedad.ranges.upper
@@ -696,6 +784,60 @@ export class Tab2Page {
       //console.log(error);
     })
   }
+  updateSensorCO2() {
+    let newData
+    newData = "?newUbiVar=CO2"
+      + "&newReadPin=" + this.CO2.pines.pin1
+      + "&newControlPinMin=" + this.CO2.control_min_pin
+      + "&newControlPinMax=" + this.CO2.control_max_pin
+      + "&newMin=" + this.CO2.ranges.lower
+      + "&newMax=" + this.CO2.ranges.upper
+      + "&newIdeal=" + this.CO2.ideal
+      + "&active=" + this.disable.CO2
+      + "&id=7"
+      + "&ip=" + this.myIP
+    //console.log(newData);
+    this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
+      this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+    }, (error) => {
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+      this.presentToast("Ha ocurriedo un error, vuelva a intentarlo.")
+      this.http.dismissLoader()
+      //console.log(error);
+    })
+  }
+  updateSensorLUM() {
+    let newData
+    newData = "?newUbiVar=Luminosidad"
+      + "&newReadPin=0"
+      + "&newControlPinMin=" + this.LUM.control_min_pin
+      + "&newControlPinMax=" + this.LUM.control_max_pin
+      + "&newMin=" + this.LUM.ranges.lower
+      + "&newMax=" + this.LUM.ranges.upper
+      + "&newIdeal=" + this.LUM.ideal
+      + "&active=" + this.disable.LUM
+      + "&id=8"
+      + "&ip=" + this.myIP
+    //console.log(newData);
+    this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
+      this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+    }, (error) => {
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+      this.presentToast("Ha ocurriedo un error, vuelva a intentarlo.")
+      this.http.dismissLoader()
+      //console.log(error);
+    })
+  }
   getDeviceData(id) {
     this.db.getDevice(id).then(_ => {
       this.ipDeviceSelected = _.ip
@@ -745,6 +887,10 @@ export class Tab2Page {
               this.updateSensorPH()
             } else if (thing == 'YL') {
               this.updateSensorYL()
+            } else if (thing == 'CO2') {
+              this.updateSensorCO2()
+            } else if (thing == 'LUM') {
+              this.updateSensorLUM()
             }
           }
         }
@@ -805,6 +951,10 @@ export class Tab2Page {
               this.disable.PH = !this.disable.PH
             } else if (sensor == 'YL') {
               this.disable.YL = !this.disable.YL
+            } else if (sensor == 'CO2') {
+              this.disable.CO2 = !this.disable.CO2
+            } else if (sensor == 'LUM') {
+              this.disable.LUM = !this.disable.LUM
             }
           }
         },
@@ -826,6 +976,10 @@ export class Tab2Page {
                 this.disable.DS18 = !this.disable.DS18
               } else if (sensor == 'YL') {
                 this.disable.YL = !this.disable.YL
+              } else if (sensor == 'LUM') {
+                this.disable.LUM = !this.disable.LUM
+              } else if (sensor == 'CO2') {
+                this.disable.CO2 = !this.disable.CO2
               }
               this.presentToast("Contraseña no válida.")
             } else {
@@ -871,6 +1025,8 @@ export class Tab2Page {
               this.show.Cond = false
               this.show.Oxy = false
               this.show.YL = false
+              this.show.CO2 = false
+              this.show.LUM = false
               this.show.PH = false
               this.presentToast("Eres admin.")
             }

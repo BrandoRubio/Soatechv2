@@ -87,8 +87,8 @@ export class HomePage implements OnInit {
   openEmail(sect) {
     let email = {
       app: 'gmail',
-      to: 'fernando.calleja.condor@gmail.com',
-      cc: 'brando.rubio.condor@gmail.com, uzziel.perez.condor@gmail.com',
+      to: 'soatech.condor@gmail.com',
+      cc: 'fernando.calleja.condor@gmail.com, uzziel.perez.condor@gmail.com, brando.rubio.condor@gmail.com',
       attachments: [
 
       ],
@@ -96,7 +96,8 @@ export class HomePage implements OnInit {
       body: 'Hola qué tal, soy ' + this.name + ' y trabajo en ' + this.company + ' en el sector ' + this.sector +
         ' con sede en '+ this.ubicacion+'.'+
         '\nMe interesaría recibir información de su solución en el sector  ' + this.sector + ', para ello facilito mi teléfono que es ' + this.telefono+'.'+
-        '\n\n*Puedes aducionar más información*',
+        '\n\nCorreo: ' + this.correo +
+        '\n\n*Puedes adicionar más información*',
       isHtml: false
     }
     //this.emailComposer.addAlias('gmail', 'com.google.android.gm')

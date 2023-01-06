@@ -56,6 +56,7 @@ export class LoggerPage implements OnInit {
     this.getFilesFromSD();
   }
   changesRute() {
+    this.fileSelected = ""
     if (this.ruteSelected == "Logger") {
       this.files = this.filesLogger.reverse();
       this.nFiles = this.filesLogger.length

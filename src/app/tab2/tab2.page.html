@@ -370,6 +370,20 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>
+            <ion-item [disabled]="!disable.DHT">
+              <ion-label color="primary">Ventilador</ion-label>
+              <!--ion-button
+                (click)="showTag('<b>Ventilador</b>','Cuando la temperatura inferior a la superior tiene una diferencia de 3 grados entonces enciende el ventilador.')">
+                <ion-icon slot="start" name="help"></ion-icon>
+              </ion-button-->
+              <ion-select value="{{DHT11.temperatura.pin_fan}}" [(ngModel)]="DHT11.temperatura.pin_fan">
+                <ion-select-option value="0">Desactivado
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
           </div>
           <div [hidden]="!ImAdmin">
             <ion-list-header>
@@ -433,6 +447,27 @@
           <ion-item><sensor4-->
               <ion-label color="primary">Pin 4</ion-label>
               <ion-select value="{{DHT11.pines.pin4}}" [(ngModel)]="DHT11.pines.pin4">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of DHTPines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item [disabled]="!disable.DHT">
+              <!--sensor3-->
+              <ion-label color="primary">Pin 5</ion-label>
+              <ion-select value="{{DHT11.pines.pin5}}" [(ngModel)]="DHT11.pines.pin5">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of DHTPines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+              <!--/ion-item>
+          <ion-item><sensor4-->
+              <ion-label color="primary">Pin 6</ion-label>
+              <ion-select value="{{DHT11.pines.pin6}}" [(ngModel)]="DHT11.pines.pin6">
                 <ion-select-option value="0">Ninguno
                 </ion-select-option>
                 <ion-select-option value="{{item}}" *ngFor="let item of DHTPines; trackBy:trackItems">
@@ -631,6 +666,147 @@
           </div>
           <div class="ion-text-center">
             <ion-button [disabled]="disable.chYL" expand="block" (click)="showAlertParams('YL')" color="primary">
+              <ion-icon slot="end" name="save-outline"></ion-icon>
+              Guardar cambios
+            </ion-button>
+          </div>
+        </div>
+      </ion-accordion>
+      <ion-accordion value="CO2" [hidden]="show.CO2">
+        <ion-item slot="header" color="light">
+          <ion-label>Gas CO2</ion-label>
+          <ion-note slot="end" color="dark" [hidden]="disable.chCO2">*</ion-note>
+          <ion-icon slot="start" color="primary" name="hardware-chip"></ion-icon>
+        </ion-item>
+        <div class="ion-padding" slot="content" (ionChange)="changesCO2()">
+          <ion-item [hidden]="!ImAdmin">
+            <!--Active-->
+            <ion-label color="primary">{{CO2.a}}</ion-label>
+            <ion-toggle slot="end" [(ngModel)]="disable.CO2" (click)="showAlertChangeStatus('CO2')"></ion-toggle>
+          </ion-item>
+          <ion-list-header>
+            <ion-label color="success">Rangos</ion-label>
+            <ion-button
+              (click)="showTag('<b>CO2:</b>Sensor que permite medir concentraciones de dióxido de carbono en el ambiente en una producción. Esta medición de CO2 no se ve afectada por el polvo y el vapor de agua.','Rangos recomendables (plantas): <b>300 - 1200</b> Rangos recomendables (humamos): <b>300 - 800</b>')">
+              <ion-icon slot="icon-only" name="help"></ion-icon>
+            </ion-button>
+          </ion-list-header>
+          <ion-item [disabled]="!disable.CO2" lines="none">
+            <ion-range [min]="0" [max]="1200" [pin]="true" [(ngModel)]="CO2.ranges" [dualKnobs]="true"
+              [value]="{ lower: CO2.ranges.lower, upper: CO2.ranges.upper }"></ion-range>
+          </ion-item>
+          <ion-item [disabled]="!disable.CO2" lines="none">
+            <ion-label color="primary" slot="start">Min</ion-label>
+            <ion-label color="primary" slot="end">Max</ion-label>
+          </ion-item>
+          <ion-item [disabled]="!disable.CO2">
+            <ion-label color="primary">Ideal</ion-label>
+            <ion-range [min]="CO2.ranges.lower" [max]="CO2.ranges.upper" [pin]="true" [(ngModel)]="CO2.ideal"></ion-range>
+          </ion-item>
+          <div [hidden]="!ImAdmin">
+            <ion-list-header>
+              <ion-label color="success">Pines de control</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.CO2">
+              <ion-label color="primary">Pin de control min</ion-label>
+              <ion-select value="{{CO2.control_min_pin}}" [(ngModel)]="CO2.control_min_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item [disabled]="!disable.CO2">
+              <ion-label color="primary">Pin de control max</ion-label>
+              <ion-select value="{{CO2.control_max_pin}}" [(ngModel)]="CO2.control_max_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-list-header>
+              <ion-label color="success">Sensor</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.CO2">
+              <ion-label color="primary">Pin</ion-label>
+              <ion-select value="{{CO2.pines.pin1}}" [(ngModel)]="CO2.pines.pin1">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of generalPines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          <div class="ion-text-center">
+            <ion-button [disabled]="disable.chCO2" expand="block" (click)="showAlertParams('CO2')" color="primary">
+              <ion-icon slot="end" name="save-outline"></ion-icon>
+              Guardar cambios
+            </ion-button>
+          </div>
+        </div>
+      </ion-accordion>
+      <ion-accordion value="LUM" [hidden]="show.LUM">
+        <ion-item slot="header" color="light">
+          <ion-label>Iluminación</ion-label>
+          <ion-note slot="end" color="dark" [hidden]="disable.chLUM">*</ion-note>
+          <ion-icon slot="start" color="primary" name="hardware-chip"></ion-icon>
+        </ion-item>
+        <div class="ion-padding" slot="content" (ionChange)="changesLUM()">
+          <ion-item [hidden]="!ImAdmin">
+            <!--Active-->
+            <ion-label color="primary">{{LUM.a}}</ion-label>
+            <ion-toggle slot="end" [(ngModel)]="disable.LUM" (click)="showAlertChangeStatus('LUM')"></ion-toggle>
+          </ion-item>
+          <ion-list-header>
+            <ion-label color="success">Rangos</ion-label>
+            <ion-button
+              (click)="showTag('<b>Humedad en sustrato:</b>Determina la cantidad de agua que tiene la tierra o un sustrato','Rangos recomendables: <b>40% - 100%</b>')">
+              <ion-icon slot="icon-only" name="help"></ion-icon>
+            </ion-button>
+          </ion-list-header>
+          <ion-item [disabled]="!disable.LUM" lines="none">
+            <ion-range [min]="0" [max]="1200" [pin]="true" [(ngModel)]="LUM.ranges" [dualKnobs]="true"
+              [value]="{ lower: LUM.ranges.lower, upper: LUM.ranges.upper }"></ion-range>
+          </ion-item>
+          <ion-item [disabled]="!disable.LUM" lines="none">
+            <ion-label color="primary" slot="start">Min</ion-label>
+            <ion-label color="primary" slot="end">Max</ion-label>
+          </ion-item>
+          <ion-item [disabled]="!disable.LUM">
+            <ion-label color="primary">Ideal</ion-label>
+            <ion-range [min]="LUM.ranges.lower" [max]="LUM.ranges.upper" [pin]="true" [(ngModel)]="LUM.ideal"></ion-range>
+          </ion-item>
+          <div [hidden]="!ImAdmin">
+            <ion-list-header>
+              <ion-label color="success">Pines de control</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.LUM">
+              <ion-label color="primary">Pin de control min</ion-label>
+              <ion-select value="{{LUM.control_min_pin}}" [(ngModel)]="LUM.control_min_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item [disabled]="!disable.LUM">
+              <ion-label color="primary">Pin de control max</ion-label>
+              <ion-select value="{{LUM.control_max_pin}}" [(ngModel)]="LUM.control_max_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          <div class="ion-text-center">
+            <ion-button [disabled]="disable.chLUM" expand="block" (click)="showAlertParams('LUM')" color="primary">
               <ion-icon slot="end" name="save-outline"></ion-icon>
               Guardar cambios
             </ion-button>

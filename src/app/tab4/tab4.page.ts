@@ -21,10 +21,11 @@ export class Tab4Page implements OnInit {
   @ViewChild('lineCanvasYL') private lineCanvasYL: ElementRef;
   @ViewChild('lineCanvasDS18') private lineCanvasDS18: ElementRef;
   @ViewChild('lineCanvasPh') private lineCanvasPh: ElementRef;
-  @ViewChild('lineCanvasTurv') private lineCanvasTurb: ElementRef;
+  @ViewChild('lineCanvasTurb') private lineCanvasTurb: ElementRef;
   @ViewChild('lineCanvasGrillosTemp') private lineCanvasGrillosTemp: ElementRef;
   @ViewChild('lineCanvasGrillosHum') private lineCanvasGrillosHum: ElementRef;
-  @ViewChild('lineCanvasGrillosGases') private lineCanvasGrillosGases: ElementRef;
+  @ViewChild('lineCanvasCO2') private lineCanvasCO2: ElementRef;
+  @ViewChild('lineCanvasLUM') private lineCanvasLUM: ElementRef;
 
   devices: any[] = []
   deviceSelected = ""
@@ -36,7 +37,8 @@ export class Tab4Page implements OnInit {
   lineChartTemp: any;
   lineChartGrillosTemp: any;
   lineChartGrillosHum: any;
-  lineChartGrillosGases: any;
+  lineChartCO2: any;
+  lineChartLUM: any;
   lineChartConductivity: any;
   lineChartYL: any;
   lineChartDS18: any;
@@ -49,6 +51,7 @@ export class Tab4Page implements OnInit {
     temperatura: true,
     humedad: true,
     co2: true,
+    lum: true,
     oxigenacion: true,
     Htemperatura: true,
     ph: true,
@@ -61,6 +64,7 @@ export class Tab4Page implements OnInit {
     humedad: "light",
     temperatura: "light",
     co2: "light",
+    lum: "light",
     ph: "light",
     conductividad: "light",
     Htemperatura: "light",
@@ -73,6 +77,7 @@ export class Tab4Page implements OnInit {
     TEMP: "",
     HUM: "",
     CO2: "",
+    LUM : "",
     AMON: "",
     PH: "",
     CONDUC: "",
@@ -84,6 +89,7 @@ export class Tab4Page implements OnInit {
   }
   VALUES = {
     CO2: 0,
+    LUM: 0,
     AMON: 0,
     PH: 0,
     CONDUC: 0,
@@ -144,10 +150,6 @@ export class Tab4Page implements OnInit {
           this.components.AskingDevice = true;
           this.getDeviceData(this.deviceSelected)
         }
-        /*if (this.lineChartGrillosHum || this.lineChartGrillosTemp) {
-          this.lineChartGrillosHum.destroy();
-          this.lineChartGrillosTemp.destroy();
-        }*/
       }
     })
   }
@@ -173,7 +175,8 @@ export class Tab4Page implements OnInit {
     this.lineChartTemp ? this.lineChartTemp.destroy() : null
     this.lineChartGrillosTemp ? this.lineChartGrillosTemp.destroy() : null
     this.lineChartGrillosHum ? this.lineChartGrillosHum.destroy() : null
-    this.lineChartGrillosGases ? this.lineChartGrillosGases.destroy() : null
+    this.lineChartCO2 ? this.lineChartCO2.destroy() : null
+    this.lineChartLUM ? this.lineChartLUM.destroy() : null
     this.lineChartConductivity ? this.lineChartConductivity.destroy() : null
     this.lineChartYL ? this.lineChartYL.destroy() : null
     this.lineChartDS18 ? this.lineChartDS18.destroy() : null
@@ -226,6 +229,22 @@ export class Tab4Page implements OnInit {
             this.sensors.ph = false;
           } else {
             this.sensors.ph = true;
+          }
+          if (data.LUM != undefined) {//Luminosidad
+            this.RANGES.LUM = data.LUMRANGES
+            this.VALUES.LUM = Math.round(data.LUM + Number.EPSILON * 100)
+            this.colors.lum = data.LUMCOLOR
+            this.sensors.lum = false;
+          } else {
+            this.sensors.co2 = true;
+          }
+          if (data.CO2 != undefined) {//gas CO2
+            this.RANGES.CO2 = data.CO2RANGES
+            this.VALUES.CO2 = Math.round(data.CO2 + Number.EPSILON * 100)
+            this.colors.co2 = data.CO2COLOR
+            this.sensors.co2 = false;
+          } else {
+            this.sensors.co2 = true;
           }
           if (data.COND != undefined) {//Conductividad Acuaponia
             this.RANGES.CONDUC = data.CONDRANGES
@@ -308,17 +327,30 @@ export class Tab4Page implements OnInit {
             this.sensors.humedad = true;
           }
           try {//co2
-            var d: number[] = data.co2.reverse()
-            var c: number[] = data.amon.reverse()
-            this.showGasesGrillosChart(dataDates, d, c, dataDates[0], dataDates[LEN], REGISTERS)
-            this.RANGES.CO2 = data.HUMRANGES
-            this.RANGES.AMON = data.AMONRANGES
+            var d: number[] = data.CO2.reverse()
+            //var c: number[] = data.amon.reverse()
+            this.showCO2Chart(dataDates, d, /*c,*/ dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.CO2 = data.CO2RANGES
+            //this.RANGES.AMON = data.AMONRANGES
             this.VALUES.CO2 = d[d.length - 1]
-            this.VALUES.AMON = c[c.length - 1]
+            //this.VALUES.AMON = c[c.length - 1]
             this.colors.co2 = data.CO2COLOR
             this.sensors.co2 = false;
           } catch (error) {
             this.sensors.co2 = true;
+          }
+          try {//luminosidad
+            var d: number[] = data.luminosidad.reverse()
+            //var c: number[] = data.amon.reverse()
+            this.showLUMChart(dataDates, d, /*c,*/ dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.LUM = data.LUMRANGES
+            //this.RANGES.AMON = data.AMONRANGES
+            this.VALUES.LUM = d[d.length - 1]
+            //this.VALUES.AMON = c[c.length - 1]
+            this.colors.lum = data.LUMCOLOR
+            this.sensors.lum = false;
+          } catch (error) {
+            this.sensors.lum = true;
           }
           try {//Oxigenación Acuaponia
             var d: number[] = data.oxygen.reverse()
@@ -493,6 +525,51 @@ export class Tab4Page implements OnInit {
       });
     }
   }
+  showPhChart(dates, ph, firstDate, lastDate, n) {
+    if (this.lineChartPh && !this.updating) {
+      this.lineChartPh.data.labels = dates;
+      this.lineChartPh.data.datasets[0].data = ph;
+      this.lineChartPh.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
+      this.lineChartPh.update('none');
+    } else {
+      this.lineChartPh = new Chart(this.lineCanvasPh.nativeElement, {
+        type: this.typeChart,
+        data: {
+          labels: dates,
+          datasets: [
+            {
+              label: "PH",
+              backgroundColor: 'rgba(66, 111, 245,0.4)',
+              borderColor: 'rgba(66, 111, 245,1)',
+              data: ph,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              ticks: {
+                display: false
+              },
+              display: true,
+              title: {
+                display: true,
+                text: n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate,
+                color: 'rgba(66, 111, 245,1)',
+                font: {
+                  family: 'Comic Sans MS',
+                  size: 12,
+                  lineHeight: 1.2,
+                },
+                //padding: { top: 20, left: 0, right: 0, bottom: 0 }
+              }
+            }
+          }
+        }
+      });
+    }
+  }
   showHumChart(dates, hum, firstDate, lastDate, n) {
     if (this.lineChartGrillosHum && !this.updating) {
       this.lineChartGrillosHum.data.labels = dates;
@@ -554,62 +631,76 @@ export class Tab4Page implements OnInit {
       });
     }
   }
-  showGasesGrillosChart(dates, co2, amon, firstDate, lastDate, n) {
-    if (this.lineChartGrillosGases && !this.updating) {
-      this.lineChartGrillosGases.data.labels = dates;
-      this.lineChartGrillosGases.data.datasets[1].data = co2;
-      this.lineChartGrillosGases.data.datasets[0].data = amon;
-      this.lineChartGrillosGases.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
-      this.lineChartGrillosGases.update('none');
+  showCO2Chart(dates, CO2, firstDate, lastDate, n) {
+    if (this.lineChartCO2 && !this.updating) {
+      this.lineChartCO2.data.labels = dates;
+      this.lineChartCO2.data.datasets[0].data = CO2;
+      this.lineChartCO2.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
+      this.lineChartCO2.update('none');
     } else {
-      this.lineChartGrillosGases = new Chart(this.lineCanvasGrillosGases.nativeElement, {
+      this.lineChartCO2 = new Chart(this.lineCanvasCO2.nativeElement, {
+        type: this.typeChart,
+        data: {
+          labels: dates,
+          datasets: [
+            /*{
+              label: "NH3",
+              backgroundColor: 'rgba(209,0,157,0.4)',
+              borderColor: 'rgba(209,0,157,1)',
+              data: co2,
+              //spanGaps: false,
+            },*/
+            {
+              label: "CO2",
+              backgroundColor: 'rgba(66, 111, 245,0.4)',
+              borderColor: 'rgba(66, 111, 245,1)',
+              data: CO2,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              ticks: {
+                display: false
+              },
+              display: true,
+              title: {
+                display: true,
+                text: n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate,
+                color: 'rgba(66, 111, 245,1)',
+                font: {
+                  family: 'Comic Sans MS',
+                  size: 12,
+                  lineHeight: 1.2,
+                },
+                //padding: { top: 20, left: 0, right: 0, bottom: 0 }
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+  showLUMChart(dates, LUM, firstDate, lastDate, n) {
+    if (this.lineChartLUM && !this.updating) {
+      this.lineChartLUM.data.labels = dates;
+      this.lineChartLUM.data.datasets[0].data = LUM;
+      //this.lineChartGrillosGases.data.datasets[1].data = amon;
+      this.lineChartLUM.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
+      this.lineChartLUM.update('none');
+    } else {
+      this.lineChartLUM = new Chart(this.lineCanvasLUM.nativeElement, {
         type: this.typeChart,
         data: {
           labels: dates,
           datasets: [
             {
-              label: "NH3",/*
-              fill: false,
-              tension: 0,*/
-              backgroundColor: 'rgba(209,0,157,0.4)',
-              borderColor: 'rgba(209,0,157,1)',/*
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(209,0,157,1)',
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(209,0,157,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 2,
-              pointHitRadius: 10,*/
-              data: co2,
-              //spanGaps: false,
-            },
-            {
-              label: "CO2",
-              fill: false,
-              tension: 0,
-              backgroundColor: 'rgba(51, 177, 196,0.4)',
-              borderColor: 'rgba(51, 177, 196,1)',
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(51, 177, 196,1)',
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(51, 177, 196,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 2,
-              pointHitRadius: 10,
-              data: amon,
-              spanGaps: false,
+              label: "Luminosidad",
+              backgroundColor: 'rgba(66, 111, 245,0.4)',
+              borderColor: 'rgba(66, 111, 245,1)',
+              data: LUM,
             },
           ]
         },
@@ -774,86 +865,9 @@ export class Tab4Page implements OnInit {
           datasets: [
             {
               label: "Temperatura",
-              /*fill: false,
-              tension: 0,*/
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(66, 111, 245,1)',
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(66, 111, 245,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 2,
-              pointHitRadius: 10,*/
+              borderColor: 'rgba(66, 111, 245,1)',
               data: data,
-              //spanGaps: false,
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            x: {
-              ticks: {
-                display: false
-              },
-              display: true,
-              title: {
-                display: true,
-                text: n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate,
-                color: 'rgba(66, 111, 245,1)',
-                font: {
-                  family: 'Comic Sans MS',
-                  size: 12,
-                  lineHeight: 1.2,
-                },
-                //padding: { top: 20, left: 0, right: 0, bottom: 0 }
-              }
-            }
-          }
-        }
-      });
-    }
-  }
-  showPhChart(data, dates, firstDate, lastDate, n) {
-    if (this.lineChartPh && !this.updating) {
-      this.lineChartPh.data.labels = dates;
-      this.lineChartPh.data.datasets[0].data = data;
-      this.lineChartPh.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
-      this.lineChartPh.update('none');
-    } else {
-      this.lineChartPh = new Chart(this.lineCanvasPh.nativeElement, {
-        type: this.typeChart,
-        data: {
-          labels: dates,
-          datasets: [
-            {
-              label: "PH",/*
-              fill: false,
-              tension: 0,*/
-              backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
-              borderCapStyle: 'butt',/
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(66, 111, 245,1)',
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(66, 111, 245,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 2,
-              pointHitRadius: 10,*/
-              data: data,
-              //spanGaps: false,
             }
           ]
         },

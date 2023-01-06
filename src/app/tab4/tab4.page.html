@@ -88,7 +88,7 @@
               <h3>Tu dispositivo no está conectado a la red</h3>
             </li>
             <li>
-              <h3>Tu dispositivo está sincronizando los datos</h3>
+              <h3>Intenta: apagar tus datos móviles</h3>
             </li>
           </ul>
         </section>
@@ -148,7 +148,7 @@
     <div [hidden]="sensors.temperatura">
       <ion-card>
         <ion-card-header color="{{colors.temperatura}}">
-          Valor actual: <b>{{VALUES.TEMP}} °C</b> &nbsp; {{RANGES.TEMP}}
+          Valor actual: <b>{{VALUES.TEMP}} °C</b> &nbsp; ({{RANGES.TEMP}})
           <ion-icon name="thermometer"></ion-icon>
         </ion-card-header>
         <ion-card-content>
@@ -160,7 +160,7 @@
     <div [hidden]="sensors.humedad">
       <ion-card>
         <ion-card-header color="{{colors.humedad}}">
-          Valor actual: <b>{{VALUES.HUM}} %</b> &nbsp; {{RANGES.HUM}}
+          Valor actual: <b>{{VALUES.HUM}} %</b> &nbsp; ({{RANGES.HUM}})
           <ion-icon name="water"></ion-icon>
         </ion-card-header>
         <ion-card-content>
@@ -172,7 +172,7 @@
     <div [hidden]="sensors.oxigenacion">
       <ion-card>
         <ion-card-header color="{{colors.oxigenacion}}">
-          Oxigenación: <b>{{VALUES.OXY}}</b> &nbsp; {{RANGES.OXY}}
+          Oxigenación: <b>{{VALUES.OXY}}</b> &nbsp; ({{RANGES.OXY}})
         </ion-card-header>
         <ion-card-content>
           <canvas #lineCanvasOxygen style="position: relative;">
@@ -183,7 +183,7 @@
     <div [hidden]="sensors.conductividad">
       <ion-card>
         <ion-card-header color="{{colors.conductividad}}">
-          Valor actual: <b>{{VALUES.CONDUC}}</b> &nbsp; {{RANGES.CONDUC}}
+          Valor actual: <b>{{VALUES.CONDUC}}</b> &nbsp; ({{RANGES.CONDUC}})
         </ion-card-header>
         <ion-card-content>
           <canvas #lineCanvasConductivity style="position: relative;">
@@ -194,7 +194,7 @@
     <div [hidden]="sensors.ph">
       <ion-card>
         <ion-card-header color="{{colors.ph}}">
-          Valor actual: <b>{{VALUES.PH}}</b> &nbsp; {{RANGES.PH}}
+          Valor actual: <b>{{VALUES.PH}}</b> &nbsp; ({{RANGES.PH}})
         </ion-card-header>
         <ion-card-content>
           <canvas #lineCanvasPh style="position: relative;">
@@ -205,7 +205,7 @@
     <div [hidden]="sensors.Htemperatura">
       <ion-card>
         <ion-card-header color="{{colors.Htemperatura}}">
-          Valor actual: <b>{{VALUES.HTEMP}}</b> &nbsp; {{RANGES.HTEMP}}
+          Valor actual: <b>{{VALUES.HTEMP}}</b> &nbsp; ({{RANGES.HTEMP}})
         </ion-card-header>
         <ion-card-content>
           <canvas #lineCanvasTemp style="position: relative;">
@@ -216,7 +216,7 @@
     <div [hidden]="sensors.YL">
       <ion-card>
         <ion-card-header color="{{colors.YL}}">
-          Humedad promedio: <b>{{VALUES.YL}}</b> &nbsp; {{RANGES.YL}}
+          Humedad promedio: <b>{{VALUES.YL}}</b> &nbsp; ({{RANGES.YL}})
         </ion-card-header>
         <ion-card-content>
           <canvas #lineCanvasYL style="position: relative;">
@@ -224,10 +224,32 @@
         </ion-card-content>
       </ion-card>
     </div>
+    <div [hidden]="sensors.co2">
+      <ion-card>
+        <ion-card-header color="{{colors.co2}}">
+          CO2: <b>{{VALUES.CO2}}</b> &nbsp; ({{RANGES.CO2}})
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasCO2 style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.lum">
+      <ion-card>
+        <ion-card-header color="{{colors.lum}}">
+          Iluminación: <b>{{VALUES.LUM}}</b> &nbsp; ({{RANGES.LUM}})
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasLUM style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
     <div [hidden]="sensors.DS18">
       <ion-card>
         <ion-card-header color="{{colors.DS18}}">
-          Temperatura promedio: <b>{{VALUES.DS18}}</b> &nbsp; {{RANGES.DS18}}
+          Temperatura promedio: <b>{{VALUES.DS18}}</b> &nbsp; ({{RANGES.DS18}})
         </ion-card-header>
         <ion-card-content>
           <canvas #lineCanvasDS18 style="position: relative;">
@@ -318,6 +340,30 @@
         <ion-card-content class="ion-text-center">
           <ion-label class="label-size" color="{{colors.YL}}">{{VALUES.YL}}%</ion-label>
           <h2>Rangos definidos: {{RANGES.YL}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.co2">
+      <ion-card>
+        <ion-card-header color="{{colors.co2}}">
+          <ion-card-title>CO2
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.co2}}">{{VALUES.CO2}}</ion-label>
+          <h2>Rangos definidos: {{RANGES.CO2}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.lum">
+      <ion-card>
+        <ion-card-header color="{{colors.lum}}">
+          <ion-card-title>Luminosidad
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.CO2}}">{{VALUES.LUM}}</ion-label>
+          <h2>Rangos definidos: {{RANGES.LUM}}</h2>
         </ion-card-content>
       </ion-card>
     </div>

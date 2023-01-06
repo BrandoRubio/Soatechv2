@@ -43,7 +43,7 @@ export class DevicesPage implements OnInit {
         if (added) {
           this.http.presentToast("Ya existe este dispositivo.")
         } else {
-          this.http.presentLoadingWithOptions("Buscando dispotivivo...")
+          this.http.presentLoadingWithOptions("Buscando dispositivos...")
           this.http.checkDevice(this.ipNewDevice).subscribe((response) => {
             this.db.addDevice(response.name, this.ipNewDevice, response.type)
             this.getDevices()
@@ -84,7 +84,7 @@ export class DevicesPage implements OnInit {
     .catch(error => console.error(`Unable to get IP: ${error}`));
   }
   getAllIPs(IP: String){
-    this.http.presentLoadingWithOptions("Buscando dispotivivos")
+    this.http.presentLoadingWithOptions("Buscando dispositivos...")
     let directionArray = IP.split(".")
     const direction = directionArray[0] + "." + directionArray[1] + "." + directionArray[2] + ".";
     this.db.emptyDB()
@@ -166,6 +166,7 @@ export class DevicesPage implements OnInit {
                 "<li>No estás conectado a misma red.</li>"+
                 "<li>Los dispositivos no están conectados a la red.</li>"+
                 "<li>Intenta desconectar/conectar los dispositivos.</li>"+
+                "<li>Apaga tus datos móviles.</li>"+
               "</ul>",
       buttons: [
         {

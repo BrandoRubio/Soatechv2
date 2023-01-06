@@ -25,22 +25,29 @@ export class Tab1Page {
     public toastController: ToastController,
     public loadingController: LoadingController,
     private iab: InAppBrowser) {
-    }
+  }
 
   ngOnInit() {
     //this.loadUbiWebSite()
   }
 
   loadUbiWebSite() {
-      this.options.toolbarcolor = document.documentElement.style.getPropertyValue('--ion-color-primary')
-    let browser = this.iab.create(this.urlSite, '_blank', this.options);
+    this.options.toolbarcolor = document.documentElement.style.getPropertyValue('--ion-color-primary')
+    if(this.options.toolbarcolor == ""){
+      this.options.toolbarcolor = '#01a3d2'
+    }
+    this.iab.create(this.urlSite, '_blank', this.options)
   }
 
-  openInExternal(){
+  openInExternal() {
     window.open(this.urlSite, '_system');
   }
 
-  ionViewWillEnter(){
-    this.logo = this.db.getLogo()
+  ionViewWillEnter() {
+    try {
+      this.logo = this.db.getLogo()
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
