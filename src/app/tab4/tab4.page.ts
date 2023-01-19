@@ -77,7 +77,7 @@ export class Tab4Page implements OnInit {
     TEMP: "",
     HUM: "",
     CO2: "",
-    LUM : "",
+    LUM: "",
     AMON: "",
     PH: "",
     CONDUC: "",
@@ -131,6 +131,7 @@ export class Tab4Page implements OnInit {
   ngOnInit() {
   }
   ionViewWillEnter() {
+    this.showNotification()
     this.reloadData()
   }
   getDevices() {
@@ -308,7 +309,13 @@ export class Tab4Page implements OnInit {
           const REGISTERS: number = data.REGISTERS;
           try {//Temperatura DHT11
             var d: number[] = data.temperatura.reverse()
-            this.showTempChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            var e: number[]
+            if (data.tex != 0) {
+              e = data.tex.reverse()
+            } else {
+              e = data.temperatura.reverse()
+            }
+            this.showTempChart(dataDates, d, e, dataDates[0], dataDates[LEN], REGISTERS)
             this.RANGES.TEMP = data.TEMPRANGES
             this.VALUES.TEMP = d[d.length - 1]
             this.colors.temperatura = data.TEMPCOLOR
@@ -318,7 +325,13 @@ export class Tab4Page implements OnInit {
           }
           try {//HUMEDAD DHT11
             var d: number[] = data.humedad.reverse()
-            this.showHumChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            var e: number[]
+            if (data.hex != 0) {
+              e = data.hex.reverse()
+            } else {
+              e = data.humedad.reverse()
+            }
+            this.showHumChart(dataDates, d, e, dataDates[0], dataDates[LEN], REGISTERS)
             this.RANGES.HUM = data.HUMRANGES
             this.VALUES.HUM = d[d.length - 1]
             this.colors.humedad = data.HUMCOLOR
@@ -480,10 +493,11 @@ export class Tab4Page implements OnInit {
       this.components.NoDevice = false;
     });
   }
-  showTempChart(dates, temp, firstDate, lastDate, n) {
+  showTempChart(dates, temp, tex, firstDate, lastDate, n) {
     if (this.lineChartGrillosTemp && !this.updating) {
       this.lineChartGrillosTemp.data.labels = dates;
       this.lineChartGrillosTemp.data.datasets[0].data = temp;
+      this.lineChartGrillosTemp.data.datasets[1].data = tex;
       this.lineChartGrillosTemp.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartGrillosTemp.update('none');
     } else {
@@ -497,6 +511,12 @@ export class Tab4Page implements OnInit {
               backgroundColor: 'rgba(66, 111, 245,0.4)',
               borderColor: 'rgba(66, 111, 245,1)',
               data: temp,
+            },
+            {
+              label: "Exterior",
+              backgroundColor: 'rgba(55, 233, 106,0.4)',
+              borderColor: 'rgba(55, 233, 106,1)',
+              data: tex,
             },
           ]
         },
@@ -570,10 +590,11 @@ export class Tab4Page implements OnInit {
       });
     }
   }
-  showHumChart(dates, hum, firstDate, lastDate, n) {
+  showHumChart(dates, hum, hex, firstDate, lastDate, n) {
     if (this.lineChartGrillosHum && !this.updating) {
       this.lineChartGrillosHum.data.labels = dates;
       this.lineChartGrillosHum.data.datasets[0].data = hum;
+      this.lineChartGrillosHum.data.datasets[1].data = hex;
       this.lineChartGrillosHum.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
       this.lineChartGrillosHum.update('none');
     } else {
@@ -602,6 +623,28 @@ export class Tab4Page implements OnInit {
               //pointRadius: 2,
               //pointHitRadius: 10,
               data: hum,
+              //spanGaps: false,
+            },
+            {
+              label: "Exterior",
+              //fill: false,
+              //tension: 0,
+              backgroundColor: 'rgba(55, 233, 106,0.4)',
+              borderColor: 'rgba(55, 233, 106,1)',
+              //borderCapStyle: 'butt',
+              //borderDash: [],
+              //borderDashOffset: 0.0,
+              //borderJoinStyle: 'miter',
+              //pointBorderColor: 'rgba(66, 111, 245,1)',
+              //pointBackgroundColor: '#fff',
+              //pointBorderWidth: 1,
+              //pointHoverRadius: 5,
+              //pointHoverBackgroundColor: 'rgba(66, 111, 245,1)',
+              //pointHoverBorderColor: 'rgba(220,220,220,1)',
+              //pointHoverBorderWidth: 2,
+              //pointRadius: 2,
+              //pointHitRadius: 10,
+              data: hex,
               //spanGaps: false,
             },
           ]
@@ -1227,12 +1270,14 @@ export class Tab4Page implements OnInit {
     }, 10000);
   }
   showNotification() {
-    LocalNotifications.schedule({
+    /*LocalNotifications.schedule({
       notifications: [
         {
-          title: 'Elemento fuera de rango',
-          body: 'El elemento de temperatura ha superado el rango',
           id: 1,
+          title: 'Elemento fuera de rango',
+          body: 'La temperatura se encuentra fuera de rango',
+          icon: 'res://icon/icon.png',
+          ionColor: 'eb445a',
           schedule: { at: new Date(Date.now() + 100) },
           sound: null,
           attachments: null,
@@ -1240,7 +1285,7 @@ export class Tab4Page implements OnInit {
           extra: null,
         },
       ],
-    });
+    });*/
   }
   deshabilitarDivs() {
     this.components.NUMBERS = true;

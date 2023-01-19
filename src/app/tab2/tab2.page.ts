@@ -43,7 +43,8 @@ export class Tab2Page {
       pin3: "0",
       pin4: "0",
       pin5: "0",
-      pin6: "0"
+      pin6: "0",
+      pin7: "0",
     },
     temperatura: {
       pin_min: "0",
@@ -402,6 +403,7 @@ export class Tab2Page {
           this.DHT11.pines.pin4 = String(DHT.read_pin).split(",")[3]
           this.DHT11.pines.pin5 = String(DHT.read_pin).split(",")[4]
           this.DHT11.pines.pin6 = String(DHT.read_pin).split(",")[5]
+          this.DHT11.pines.pin7 = String(DHT.read_pin).split(",")[6]
           this.DHT11.temperatura.ideal = Number(String(DHT.ideal).split(",")[0])
           this.DHT11.humedad.ideal = Number(String(DHT.ideal).split(",")[1])
           this.DHT11.temperatura.ranges.lower = Number(String(DHT.min).split(",")[0])
@@ -624,7 +626,7 @@ export class Tab2Page {
   updateSensorDHT() {
     let newData
     newData = "?newUbiVar=temperatura,humedad"
-      + "&newReadPin=" + this.DHT11.pines.pin1 + "," + this.DHT11.pines.pin2 + "," + this.DHT11.pines.pin3 + "," + this.DHT11.pines.pin4 + "," + this.DHT11.pines.pin5 + "," + this.DHT11.pines.pin6
+      + "&newReadPin=" + this.DHT11.pines.pin1 + "," + this.DHT11.pines.pin2 + "," + this.DHT11.pines.pin3 + "," + this.DHT11.pines.pin4 + "," + this.DHT11.pines.pin5 + "," + this.DHT11.pines.pin6 + "," + this.DHT11.pines.pin7
       + "&newControlPinMin=" + this.DHT11.temperatura.pin_min + "," + this.DHT11.humedad.pin_min + "," + this.DHT11.temperatura.pin_fan
       + "&newControlPinMax=" + this.DHT11.temperatura.pin_max + "," + this.DHT11.humedad.pin_max
       + "&newMin=" + this.DHT11.temperatura.ranges.lower + "," + this.DHT11.humedad.ranges.lower

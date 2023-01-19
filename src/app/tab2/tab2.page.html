@@ -475,6 +475,17 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>
+            <ion-item [disabled]="!disable.DHT">
+              <!--sensor3-->
+              <ion-label color="primary">Pin de sensor externo</ion-label>
+              <ion-select value="{{DHT11.pines.pin7}}" [(ngModel)]="DHT11.pines.pin7">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of DHTPines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
           </div>
           <div class="ion-text-center">
             <ion-button [disabled]="disable.chDht" expand="block" (click)="showAlertParams('DHT')" color="primary">
