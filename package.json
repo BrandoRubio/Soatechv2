@@ -22,7 +22,7 @@
     "@awesome-cordova-plugins/bluetooth-le": "^6.1.0",
     "@awesome-cordova-plugins/bluetooth-serial": "^6.1.0",
     "@awesome-cordova-plugins/clipboard": "^6.2.0",
-    "@awesome-cordova-plugins/core": "^6.2.0",
+    "@awesome-cordova-plugins/core": "^6.3.0",
     "@awesome-cordova-plugins/email-composer": "^6.2.0",
     "@awesome-cordova-plugins/file": "^5.44.0",
     "@awesome-cordova-plugins/file-opener": "^5.44.0",

@@ -69,7 +69,6 @@
 </ion-header>
 
 <ion-content>
-
   <div style="height: 100%; display: flex; align-items: center; justify-content: center;"
     [hidden]="components.NoDevice">
     <ion-card>
@@ -191,6 +190,17 @@
         </ion-card-content>
       </ion-card>
     </div>
+    <div [hidden]="sensors.JSN">
+      <ion-card>
+        <ion-card-header color="{{colors.JSN}}">
+          Porcentaje actual: <b>{{VALUES.JSN}}%</b> &nbsp; ({{RANGES.JSN}})
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #lineCanvasJSN style="position: relative;">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+    </div>
     <div [hidden]="sensors.ph">
       <ion-card>
         <ion-card-header color="{{colors.ph}}">
@@ -304,6 +314,19 @@
         <ion-card-content class="ion-text-center">
           <ion-label class="label-size" color="{{colors.conductividad}}">{{VALUES.CONDUC}}</ion-label>
           <h2>Rango definido: {{RANGES.CONDUC}}</h2>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div [hidden]="sensors.JSN">
+      <ion-card>
+        <ion-card-header color="{{colors.JSN}}">
+          <ion-card-title>Nivel del agua
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="ion-text-center">
+          <ion-label class="label-size" color="{{colors.JSN}}">{{VALUES.JSN}}%</ion-label>
+          <h2>Altura del almacen: {{RANGES.JSNH}} cm</h2>
+          <h2>Rango definido: {{RANGES.JSN}} cm</h2>
         </ion-card-content>
       </ion-card>
     </div>

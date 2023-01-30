@@ -712,7 +712,8 @@
           </ion-item>
           <ion-item [disabled]="!disable.CO2">
             <ion-label color="primary">Ideal</ion-label>
-            <ion-range [min]="CO2.ranges.lower" [max]="CO2.ranges.upper" [pin]="true" [(ngModel)]="CO2.ideal"></ion-range>
+            <ion-range [min]="CO2.ranges.lower" [max]="CO2.ranges.upper" [pin]="true"
+              [(ngModel)]="CO2.ideal"></ion-range>
           </ion-item>
           <div [hidden]="!ImAdmin">
             <ion-list-header>
@@ -760,6 +761,96 @@
           </div>
         </div>
       </ion-accordion>
+      <ion-accordion value="JSN" [hidden]="show.JSN">
+        <ion-item slot="header" color="light">
+          <ion-label>Nivel de agua</ion-label>
+          <ion-note slot="end" color="dark" [hidden]="disable.chJSN">*</ion-note>
+          <ion-icon slot="start" color="primary" name="hardware-chip"></ion-icon>
+        </ion-item>
+        <div class="ion-padding" slot="content" (ionChange)="changesJSN()">
+          <ion-item [hidden]="!ImAdmin">
+            <!--Active-->
+            <ion-label color="primary">{{JSN.a}}</ion-label>
+            <ion-toggle slot="end" [(ngModel)]="disable.JSN" (click)="showAlertChangeStatus('JSN')"></ion-toggle>
+          </ion-item>
+          <ion-list-header>
+            <ion-label color="success">Rangos</ion-label>
+            <ion-button
+              (click)="showTag('<b>Nivel de agua:</b> Se requiere saber cuál es la altura en centímetros para calcular su porcentaje de agua.','El nivel que se muestra es el tomado por nuestro sensor.')">
+              <ion-icon slot="icon-only" name="help"></ion-icon>
+            </ion-button>
+          </ion-list-header>
+          <ion-item [disabled]="!disable.JSN" lines="none">
+            <ion-range [min]="0" [max]="100" [pin]="true" [(ngModel)]="JSN.ranges" [dualKnobs]="true"
+              [value]="{ lower: JSN.ranges.lower, upper: JSN.ranges.upper }"></ion-range>
+          </ion-item>
+          <ion-item [disabled]="!disable.JSN" lines="none">
+            <ion-label color="primary" slot="start">Min</ion-label>
+            <ion-label color="primary" slot="end">Max</ion-label>
+          </ion-item>
+          <ion-item [disabled]="!disable.JSN" lines="none">
+            <ion-range class="cion-range" [min]="20" [max]="500" step="10" [pin]="true" [(ngModel)]="JSN.ideal"
+              [pinFormatter]="pinFormatter"></ion-range>
+          </ion-item>
+          <ion-item [disabled]="!disable.JSN">
+            <ion-label color="primary">Altura del almacén (en cm)</ion-label>
+          </ion-item>
+          <div [hidden]="!ImAdmin">
+            <ion-list-header>
+              <ion-label color="success">Pines de control</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.JSN">
+              <ion-label color="primary">Pin de control min</ion-label>
+              <ion-select value="{{JSN.control_min_pin}}" [(ngModel)]="JSN.control_min_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <!--ion-item [disabled]="!disable.JSN">
+              <ion-label color="primary">Pin de control max</ion-label>
+              <ion-select value="{{JSN.control_max_pin}}" [(ngModel)]="JSN.control_max_pin">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of relePines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item-->
+            <ion-list-header>
+              <ion-label color="success">Sensor</ion-label>
+            </ion-list-header>
+            <ion-item [disabled]="!disable.JSN">
+              <ion-label color="primary">Pin echo</ion-label>
+              <ion-select value="{{JSN.pines.pin1}}" [(ngModel)]="JSN.pines.pin1">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of generalPines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item [disabled]="!disable.JSN">
+              <ion-label color="primary">Pin trigger</ion-label>
+              <ion-select value="{{JSN.pines.pin2}}" [(ngModel)]="JSN.pines.pin2">
+                <ion-select-option value="0">Ninguno
+                </ion-select-option>
+                <ion-select-option value="{{item}}" *ngFor="let item of generalPines; trackBy:trackItems">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+          <div class="ion-text-center">
+            <ion-button [disabled]="disable.chJSN" expand="block" (click)="showAlertParams('JSN')" color="primary">
+              <ion-icon slot="end" name="save-outline"></ion-icon>
+              Guardar cambios
+            </ion-button>
+          </div>
+        </div>
+      </ion-accordion>
       <ion-accordion value="LUM" [hidden]="show.LUM">
         <ion-item slot="header" color="light">
           <ion-label>Iluminación</ion-label>
@@ -789,7 +880,8 @@
           </ion-item>
           <ion-item [disabled]="!disable.LUM">
             <ion-label color="primary">Ideal</ion-label>
-            <ion-range [min]="LUM.ranges.lower" [max]="LUM.ranges.upper" [pin]="true" [(ngModel)]="LUM.ideal"></ion-range>
+            <ion-range [min]="LUM.ranges.lower" [max]="LUM.ranges.upper" [pin]="true"
+              [(ngModel)]="LUM.ideal"></ion-range>
           </ion-item>
           <div [hidden]="!ImAdmin">
             <ion-list-header>
@@ -1072,7 +1164,7 @@
     </ion-accordion-group>
   </div>
   <div [hidden]=SSIDPASS>
-      <ion-note color="medium">No disponible</ion-note>
+    <ion-note color="medium">No disponible</ion-note>
     <ion-item disabled="true">
       <ion-label color="primary">Dispositivo</ion-label>
       <ion-select [(ngModel)]="deviceBLE" placeholder="Seleccione" (ionChange)="onBleChanged($event)">

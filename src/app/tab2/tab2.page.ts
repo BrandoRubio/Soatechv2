@@ -158,6 +158,21 @@ export class Tab2Page {
     control_min_pin: "0",
     control_max_pin: "0"
   }
+  JSN = {
+    id: 9,
+    a: "Sensor inactivo",
+    ranges: {
+      lower: 0,
+      upper: 0
+    },
+    ideal: 0,
+    pines: {
+      pin1: "0",
+      pin2: "0",
+    },
+    control_min_pin: "0",
+    control_max_pin: "0"
+  }
   LUM = {
     id: 8,
     a: "Sensor inactivo",
@@ -179,11 +194,13 @@ export class Tab2Page {
     chCond: true,
     chYL: true,
     chCO2: true,
+    chJSN: true,
     chLUM: true,
     DHT: true,
     DS18: true,
     YL: true,
     CO2: true,
+    JSN: true,
     LUM: true,
     Oxy: true,
     PH: true,
@@ -194,6 +211,7 @@ export class Tab2Page {
     DS18 : false,
     YL : false,
     CO2 : false,
+    JSN : false,
     LUM : false,
     Oxy : false,
     PH : false,
@@ -287,6 +305,12 @@ export class Tab2Page {
       this.CO2.a = Boolean(this.disable.CO2) ? "Sensor activo" : "Sensor inactivo"
     }
   }
+  changesJSN() {
+    if (!this.disable.loading) {
+      this.disable.chJSN = false;
+      this.JSN.a = Boolean(this.disable.JSN) ? "Sensor activo" : "Sensor inactivo"
+    }
+  }
   changesLUM() {
     if (!this.disable.loading) {
       this.disable.chLUM = false;
@@ -307,6 +331,7 @@ export class Tab2Page {
     this.disable.chYL = true
     this.disable.chLUM = true
     this.disable.chCO2 = true
+    this.disable.chJSN = true
     this.sensors = true
     this.ImAdmin = false;
     this.loading = false
@@ -507,7 +532,7 @@ export class Tab2Page {
           this.YL.control_min_pin = String(YL.pin_min)
           this.YL.control_max_pin = String(YL.pin_max)
         }
-        if (sensors.CO2 != undefined) {//Asignación de variables a DHT11
+        if (sensors.CO2 != undefined) {//Asignación de variables a Co2
           const CO2 = sensors.CO2
           this.disable.CO2 = CO2.active == "true" ? true : false
           if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.CO2){
@@ -523,6 +548,24 @@ export class Tab2Page {
           this.CO2.ranges.upper = Number(String(CO2.max))
           this.CO2.control_min_pin = String(CO2.pin_min)
           this.CO2.control_max_pin = String(CO2.pin_max)
+        }
+        if (sensors.JSN != undefined) {//Asignación de variables a JSN
+          const JSN = sensors.JSN
+          this.disable.JSN = JSN.active == "true" ? true : false
+          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.JSN){
+            this.show.JSN = false;
+          }else{
+            this.show.JSN = true;
+          }
+          this.JSN.a = JSN.active == "true" ? "Sensor activo" : "Sensor inactivo"
+          this.JSN.id = JSN.id
+          this.JSN.pines.pin1 = String(JSN.read_pin).split(",")[0]
+          this.JSN.pines.pin2 = String(JSN.read_pin).split(",")[1]
+          this.JSN.ideal = Number(String(JSN.ideal))
+          this.JSN.ranges.lower = Number(String(JSN.min))
+          this.JSN.ranges.upper = Number(String(JSN.max))
+          this.JSN.control_min_pin = String(JSN.pin_min)
+          this.JSN.control_max_pin = String(JSN.pin_max)
         }
         if (sensors.Luminosidad != undefined) {//Asignación de variables a DHT11
           const LUM = sensors.Luminosidad
@@ -813,6 +856,33 @@ export class Tab2Page {
       //console.log(error);
     })
   }
+  updateSensorJSN() {
+    let newData
+    newData = "?newUbiVar=JSN"
+      + "&newReadPin=" + this.JSN.pines.pin1 +"," + this.JSN.pines.pin2
+      + "&newControlPinMin=" + this.JSN.control_min_pin
+      + "&newControlPinMax=" + this.JSN.control_max_pin
+      + "&newMin=" + this.JSN.ranges.lower
+      + "&newMax=" + this.JSN.ranges.upper
+      + "&newIdeal=" + this.JSN.ideal
+      + "&active=" + this.disable.JSN
+      + "&id=9"
+      + "&ip=" + this.myIP
+    //console.log(newData);
+    this.http.changeParamsSensor(this.ipDeviceSelected, newData).subscribe((_) => {
+      this.presentToast("Parámetros enviados correctamente, el dispositivo se reiniciará.")
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+    }, (error) => {
+      setTimeout(() => {
+        this.loadData()
+      }, 500);
+      this.presentToast("Ha ocurriedo un error, vuelva a intentarlo.")
+      this.http.dismissLoader()
+      //console.log(error);
+    })
+  }
   updateSensorLUM() {
     let newData
     newData = "?newUbiVar=Luminosidad"
@@ -891,13 +961,14 @@ export class Tab2Page {
               this.updateSensorYL()
             } else if (thing == 'CO2') {
               this.updateSensorCO2()
+            } else if (thing == 'JSN') {
+              this.updateSensorJSN()
             } else if (thing == 'LUM') {
               this.updateSensorLUM()
             }
           }
         }
       ]
-
     });
 
     await alert.present();
@@ -931,7 +1002,7 @@ export class Tab2Page {
       inputs: [
         {
           placeholder: 'contraseña',
-          type: 'password',
+          type: 'number',
           name: 'password'
         }
       ],
@@ -955,6 +1026,8 @@ export class Tab2Page {
               this.disable.YL = !this.disable.YL
             } else if (sensor == 'CO2') {
               this.disable.CO2 = !this.disable.CO2
+            } else if (sensor == 'JSN') {
+              this.disable.JSN = !this.disable.JSN
             } else if (sensor == 'LUM') {
               this.disable.LUM = !this.disable.LUM
             }
@@ -965,7 +1038,7 @@ export class Tab2Page {
           role: 'confirm',
           cssClass: 'alert-button-confirm',
           handler: (data) => { //takes the data
-            if (data.password != "condor") {
+            if (data.password != "0000") {
               if (sensor == 'DHT') {
                 this.disable.DHT = !this.disable.DHT
               } else if (sensor == 'Oxy') {
@@ -982,6 +1055,8 @@ export class Tab2Page {
                 this.disable.LUM = !this.disable.LUM
               } else if (sensor == 'CO2') {
                 this.disable.CO2 = !this.disable.CO2
+              } else if (sensor == 'JSN') {
+                this.disable.JSN = !this.disable.JSN
               }
               this.presentToast("Contraseña no válida.")
             } else {
@@ -1002,7 +1077,7 @@ export class Tab2Page {
       inputs: [
         {
           placeholder: 'contraseña',
-          type: 'password',
+          type: 'number',
           name: 'password'
         }
       ],
@@ -1017,7 +1092,7 @@ export class Tab2Page {
           role: 'confirm',
           cssClass: 'alert-button-confirm',
           handler: (data) => { //takes the data
-            if (data.password != "condor") {
+            if (data.password != "0000") {
               this.ImAdmin = false;
               this.presentToast("Contraseña no válida.")
             } else {
@@ -1078,5 +1153,9 @@ export class Tab2Page {
     });
 
     await alert.present();
+  }
+  
+  pinFormatter(value: number) {
+    return `${value} cm`;
   }
 }

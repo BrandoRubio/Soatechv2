@@ -17,6 +17,7 @@ const { SplashScreen } = Plugins;
 export class Tab4Page implements OnInit {
   @ViewChild('lineCanvasTemp') private lineCanvasTemp: ElementRef;
   @ViewChild('lineCanvasConductivity') private lineCanvasConductivity: ElementRef;
+  @ViewChild('lineCanvasJSN') private lineCanvasJSN: ElementRef;
   @ViewChild('lineCanvasOxygen') private lineCanvasOxygen: ElementRef;
   @ViewChild('lineCanvasYL') private lineCanvasYL: ElementRef;
   @ViewChild('lineCanvasDS18') private lineCanvasDS18: ElementRef;
@@ -40,6 +41,7 @@ export class Tab4Page implements OnInit {
   lineChartCO2: any;
   lineChartLUM: any;
   lineChartConductivity: any;
+  lineChartJSN: any;
   lineChartYL: any;
   lineChartDS18: any;
   lineChartTurb: any;
@@ -55,6 +57,7 @@ export class Tab4Page implements OnInit {
     oxigenacion: true,
     Htemperatura: true,
     ph: true,
+    JSN: true,
     conductividad: true,
     turvidez: true,
     YL: true,
@@ -66,6 +69,7 @@ export class Tab4Page implements OnInit {
     co2: "light",
     lum: "light",
     ph: "light",
+    JSN: "light",
     conductividad: "light",
     Htemperatura: "light",
     oxigenacion: "light",
@@ -82,6 +86,8 @@ export class Tab4Page implements OnInit {
     PH: "",
     CONDUC: "",
     OXY: "",
+    JSN: "",
+    JSNH: "",
     HTEMP: "",
     TURVIDEZ: "",
     YL: "",
@@ -94,6 +100,7 @@ export class Tab4Page implements OnInit {
     PH: 0,
     CONDUC: 0,
     OXY: 0,
+    JSN: 0,
     HTEMP: 0,
     TURVIDEZ: 0,
     YL: 0,
@@ -180,6 +187,7 @@ export class Tab4Page implements OnInit {
     this.lineChartLUM ? this.lineChartLUM.destroy() : null
     this.lineChartConductivity ? this.lineChartConductivity.destroy() : null
     this.lineChartYL ? this.lineChartYL.destroy() : null
+    this.lineChartJSN ? this.lineChartJSN.destroy() : null
     this.lineChartDS18 ? this.lineChartDS18.destroy() : null
     this.lineChartTurb ? this.lineChartTurb.destroy() : null
     this.lineChartOxygen ? this.lineChartOxygen.destroy() : null
@@ -278,6 +286,14 @@ export class Tab4Page implements OnInit {
             this.sensors.YL = false;
           } else {
             this.sensors.YL = true;
+          }
+          if (data.JSN != undefined) {//Nivel de agua (JSN)
+            this.RANGES.JSN = data.JSNRANGES
+            this.VALUES.JSN = Math.round(data.JSN + Number.EPSILON * 100)
+            this.colors.JSN = data.JSNCOLOR
+            this.sensors.JSN = false;
+          } else {
+            this.sensors.JSN = true;
           }
           if (data.PSTEMP != undefined) {//Temperatura en sustrato (DS18)
             this.RANGES.DS18 = data.STEMPRANGES
@@ -404,6 +420,17 @@ export class Tab4Page implements OnInit {
             this.sensors.ph = false;
           } catch (error) {
             this.sensors.ph = true;
+          }
+          try {//JSN nivel de agua
+            var d: number[] = data.JSN.reverse()
+            this.showJSNChart(dataDates, d, dataDates[0], dataDates[LEN], REGISTERS)
+            this.RANGES.JSN = data.JSNRANGES
+            this.RANGES.JSNH = data.JSNHEIGHT
+            this.VALUES.JSN = d[d.length - 1]
+            this.colors.JSN = data.JSNCOLOR
+            this.sensors.JSN = false;
+          } catch (error) {
+            this.sensors.JSN = true;
           }
           try {//Temperatura Acuaponia
             var d: number[] = data.Htemp.reverse()
@@ -952,26 +979,55 @@ export class Tab4Page implements OnInit {
           labels: dates,
           datasets: [
             {
-              label: "Conductividad",/*
-              fill: false,
-              tension: 0,*/
+              label: "Conductividad",
               backgroundColor: 'rgba(66, 111, 245,0.4)',
-              borderColor: 'rgba(66, 111, 245,1)',/*
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(66, 111, 245,1)',
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(66, 111, 245,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 2,
-              pointHitRadius: 10,*/
+              borderColor: 'rgba(66, 111, 245,1)',
               data: data,
-              //spanGaps: false,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              ticks: {
+                display: false
+              },
+              display: true,
+              title: {
+                display: true,
+                text: n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate,
+                color: 'rgba(66, 111, 245,1)',
+                font: {
+                  family: 'Comic Sans MS',
+                  size: 12,
+                  lineHeight: 1.2,
+                },
+                //padding: { top: 20, left: 0, right: 0, bottom: 0 }
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+  showJSNChart(dates, data, firstDate, lastDate, n) {
+    if (this.lineChartJSN && !this.updating) {
+      this.lineChartJSN.data.labels = dates;
+      this.lineChartJSN.data.datasets[0].data = data;
+      this.lineChartJSN.options.scales.x.title.text = n + ' registros desde: ' + firstDate + ' hasta las: ' + lastDate;
+      this.lineChartJSN.update('none');
+    } else {
+      this.lineChartJSN = new Chart(this.lineCanvasJSN.nativeElement, {
+        type: this.typeChart,
+        data: {
+          labels: dates,
+          datasets: [
+            {
+              label: "Nivel del agua",
+              backgroundColor: 'rgba(66, 111, 245,0.4)',
+              borderColor: 'rgba(66, 111, 245,1)',
+              data: data,
             }
           ]
         },
