@@ -103,6 +103,9 @@ export class HomePage implements OnInit {
     //this.emailComposer.addAlias('gmail', 'com.google.android.gm')
     this.emailComposer.open(email);
   }
+  openSoatechBot(){
+    window.open("https://wa.me/+525530368048", '_system');
+  }
   async showAlert() {
     const alert = await this.alertController.create({
       header: 'Atención',

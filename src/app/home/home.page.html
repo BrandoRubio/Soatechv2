@@ -10,10 +10,10 @@
 <ion-content>
   <img alt="logo" src="../../assets/icon/soatech.png" />
   <ion-slides #slide [options]="slideOptsOne">
-    <ion-slide>
+    <ion-slide button>
       <div class="slide">
         <ion-thumbnail>
-          <img alt="ícono" src="../../assets/icon/hi.png"/>
+          <img alt="ícono" src="../../assets/icon/hi.png" (click)="openSoatechBot()"/>
         </ion-thumbnail>
         <ion-card-header class="ion-text-center">
           <ion-card-title color="p">Bienvenido</ion-card-title>

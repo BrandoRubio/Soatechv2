@@ -10,7 +10,7 @@
     </ion-buttons>
     <ion-title color="light">
       <ion-select value="{{deviceSelected}}" [interfaceOptions]="optionsDevice" (ionChange)="changeDevice($event)">
-        <ion-select-option value="404">Dispositivo externo
+        <ion-select-option value="404">Sin dispositivos
         </ion-select-option>
         <ion-select-option value="{{item.id}}" *ngFor="let item of devices; trackBy:trackItems">{{item.name}}
         </ion-select-option>
@@ -1163,8 +1163,36 @@
       </ion-accordion>
     </ion-accordion-group>
   </div>
-  <div [hidden]=SSIDPASS>
-    <ion-note color="medium">No disponible</ion-note>
+  <div [hidden]=SSIDPASS style="height: 100%; display: flex; align-items: center; justify-content: center;">
+      <ion-card>
+        <ion-card-header class="ion-text-center">
+          <ion-img src="../../assets/icon/cpu.png"></ion-img>
+          <ion-card-title color="primary">No hay dispositivos registrados </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <h2>Agrega tus dispositivos <a [routerLink]="['/devices']">aquí</a> o sigue los siguientes pasos: </h2>
+          <section>
+            <ul>
+              <li>
+                <h3>Clic <ion-icon name="ellipsis-vertical-outline"></ion-icon> en la parte superior derecha</h3>
+              </li>
+              <li>
+                <h3>Conéctate al mismo Wi-Fi que tus dispositivos</h3>
+              </li>
+              <li>
+                <h3>Selecciona <b>Dispositivos</b></h3>
+              </li>
+              <li>
+                <h3>Ingresa la IP correspondiente</h3>
+              </li>
+              <li>
+                <h3>Verifica y listo</h3>
+              </li>
+            </ul>
+          </section>
+        </ion-card-content>
+      </ion-card>
+    <!--ion-note color="medium">No disponible</ion-note>
     <ion-item disabled="true">
       <ion-label color="primary">Dispositivo</ion-label>
       <ion-select [(ngModel)]="deviceBLE" placeholder="Seleccione" (ionChange)="onBleChanged($event)">
@@ -1215,7 +1243,7 @@
         </section>
       </ion-card-content>
     </ion-card>
-    <!--ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button (click)="scanDevices()" color="primary">
         <ion-icon name="bluetooth"></ion-icon>
       </ion-fab-button>

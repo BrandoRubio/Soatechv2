@@ -18,6 +18,7 @@ export class Tab4Page implements OnInit {
   @ViewChild('lineCanvasTemp') private lineCanvasTemp: ElementRef;
   @ViewChild('lineCanvasConductivity') private lineCanvasConductivity: ElementRef;
   @ViewChild('lineCanvasJSN') private lineCanvasJSN: ElementRef;
+  @ViewChild('lineCanvasJSND') private lineCanvasJSND: ElementRef;
   @ViewChild('lineCanvasOxygen') private lineCanvasOxygen: ElementRef;
   @ViewChild('lineCanvasYL') private lineCanvasYL: ElementRef;
   @ViewChild('lineCanvasDS18') private lineCanvasDS18: ElementRef;
@@ -27,7 +28,7 @@ export class Tab4Page implements OnInit {
   @ViewChild('lineCanvasGrillosHum') private lineCanvasGrillosHum: ElementRef;
   @ViewChild('lineCanvasCO2') private lineCanvasCO2: ElementRef;
   @ViewChild('lineCanvasLUM') private lineCanvasLUM: ElementRef;
-
+  
   devices: any[] = []
   deviceSelected = ""
   ipDeviceSelected = ""
@@ -42,6 +43,7 @@ export class Tab4Page implements OnInit {
   lineChartLUM: any;
   lineChartConductivity: any;
   lineChartJSN: any;
+  lineChartJSND: any;
   lineChartYL: any;
   lineChartDS18: any;
   lineChartTurb: any;
@@ -175,6 +177,9 @@ export class Tab4Page implements OnInit {
       this.typeChart = 'bar'
       //document.getElementById("lineCanvasTemp") ? console.log("Este existe") : console.log("no existe");
       this.destroyAllCharts()
+    } else if (value == "numbers") {
+      this.updating = true
+      this.lineChartJSND ? this.lineChartJSND.destroy() : null
     }
     this.getDeviceData(this.deviceSelected);
   }
@@ -292,6 +297,11 @@ export class Tab4Page implements OnInit {
             this.VALUES.JSN = Math.round(data.JSN + Number.EPSILON * 100)
             this.colors.JSN = data.JSNCOLOR
             this.sensors.JSN = false;
+            var c1 = data.JSNCOLOR == "success" ? "rgb(45, 211, 111)" : "rgb(235, 68, 90)"
+            var c2 = data.JSNCOLOR == "success" ? "rgb(176, 245, 204)" : "rgb(250, 170, 180)"
+            var n: String[] = ["Lleno", "Vacío"]
+            var d: number[] = [this.VALUES.JSN, 100 - this.VALUES.JSN]
+            this.showJSNDChart(n, d, c1, c2)
           } else {
             this.sensors.JSN = true;
           }
@@ -303,6 +313,7 @@ export class Tab4Page implements OnInit {
           } else {
             this.sensors.DS18 = true;
           }
+          this.updating = false
         }, error => {
           this.deshabilitarDivs();
           this.components.WithoutDevices = true;
@@ -1007,6 +1018,28 @@ export class Tab4Page implements OnInit {
               }
             }
           }
+        }
+      });
+    }
+  }
+  showJSNDChart(text, data, color1, color2) {
+    if (this.lineChartJSND && !this.updating) {
+      this.lineChartJSND.data.labels = text;
+      this.lineChartJSND.data.datasets[0].backgroundColor = [color1,color2];
+      this.lineChartJSND.data.datasets[0].data = data;
+      this.lineChartJSND.update();
+    } else {
+      this.lineChartJSND = new Chart(this.lineCanvasJSND.nativeElement, {
+        type: "doughnut",
+        data: {
+          labels: text,
+          datasets: [
+            {
+              label: "Nivel de agua",
+              backgroundColor: [color1,color2],
+              data: data,
+            }
+          ]
         }
       });
     }
