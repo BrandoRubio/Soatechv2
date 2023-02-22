@@ -29,6 +29,7 @@ export class Tab2Page {
   NRegisters = 0
   devices: any[] = []
   deviceSelected
+  externalDevice = "Dispositivo Externo"
   ipDeviceSelected = "192.168.4.1"
   firstTime: Boolean = true
   DHTPines = [2, 4, 5, 13, 14, 15, 16, 17, 18, 19, 22, 23, 25, 27, 32, 33, 34, 35, 36, 37, 38, 39]
@@ -207,15 +208,15 @@ export class Tab2Page {
     Cond: true,
   }
   show = {
-    DHT : false,
-    DS18 : false,
-    YL : false,
-    CO2 : false,
-    JSN : false,
-    LUM : false,
-    Oxy : false,
-    PH : false,
-    Cond : false,
+    DHT: false,
+    DS18: false,
+    YL: false,
+    CO2: false,
+    JSN: false,
+    LUM: false,
+    Oxy: false,
+    PH: false,
+    Cond: false,
   }
 
   loading: Boolean = false
@@ -341,29 +342,29 @@ export class Tab2Page {
     //this.tryCheck()
     if (this.network.type == 'wifi') {
       this.GetIP()
-      if (this.deviceSelected == "404") {
+      /*if (this.deviceSelected == "404") {
         this.sensors = true;
         this.showLoading = true;
         this.showNotFound = true;
         this.SSIDPASS = false;
-      } else {
-        this.SSIDPASS = true;
-        this.getDeviceData(this.deviceSelected)
-      }
+      } else {*/
+      this.SSIDPASS = true;
+      this.getDeviceData(this.deviceSelected)
+      //}
     } else {
-      if (this.deviceSelected == "404") {
+      /*if (this.deviceSelected == "404") {
         this.SSIDPASS = false;
         this.showNotFound = true
         this.loading = true
         this.sensors = true
         this.showLoading = true
-      } else {
-        this.showNotFound = false
-        this.SSIDPASS = true;
-        this.loading = true
-        this.sensors = true
-        this.showLoading = true
-      }
+      } else {*/
+      this.showNotFound = false
+      this.SSIDPASS = true;
+      this.loading = true
+      this.sensors = true
+      this.showLoading = true
+      //}
     }
   }
   GetIP() {
@@ -414,9 +415,9 @@ export class Tab2Page {
         if (sensors.DHT11 != undefined) {//Asignación de variables a DHT11
           const DHT = sensors.DHT11
           this.disable.DHT = DHT.active == "true" ? true : false
-          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.DHT){
+          if (_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.DHT) {
             this.show.DHT = false;
-          }else{
+          } else {
             this.show.DHT = true;
           }
           this.disable.DHT = DHT.active == "true" ? true : false
@@ -444,9 +445,9 @@ export class Tab2Page {
         if (sensors.Ds18 != undefined) {//Asignación de variables a DHT11
           const DS18 = sensors.Ds18
           this.disable.DS18 = DS18.active == "true" ? true : false
-          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.DS18){
+          if (_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.DS18) {
             this.show.DS18 = false;
-          }else{
+          } else {
             this.show.DS18 = true;
           }
           this.disable.DS18 = DS18.active == "true" ? true : false
@@ -462,9 +463,9 @@ export class Tab2Page {
         if (sensors.Oxygen != undefined) {//Asignación de variables a DHT11
           const Oxy = sensors.Oxygen
           this.disable.Oxy = Oxy.active == "true" ? true : false
-          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.Oxy){
+          if (_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.Oxy) {
             this.show.Oxy = false;
-          }else{
+          } else {
             this.show.Oxy = true;
           }
           this.disable.Oxy = Oxy.active == "true" ? true : false
@@ -480,9 +481,9 @@ export class Tab2Page {
         if (sensors.Conductividad != undefined) {//Asignación de variables a DHT11
           const Cond = sensors.Conductividad
           this.disable.Cond = Cond.active == "true" ? true : false
-          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.Cond){
+          if (_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.Cond) {
             this.show.Cond = false;
-          }else{
+          } else {
             this.show.Cond = true;
           }
           this.Cond.a = Cond.active == "true" ? "Sensor activo" : "Sensor inactivo"
@@ -497,9 +498,9 @@ export class Tab2Page {
         if (sensors.PH != undefined) {//Asignación de variables a DHT11
           const PH = sensors.PH
           this.disable.PH = PH.active == "true" ? true : false
-          if(_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.PH){
+          if (_.type == "acuicola" || _.type == "integral" || this.ImAdmin || this.disable.PH) {
             this.show.PH = false;
-          }else{
+          } else {
             this.show.PH = true;
           }
           this.disable.PH = PH.active == "true" ? true : false
@@ -515,9 +516,9 @@ export class Tab2Page {
         if (sensors.YL != undefined) {//Asignación de variables a DHT11
           const YL = sensors.YL
           this.disable.YL = YL.active == "true" ? true : false
-          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.YL){
+          if (_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.YL) {
             this.show.YL = false;
-          }else{
+          } else {
             this.show.YL = true;
           }
           this.YL.a = YL.active == "true" ? "Sensor activo" : "Sensor inactivo"
@@ -535,9 +536,9 @@ export class Tab2Page {
         if (sensors.CO2 != undefined) {//Asignación de variables a Co2
           const CO2 = sensors.CO2
           this.disable.CO2 = CO2.active == "true" ? true : false
-          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.CO2){
+          if (_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.CO2) {
             this.show.CO2 = false;
-          }else{
+          } else {
             this.show.CO2 = true;
           }
           this.CO2.a = CO2.active == "true" ? "Sensor activo" : "Sensor inactivo"
@@ -552,9 +553,9 @@ export class Tab2Page {
         if (sensors.JSN != undefined) {//Asignación de variables a JSN
           const JSN = sensors.JSN
           this.disable.JSN = JSN.active == "true" ? true : false
-          if(_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.JSN){
+          if (_.type == "insectos" || _.type == "integral" || this.ImAdmin || this.disable.JSN) {
             this.show.JSN = false;
-          }else{
+          } else {
             this.show.JSN = true;
           }
           this.JSN.a = JSN.active == "true" ? "Sensor activo" : "Sensor inactivo"
@@ -570,9 +571,9 @@ export class Tab2Page {
         if (sensors.Luminosidad != undefined) {//Asignación de variables a DHT11
           const LUM = sensors.Luminosidad
           this.disable.LUM = LUM.active == "true" ? true : false
-          if(_.type == "insectos" || _.type == "integral" ||  _.type == "agricola" || this.ImAdmin || this.disable.LUM){
+          if (_.type == "insectos" || _.type == "integral" || _.type == "agricola" || this.ImAdmin || this.disable.LUM) {
             this.show.LUM = false;
-          }else{
+          } else {
             this.show.LUM = true;
           }
           this.LUM.a = LUM.active == "true" ? "Sensor activo" : "Sensor inactivo"
@@ -859,7 +860,7 @@ export class Tab2Page {
   updateSensorJSN() {
     let newData
     newData = "?newUbiVar=JSN"
-      + "&newReadPin=" + this.JSN.pines.pin1 +"," + this.JSN.pines.pin2
+      + "&newReadPin=" + this.JSN.pines.pin1 + "," + this.JSN.pines.pin2
       + "&newControlPinMin=" + this.JSN.control_min_pin
       + "&newControlPinMax=" + this.JSN.control_max_pin
       + "&newMin=" + this.JSN.ranges.lower
@@ -911,11 +912,15 @@ export class Tab2Page {
     })
   }
   getDeviceData(id) {
-    this.db.getDevice(id).then(_ => {
-      this.ipDeviceSelected = _.ip
-      //console.log(this.ipDeviceSelected);
-      this.tryCheck()
-    })
+    if (id == "404") {
+      this.ipDeviceSelected = "192.168.4.1"
+    } else {
+      this.db.getDevice(id).then(_ => {
+        this.ipDeviceSelected = _.ip
+        //console.log(this.ipDeviceSelected);
+      })
+    }
+    this.tryCheck()
   }
   openLogger() {
     let params: any = {
@@ -1140,10 +1145,10 @@ export class Tab2Page {
     let txt2 = String(txt.split("?")[1]) */
     const alert = await this.alertController.create({
       header: 'Recomendaciones',
-      message:  "<ul>"
-      + "<li>" + txt1 + "</li>"
-      + "<li>" + txt2 + "</li>"
-      + "</ul>",
+      message: "<ul>"
+        + "<li>" + txt1 + "</li>"
+        + "<li>" + txt2 + "</li>"
+        + "</ul>",
       buttons: [
         {
           text: 'Ok',
@@ -1154,7 +1159,7 @@ export class Tab2Page {
 
     await alert.present();
   }
-  
+
   pinFormatter(value: number) {
     return `${value} cm`;
   }

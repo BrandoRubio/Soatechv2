@@ -10,7 +10,7 @@
     </ion-buttons>
     <ion-title color="light">
       <ion-select value="{{deviceSelected}}" [interfaceOptions]="optionsDevice" (ionChange)="changeDevice($event)">
-        <ion-select-option value="404">Sin dispositivos
+        <ion-select-option value="404">{{externalDevice}}
         </ion-select-option>
         <ion-select-option value="{{item.id}}" *ngFor="let item of devices; trackBy:trackItems">{{item.name}}
         </ion-select-option>
