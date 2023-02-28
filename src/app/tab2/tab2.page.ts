@@ -1,11 +1,9 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpService } from '../services/http.service';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
-import { NavController, ToastController, AlertController, Platform } from '@ionic/angular';
+import { NavController, ToastController, AlertController } from '@ionic/angular';
 import { DbService } from '../services/db.service';
-import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { NetworkInterface } from '@awesome-cordova-plugins/network-interface/ngx';
-
 
 @Component({
   selector: 'app-tab2',
@@ -13,6 +11,18 @@ import { NetworkInterface } from '@awesome-cordova-plugins/network-interface/ngx
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
+  constructor(
+    private networkInterface: NetworkInterface,
+    private db: DbService,
+    private network: Network,
+    private nav: NavController,
+    private http: HttpService,
+    private toastController: ToastController,
+    private alertController: AlertController,
+  ) {
+    /*this.plt.ready().then((readySource) => {
+    });*/
+  }
   name = "No device"
   ImAdmin = false;
   split: String = ""
@@ -28,10 +38,14 @@ export class Tab2Page {
   SSIDPASS = true
   NRegisters = 0
   devices: any[] = []
-  deviceSelected
+  deviceSelected = "404"
   externalDevice = "Dispositivo Externo"
   ipDeviceSelected = "192.168.4.1"
   firstTime: Boolean = true
+  loading: Boolean = false
+  showNotFound: Boolean = true
+  showLoading: Boolean = true
+  minutes = 0
   DHTPines = [2, 4, 5, 13, 14, 15, 16, 17, 18, 19, 22, 23, 25, 27, 32, 33, 34, 35, 36, 37, 38, 39]
   generalPines = [1, 2, 4, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 20, 25, 26, 27, 32, 33, 34, 35, 36, 39]
   relePines = [2, 4, 12, 13, 14, 15, 16, 17, 20, 25, 26, 27, 32, 33]
@@ -218,45 +232,25 @@ export class Tab2Page {
     PH: false,
     Cond: false,
   }
-
-  loading: Boolean = false
-  showNotFound: Boolean = true
-  showLoading: Boolean = true
-  minutes = 0
-  constructor(
-    private networkInterface: NetworkInterface,
-    private db: DbService,
-    private network: Network,
-    private nav: NavController,
-    private http: HttpService,
-    private toastController: ToastController,
-    private alertController: AlertController,
-    public BLSE: BluetoothSerial,
-    private ngZone: NgZone,
-    public plt: Platform
-  ) {
-    this.plt.ready().then((readySource) => {
-    });
-  }
   ngOnInit() {
     this.scanDevices()
   }
   getDevices() {
-    this.db.getDevices().then(_ => {
-      this.devices = _
-      if (this.firstTime) {
-        if (this.devices.length == 0) {
-          this.deviceSelected = "404"
-        } else {
-          this.deviceSelected = _[0].id
+      this.db.getDevices().then(_ => {
+        this.devices = _
+        if (this.firstTime) {
+          if (this.devices.length == 0) {
+            this.deviceSelected = "404"
+          } else {
+            this.deviceSelected = _[0].id
+          }
+          this.firstTime = false
         }
-        this.firstTime = false
-      }
-    })
+      }) 
+    
   }
   changeDevice(dev) {
     this.deviceSelected = dev.target.value;
-    //this.getDeviceData(this.deviceSelected)
     this.loadData()
   }
   changesDev() {
@@ -370,7 +364,7 @@ export class Tab2Page {
   GetIP() {
     this.networkInterface.getWiFiIPAddress()
       .then(address => {
-        console.log(address.ip);
+        //console.log(address.ip);
         this.myIP = address.ip
       })
       .catch(error => console.error(`Unable to get IP: ${error}`));
@@ -396,6 +390,7 @@ export class Tab2Page {
     }
   }
   tryCheck() {
+    //this.showNotFound = false
     this.disable.loading = true;
     //this.http.presentLoadingWithOptions('Buscando dispositivo.').then()
     this.http.checkDeviceCM(this.ipDeviceSelected).subscribe((_) => {
@@ -626,35 +621,35 @@ export class Tab2Page {
     })
   }
   scanDevices() {
-    this.BLEDEVS = []
+    /*this.BLEDEVS = []
     console.log(this.BLSE);
     this.BLSE.list().then(d => {
       d.forEach(i => {
         console.log(i);
         this.BLEDEVS.push(i)
       });
-    })
+    })*/
     //this.le.startScan().subscribe(dev => this.onDeviceDiscovered(dev))
   }
   onDeviceDiscovered(dev) {
-    this.ngZone.run(() => {
+    /*this.ngZone.run(() => {
       this.BLEDEVS.push(dev)
-    })
+    })*/
   }
   onBleChanged(event) {
-    this.BLSE.connect(this.deviceBLE).subscribe(state => {
+    /*this.BLSE.connect(this.deviceBLE).subscribe(state => {
       //console.log(state);
     }, e => {
       //console.log(e)
-    })
+    })*/
   }
   sendSSIDPASS() {
     let data = this.SSID + "," + this.PASS
-    this.BLSE.write(data).then(state => {
+    /*this.BLSE.write(data).then(state => {
       //console.log(state);
     }, e => {
       //console.log(e)
-    })
+    })*/
 
     /*if (this.ble.isConnected)
       console.log("WE ARE CURRENTLY CONNECTED");
@@ -914,6 +909,7 @@ export class Tab2Page {
   getDeviceData(id) {
     if (id == "404") {
       this.ipDeviceSelected = "192.168.4.1"
+      //console.log(this.ipDeviceSelected);
     } else {
       this.db.getDevice(id).then(_ => {
         this.ipDeviceSelected = _.ip
@@ -1159,7 +1155,6 @@ export class Tab2Page {
 
     await alert.present();
   }
-
   pinFormatter(value: number) {
     return `${value} cm`;
   }

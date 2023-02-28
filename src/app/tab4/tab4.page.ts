@@ -1359,22 +1359,23 @@ export class Tab4Page implements OnInit {
     }, 10000);
   }
   showNotification() {
-    /*LocalNotifications.schedule({
+    LocalNotifications.schedule({
       notifications: [
         {
           id: 1,
           title: 'Elemento fuera de rango',
           body: 'La temperatura se encuentra fuera de rango',
-          icon: 'res://icon/icon.png',
-          ionColor: 'eb445a',
+          smallIcon: "ic_stat_name",
+          iconColor: '#f2e202',
           schedule: { at: new Date(Date.now() + 100) },
           sound: null,
-          attachments: null,
-          actionTypeId: '',
           extra: null,
         },
       ],
-    });*/
+    });
+  }
+  print(){
+    console.log(LocalNotifications);
   }
   deshabilitarDivs() {
     this.components.NUMBERS = true;

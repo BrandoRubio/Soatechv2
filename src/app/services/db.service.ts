@@ -36,6 +36,7 @@ export class DbService {
 
   async getDevices() {
     //this.presentToast(JSON.stringify(/*this.devicesList))
+    
     await this.storage.executeSql('SELECT * FROM devices', []).then(res => {
       let items: any[] = [];
       if (res.rows.length > 0) {

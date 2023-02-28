@@ -16,41 +16,40 @@ export class AppComponent {
     private db: DbService,
     private menu: MenuController,
     private alertController: AlertController,
-    ) {
+  ) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       this.navigate();
     });
+  }
+  devices: any[]
+  navigate() {
+    this.router.navigate(['/tabs', 'home'])
+  }
+  ngOnInit() {
     this.platform.ready().then(() => {
-      //this.storage.create()
+      this.getDevices();
     });
   }
-  devices : any []
-  navigate(){
-    this.router.navigate(['/tabs','home'])
-  }
-  ngOnInit(){
-    this.getDevices();
-  }
-  hideMenu(){
+  hideMenu() {
     this.menu.close()
   }
   getDevices() {
     this.db.getDevices().then(_ => {
       this.devices = _
-        if (this.devices.length == 0) {
-          this.devices[0] = {
-            name: "0 dispositivos"
-          }
-        }else{
-          this.db.getDevice(_[0].id)
+      if (this.devices.length == 0) {
+        this.devices[0] = {
+          name: "0 dispositivos"
         }
+      } else {
+        this.db.getDevice(_[0].id)
+      }
     })
   }
   async showDeviceInformation(name, type, ip) {
     const alert = await this.alertController.create({
       header: name,
-      message: '<ul><li><p>Tipo: <b>' + type + '</b></p></li></ul>'+
-      '<ul><li><p>IP: <b>' + ip + '</b></p></li></ul>',
+      message: '<ul><li><p>Tipo: <b>' + type + '</b></p></li></ul>' +
+        '<ul><li><p>IP: <b>' + ip + '</b></p></li></ul>',
       buttons: ['OK'],
     });
 

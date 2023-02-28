@@ -48,28 +48,47 @@
     <ion-card>
       <ion-card-header class="ion-text-center">
         <ion-img src="../../assets/icon/advertencia.png"></ion-img>
-        <ion-card-title color="primary">¡UPS! Dispositivo no encontrado </ion-card-title>
+        <ion-card-title color="primary">¡UPS! Dispositivo no encontrado</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <h2>Instrucciones:</h2>
+        <!--h2>Instrucciones:</h2-->
         <section>
           <ul>
             <li>
-              <h3>Enciende el modo configuración en el dispositivo</h3>
+              <h3>Conecta tu <b>SoatechBox</b> a una red Wi-Fi.
+              </h3>
             </li>
             <li>
-              <h3>Conécta tu <ion-icon name="phone-portrait-outline" color="primary"></ion-icon> a la red del
-                dispositivo </h3>
+              <h3>Conécta tu <ion-icon name="phone-portrait-outline" color="primary"></ion-icon> a la misma red.</h3>
             </li>
             <li>
-              <h3>Regresa a este apartado</h3>
+              <h3>Desliza hacia abajo o pulsa <ion-icon color="primary" name="refresh-outline"
+                  (click)="loadData()"></ion-icon>.</h3>
             </li>
             <li>
-              <h3>Recarga esta pestaña (desliza hacia abajo o pulsa <ion-icon color="primary" name="refresh-outline"
-                  (click)="loadData()"></ion-icon>)</h3>
+              <h3>O bien escanea nuevamente los dispositivos <a [routerLink]="['/devices']">aquí</a>.</h3>
+            </li>
+          </ul>
+        </section>
+      </ion-card-content>
+      <ion-card-header class="ion-text-center">
+        <ion-img src="../../assets/icon/access point.png"></ion-img>
+        <ion-card-title color="primary">Dispositivo externo</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <!--h2>Instrucciones:</h2-->
+        <section>
+          <ul>
+            <li>
+              <h3><b>SoatechBox</b> encenderá un punto de acceso mientras no se conecte a una red Wi-Fi.
+              </h3>
             </li>
             <li>
-              <h3>También puedes seleccionar un dispositivo desde el encabezado</h3>
+              <h3>Ve a ajustes de red de tu <ion-icon name="phone-portrait-outline" color="primary"></ion-icon> y conéctate a la red de <b>SoatechBox</b>.</h3>
+            </li>
+            <li>
+              <h3>Desliza hacia abajo o pulsa <ion-icon color="primary" name="refresh-outline"
+                  (click)="loadData()"></ion-icon>.</h3>
             </li>
           </ul>
         </section>

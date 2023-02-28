@@ -69,32 +69,34 @@
 </ion-header>
 
 <ion-content>
-  <div style="height: 100%; display: flex; align-items: center; justify-content: center;"
-    [hidden]="components.NoDevice">
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;" [hidden]="components.NoDevice">
     <ion-card>
       <ion-card-header class="ion-text-center">
         <ion-img src="../../assets/icon/advertencia.png"></ion-img>
         <ion-card-title color="primary">¡UPS! Dispositivo no encontrado </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <h2>Posibles causas:</h2>
+        <h2>Instrucciones:</h2>
         <section>
           <ul>
             <li>
-              <h3>No estás conectado a la misma red</h3>
+              <h3>Conecta tu <b>SoatechBox</b> a una red Wi-Fi.
+              </h3>
             </li>
             <li>
-              <h3>Tu dispositivo no está conectado a la red</h3>
+              <h3>Conécta tu <ion-icon name="phone-portrait-outline" color="primary"></ion-icon> a la misma red que tu <b>SoatechBox</b></h3>
             </li>
             <li>
-              <h3>Intenta: apagar tus datos móviles</h3>
+              <h3>Regresa a este apartado</h3>
+            </li>
+            <li>
+              <h3>Selecciona el dispositivo deseado.</h3>
+            </li>
+            <li>
+              <h3>O bien escanea nuevamente los dispositivos <a [routerLink]="['/devices']">aquí</a>.</h3>
             </li>
           </ul>
         </section>
-        <h3>Nota: recuerda que este apartado es para monitoreo local.</h3>
-        <ion-item lines="none">
-          <ion-spinner name="crescent" color="primary"></ion-spinner>
-        </ion-item>
       </ion-card-content>
     </ion-card>
   </div>
@@ -422,4 +424,9 @@
       </ion-card>
     </div>
   </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="print()" color="primary">
+      <ion-icon name="reload"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
