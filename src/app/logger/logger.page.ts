@@ -153,7 +153,8 @@ export class LoggerPage implements OnInit {
           text: 'Ok',
           role: 'cancel',
         },
-      ]
+      ],
+      cssClass: 'alert_success',
     });
 
     await alert.present();

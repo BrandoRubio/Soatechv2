@@ -272,6 +272,7 @@ export class Tab3Page {
           },
         },
       ],
+      cssClass: 'alert_success',
     });
 
     await alert.present();

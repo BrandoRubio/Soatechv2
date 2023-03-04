@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { DbService } from '../services/db.service';
 import { HttpService } from '../services/http.service';
 import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx'
 import { Chart, ChartType, registerables } from 'chart.js';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
-const { LocalNotifications } = Plugins;
-const { SplashScreen } = Plugins;
+import { NotificationsService } from '../services/notifications.service';
+const { LocalNotifications, BackgroundTask, App } = Plugins;
+//const { SplashScreen } = Plugins;
 //import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
@@ -28,7 +30,7 @@ export class Tab4Page implements OnInit {
   @ViewChild('lineCanvasGrillosHum') private lineCanvasGrillosHum: ElementRef;
   @ViewChild('lineCanvasCO2') private lineCanvasCO2: ElementRef;
   @ViewChild('lineCanvasLUM') private lineCanvasLUM: ElementRef;
-  
+
   devices: any[] = []
   deviceSelected = ""
   ipDeviceSelected = ""
@@ -64,6 +66,20 @@ export class Tab4Page implements OnInit {
     turvidez: true,
     YL: true,
     DS18: true,
+  }
+  ids = {
+    temperatura: 1,
+    humedad: 2,
+    co2: 3,
+    lum: 4,
+    oxigenacion: 5,
+    Htemperatura: 6,
+    ph: 7,
+    JSN: 8,
+    conductividad: 9,
+    turvidez: 10,
+    YL: 11,
+    DS18: 12,
   }
   colors = {
     humedad: "light",
@@ -126,21 +142,37 @@ export class Tab4Page implements OnInit {
     //private localNotifications: LocalNotifications,
     private db: DbService,
     private http: HttpService,
+    private backgroundMode: BackgroundMode,
     public platform: Platform) {
     Chart.register(...registerables);
     this.platform.pause.subscribe(async () => {
       clearInterval(this.intervalo)
+      console.log("Dormido");
+
     });
     this.platform.resume.subscribe(async () => {
       this.firstTime = true
       this.firstTimeDev = true
       this.reloadData()
+      console.log("Despierto");
+
     });
+    this.backgroundMode.enable();
+    /*App.addListener('appStateChange', async ({ isActive }) => {      
+      if (isActive) {
+        return;
+      }
+      await BackgroundTask.beforeExit(async () => {
+        this.getNotifications()
+      });
+    });*/
   }
   ngOnInit() {
+    setInterval(() => {
+      this.getNotifications();
+    }, 10000)
   }
   ionViewWillEnter() {
-    this.showNotification()
     this.reloadData()
   }
   getDevices() {
@@ -168,14 +200,22 @@ export class Tab4Page implements OnInit {
     this.deviceSelected = dev.target.value;
     this.getDeviceData(this.deviceSelected);
   }
+  async startBackgroundTask() {
+    try {
+      const taskId = await BackgroundTask.beforeExit(async () => {
+        //await get();
+        BackgroundTask.finish({ taskId });
+      });
+    } catch (e) {
+      console.log("Error starting background task", e);
+    }
+  }
   changeMood(value) {
     if (value == "registersl") {
       this.typeChart = 'line'
-      //document.getElementById("canvas") ? console.log("Este existe") : console.log("no existe");
       this.destroyAllCharts()
     } else if (value == "registersb") {
       this.typeChart = 'bar'
-      //document.getElementById("lineCanvasTemp") ? console.log("Este existe") : console.log("no existe");
       this.destroyAllCharts()
     } else if (value == "numbers") {
       this.updating = true
@@ -203,6 +243,7 @@ export class Tab4Page implements OnInit {
       this.ipDeviceSelected = _.ip
       if (this.firstTimeDev) {
         this.http.checkDevice(this.ipDeviceSelected).subscribe(__ => {
+          this.getNotifications()
           this.firstTimeDev = false
           this.db.updateTypeDevice(this.deviceSelected, __.name, __.type)
         }, error => {
@@ -1025,7 +1066,7 @@ export class Tab4Page implements OnInit {
   showJSNDChart(text, data, color1, color2) {
     if (this.lineChartJSND && !this.updating) {
       this.lineChartJSND.data.labels = text;
-      this.lineChartJSND.data.datasets[0].backgroundColor = [color1,color2];
+      this.lineChartJSND.data.datasets[0].backgroundColor = [color1, color2];
       this.lineChartJSND.data.datasets[0].data = data;
       this.lineChartJSND.update();
     } else {
@@ -1036,7 +1077,7 @@ export class Tab4Page implements OnInit {
           datasets: [
             {
               label: "Nivel de agua",
-              backgroundColor: [color1,color2],
+              backgroundColor: [color1, color2],
               data: data,
             }
           ]
@@ -1358,24 +1399,85 @@ export class Tab4Page implements OnInit {
       this.getDevices();
     }, 10000);
   }
-  showNotification() {
-    LocalNotifications.schedule({
+  getNotifications() {
+    /*LocalNotifications.schedule({
       notifications: [
         {
-          id: 1,
-          title: 'Elemento fuera de rango',
-          body: 'La temperatura se encuentra fuera de rango',
+          id: 0,
+          title: "Backgound " + new Date().toLocaleTimeString(),
           smallIcon: "ic_stat_name",
-          iconColor: '#f2e202',
-          schedule: { at: new Date(Date.now() + 100) },
-          sound: null,
-          extra: null,
+          body: "Soatech está funcionando de fondo.",
+          iconColor: "#5260ff",
+          hora: new Date().toLocaleTimeString(),
         },
-      ],
-    });
+      ]
+    });*/
+    this.http.getNotifications(this.ipDeviceSelected).subscribe(notificationsArray => {
+      Object.keys(notificationsArray).forEach(propiedad => {
+        this.showNotification(notificationsArray[propiedad])
+      });
+    })
   }
-  print(){
-    console.log(LocalNotifications);
+  showNotification(obj) {
+    this.existNotification(obj.id, obj.title, obj.text).then(exist => {
+      if (!exist) {
+        LocalNotifications.schedule({
+          notifications: [
+            {
+              id: obj.id,
+              title: obj.title,
+              smallIcon: "ic_stat_name",
+              elemento: obj.title,
+              body: obj.text == "Estable" ? "Ya se encuentra estable" : obj.text,
+              rangos: obj.ranges,
+              valor: obj.value,
+              iconColor: obj.color,
+              hora: new Date().toLocaleTimeString(),
+            },
+          ]
+        });
+      }
+    })
+  }
+  existNotification(id, title, newState): Promise<boolean> {
+    return new Promise(resolve => {
+      let contador = 0;
+      LocalNotifications.getDeliveredNotifications().then(na => {
+        let notifications = na.notifications;
+        if (notifications.length != 0) {
+          notifications.forEach(element => {
+            contador++;
+            if (element.id == id && element.title == title) {
+              //console.log(element.data["android.text"]);
+              if(element.data["android.text"] == "Ya se encuentra estable" && newState != "Estable"){
+                resolve(false)//nueva not
+              }else if(element.data["android.text"] != "Ya se encuentra estable" && newState == "Estable"){
+                resolve(false);
+              }else{
+                resolve(true);
+              }
+            } else if (contador === notifications.length) {
+              if (newState != "Estable") {
+                console.log("here 1");
+                
+                resolve(false)
+              } else {
+                resolve(true)
+              }
+            }
+          });
+        } else {
+          if(newState != "Estable"){
+            console.log("here 2");
+            resolve(false)
+          }else{
+            resolve(true)
+          }
+          //console.log("SAlió " +id);
+          resolve(false)
+        }
+      })
+    })
   }
   deshabilitarDivs() {
     this.components.NUMBERS = true;

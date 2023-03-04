@@ -31,7 +31,6 @@ export class HomePage implements OnInit {
     private alertController: AlertController,
     private emailComposer: EmailComposer,
     private router: Router,
-
   ) { }
 
   async ngOnInit() {
@@ -122,13 +121,14 @@ export class HomePage implements OnInit {
         {
           text: 'Continuar',
           role: 'confirm',
-          cssClass: 'alert-button-confirm',
+          //cssClass: 'alert-button-confirm',
           handler: () => {
             this.router.navigate(['/profile'])
             //this.descargarArchivo
           },
         },
       ],
+      cssClass: 'alert_success',
     });
 
     await alert.present();

@@ -20,6 +20,8 @@ import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { EmailComposer } from '@awesome-cordova-plugins/email-composer/ngx';
 import { Storage } from '@ionic/storage';
 import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
+import { NotificationsService } from './services/notifications.service';
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx';
 //import {EmailComposer} from "@ionic-native/email-composer/ngx";
 
 @NgModule({
@@ -30,6 +32,7 @@ import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
     File,
     FileOpener,
     NetworkInterface,
+    BackgroundMode,
     BluetoothSerial,
     Storage,
     Clipboard,
@@ -38,6 +41,7 @@ import { Clipboard } from '@awesome-cordova-plugins/clipboard/ngx';
     InAppBrowser,
     DownloadsService,
     HttpService,
+    NotificationsService,
     Network,
     SQLite],
   bootstrap: [AppComponent],

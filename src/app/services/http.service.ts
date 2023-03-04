@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { timeout} from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class HttpService {
   endpoint = 'http://';
   constructor(
     private toastController: ToastController,
+    private router: Router,
     private httpClient: HttpClient,
     public loadingController: LoadingController
   ) { }
@@ -30,6 +32,9 @@ export class HttpService {
   }
   getSensors(ip): Observable<any> {
     return this.httpClient.get(this.endpoint + ip + "/getSensors")
+  }
+  getNotifications(ip): Observable<any> {
+    return this.httpClient.get(this.endpoint + ip + "/getNotifications")
   }
   getAllElementValues(ipDevice): Observable<any> {
     return this.httpClient.get(this.endpoint + ipDevice + "/getLastNValues")

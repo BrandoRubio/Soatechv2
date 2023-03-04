@@ -70,6 +70,7 @@ export class DevicesPage implements OnInit {
       message: '<ul><li><p>Tipo: <b>' + type + '</b></p></li></ul>'+
       '<ul><li><p>IP: <b>' + ip + '</b></p></li></ul>',
       buttons: ['OK'],
+      cssClass: 'alert_success',
     });
 
     await alert.present();
@@ -128,13 +129,13 @@ export class DevicesPage implements OnInit {
         {
           text: 'Actualizar',
           role: 'confirm',
-          cssClass: 'alert-button-confirm',
           handler: () => {
               this.GetIP()
               //this.descargarArchivo
           },
         },
       ],
+      cssClass: 'alert_success',
     });
 
     await alert.present();
@@ -148,12 +149,12 @@ export class DevicesPage implements OnInit {
         {
           text: 'Ok',
           role: 'cancel',
-          cssClass: 'alert-button-confirm',
           handler: () => {
 
           },
         }
       ],
+      cssClass: 'alert_success',
     });
 
     await alert.present();
@@ -172,12 +173,12 @@ export class DevicesPage implements OnInit {
         {
           text: 'Ok',
           role: 'cancel',
-          cssClass: 'alert-button-confirm',
           handler: () => {
 
           },
         }
       ],
+      cssClass: 'alert_success',
     });
 
     await alert.present();

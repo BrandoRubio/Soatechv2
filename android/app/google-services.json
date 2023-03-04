@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "768878593957",
+    "project_id": "soatech-2a232",
+    "storage_bucket": "soatech-2a232.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768878593957:android:22d2caea0674e2a9078a4c",
+        "android_client_info": {
+          "package_name": "com.condor.soatechapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768878593957-dd66bdslhtdi6ml49ed57d4715t0mcik.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwLM0kjzCLp6--_qeOjtodIeF-PAlBs8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768878593957-dd66bdslhtdi6ml49ed57d4715t0mcik.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

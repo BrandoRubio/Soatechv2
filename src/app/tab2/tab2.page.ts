@@ -969,7 +969,8 @@ export class Tab2Page {
             }
           }
         }
-      ]
+      ],
+      cssClass: 'alert_success',
     });
 
     await alert.present();
@@ -988,9 +989,9 @@ export class Tab2Page {
         {
           text: 'OK',
           role: 'confirm',
-          cssClass: 'alert-button-confirm',
         }
-      ]
+      ],
+      cssClass: 'alert_success',
 
     });
 
@@ -1065,7 +1066,8 @@ export class Tab2Page {
             }
           }
         }
-      ]
+      ],
+      cssClass: 'alert_success',
 
     });
 
@@ -1110,7 +1112,8 @@ export class Tab2Page {
             }
           }
         }
-      ]
+      ],
+      cssClass: 'alert_success',
 
     });
 
@@ -1126,7 +1129,8 @@ export class Tab2Page {
           text: 'ok',
           role: 'confirm',
         }
-      ]
+      ],
+      cssClass: 'alert_success',
 
     });
 
@@ -1150,7 +1154,8 @@ export class Tab2Page {
           text: 'Ok',
           role: 'cancel',
         },
-      ]
+      ],
+      cssClass: 'alert_success',
     });
 
     await alert.present();
