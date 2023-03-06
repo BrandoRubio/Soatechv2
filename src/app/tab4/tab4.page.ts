@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DbService } from '../services/db.service';
 import { HttpService } from '../services/http.service';
 import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx'
 import { Chart, ChartType, registerables } from 'chart.js';
 import { Plugins } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
@@ -142,7 +141,6 @@ export class Tab4Page implements OnInit {
     //private localNotifications: LocalNotifications,
     private db: DbService,
     private http: HttpService,
-    private backgroundMode: BackgroundMode,
     public platform: Platform) {
     Chart.register(...registerables);
     this.platform.pause.subscribe(async () => {
@@ -157,7 +155,6 @@ export class Tab4Page implements OnInit {
       console.log("Despierto");
 
     });
-    this.backgroundMode.enable();
     /*App.addListener('appStateChange', async ({ isActive }) => {      
       if (isActive) {
         return;

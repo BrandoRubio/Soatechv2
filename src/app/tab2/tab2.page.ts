@@ -236,18 +236,18 @@ export class Tab2Page {
     this.scanDevices()
   }
   getDevices() {
-      this.db.getDevices().then(_ => {
-        this.devices = _
-        if (this.firstTime) {
-          if (this.devices.length == 0) {
-            this.deviceSelected = "404"
-          } else {
-            this.deviceSelected = _[0].id
-          }
-          this.firstTime = false
+    this.db.getDevices().then(_ => {
+      this.devices = _
+      if (this.firstTime) {
+        if (this.devices.length == 0) {
+          this.deviceSelected = "404"
+        } else {
+          this.deviceSelected = _[0].id
         }
-      }) 
-    
+        this.firstTime = false
+      }
+    })
+
   }
   changeDevice(dev) {
     this.deviceSelected = dev.target.value;
@@ -909,14 +909,16 @@ export class Tab2Page {
   getDeviceData(id) {
     if (id == "404") {
       this.ipDeviceSelected = "192.168.4.1"
+      this.tryCheck()
       //console.log(this.ipDeviceSelected);
     } else {
       this.db.getDevice(id).then(_ => {
         this.ipDeviceSelected = _.ip
+        this.tryCheck()
         //console.log(this.ipDeviceSelected);
       })
     }
-    this.tryCheck()
+    console.log(this.ipDeviceSelected);
   }
   openLogger() {
     let params: any = {

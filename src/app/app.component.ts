@@ -3,6 +3,7 @@ import { AlertController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { DbService } from './services/db.service';
 import { MenuController } from '@ionic/angular';
+import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx'
 import {
   ActionPerformed,
   PushNotificationSchema,
@@ -23,11 +24,13 @@ export class AppComponent {
     private db: DbService,
     private menu: MenuController,
     private notifications: NotificationsService,
+    private backgroundMode: BackgroundMode,
     private alertController: AlertController,
   ) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       this.navigate();
     });
+    this.backgroundMode.enable();
   }
   devices: any[]
   navigate() {
