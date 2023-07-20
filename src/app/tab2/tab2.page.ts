@@ -42,6 +42,7 @@ export class Tab2Page {
   externalDevice = "Dispositivo Externo"
   ipDeviceSelected = "192.168.4.1"
   firstTime: Boolean = true
+  ft: Boolean = true
   loading: Boolean = false
   showNotFound: Boolean = true
   showLoading: Boolean = true
@@ -335,7 +336,15 @@ export class Tab2Page {
     this.getDevices()
     //this.tryCheck()
     if (this.network.type == 'wifi') {
+      
       this.GetIP()
+      if (this.ft) {
+        console.log("ft");
+        
+        this.ft = false
+      } else {
+        console.log("st");
+      }
       /*if (this.deviceSelected == "404") {
         this.sensors = true;
         this.showLoading = true;
@@ -394,7 +403,7 @@ export class Tab2Page {
     this.disable.loading = true;
     //this.http.presentLoadingWithOptions('Buscando dispositivo.').then()
     this.http.checkDeviceCM(this.ipDeviceSelected).subscribe((_) => {
-      //console.log(_);
+      console.log("Check");
       this.params = false;
       this.SSID = _.ssid;
       this.PASS = _.password;
@@ -404,7 +413,9 @@ export class Tab2Page {
       this.type = _.type;
       this.disable.chDev = true;
       //this.disable.loading = false;
+      console.log(this.ipDeviceSelected);
       this.http.getSensors(this.ipDeviceSelected).subscribe((sensors) => {
+        console.log("Sensors");
         this.showNotFound = true
         this.showLoading = true
         if (sensors.DHT11 != undefined) {//Asignación de variables a DHT11
@@ -584,12 +595,20 @@ export class Tab2Page {
           this.disable.loading = false;
         }, 500);
       }, (error) => {
-        this.showAlertNoDevice
+        console.log("ERR");
+        console.log(error);
+        this.showAlertNoDevice()
+        this.showNotFound = false
+        this.showLoading = true
+        this.sensors = true
+        this.loading = true
       })
       this.http.dismissLoader()
       //this.http.presentLoadingWithOptions("Extrayendo datos del dispositivo")
     }, (error) => {
       //this.presentToast("Ha ocurriedo un error, vuelva a intentarlo.")
+      console.log("ERRORRS");
+      console.log(error);
       this.http.dismissLoader()
       //this.showAlertNoDevice()
       this.showNotFound = false
@@ -918,7 +937,7 @@ export class Tab2Page {
         //console.log(this.ipDeviceSelected);
       })
     }
-    console.log(this.ipDeviceSelected);
+    //console.log(this.ipDeviceSelected);
   }
   openLogger() {
     let params: any = {
