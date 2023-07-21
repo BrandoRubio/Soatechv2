@@ -5,7 +5,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.condor.soatechapp"
         minSdkVersion rootProject.ext.minSdkVersion
