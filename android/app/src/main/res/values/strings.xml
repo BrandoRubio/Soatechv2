@@ -4,4 +4,5 @@
     <string name="title_activity_main">Soatech</string>
     <string name="package_name">com.condor.soatechapp</string>
     <string name="custom_url_scheme">com.condor.soatechapp</string>
+    <string name="server_client_id">768878593957-a2a5uc1s4pv859gstg9tqgur9un25e59.apps.googleusercontent.com</string>
 </resources>

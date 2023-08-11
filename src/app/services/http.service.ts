@@ -72,6 +72,9 @@ export class HttpService {
     return this.httpClient.get(this.endpoint + ipDevice + "/getNetworks")
   }
 
+  sendToGoogle(apiURL, accessToken){
+
+  }
   async presentLoadingWithOptions(msg) {
     const loading = await this.loadingController.create({
       spinner: 'dots',

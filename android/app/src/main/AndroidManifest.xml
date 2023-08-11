@@ -5,6 +5,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+              <action android:name="INTENT_ACTION_FROM_CONSOLE"/>
+              <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <provider android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true" android:name="androidx.core.content.FileProvider">

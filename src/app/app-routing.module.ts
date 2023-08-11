@@ -36,6 +36,10 @@ const routes: Routes = [
   },  {
     path: 'reports',
     loadChildren: () => import('./reports/reports.module').then( m => m.ReportsPageModule)
+  },
+  {
+    path: 'google',
+    loadChildren: () => import('./google/google.module').then( m => m.GooglePageModule)
   }
 
 ];

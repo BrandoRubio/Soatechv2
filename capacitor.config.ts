@@ -9,6 +9,11 @@ const config: CapacitorConfig = {
     LocalNotifications: {
       smallIcon: "ic_image_notification",
     },
+    GoogleAuth: {
+      scopes: ['profile', 'email'],
+      serverClientId: '768878593957-29bp124t8ka428mbaqvbouqf58k84nn5.apps.googleusercontent.com',
+      forceCodeForRefreshToken: true,
+    },
   },
 };
 
