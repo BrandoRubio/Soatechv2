@@ -24,6 +24,7 @@ export class Tab2Page {
     });*/
   }
   name = "No device"
+  id = ""
   ImAdmin = false;
   split: String = ""
   type: String = ""
@@ -405,6 +406,7 @@ export class Tab2Page {
     this.http.checkDeviceCM(this.ipDeviceSelected).subscribe((_) => {
       console.log("Check");
       this.params = false;
+      this.id = _.id;
       this.SSID = _.ssid;
       this.PASS = _.password;
       this.name = _.name;

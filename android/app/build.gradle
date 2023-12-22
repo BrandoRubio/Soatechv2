@@ -5,6 +5,8 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 android {
+
+    namespace 'com.condor.soatechapp'
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.condor.soatechapp"
